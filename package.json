@@ -1,0 +1,76 @@
+{
+    "name": "better-phpunit",
+    "displayName": "Better PHPUnit",
+    "description": "A better PHPUnit test runner",
+    "version": "0.0.1",
+    "publisher": "calebporzio",
+    "engines": {
+        "vscode": "^1.17.0"
+    },
+    "icon": "icon.png",
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "*"
+    ],
+    "main": "./extension",
+    "contributes": {
+        "keybindings": [
+            {
+                "key": "cmd+k cmd+o",
+                "command": "workbench.action.tasks.runTask",
+                "args": "phpunit: method"
+            },
+            {
+                "key": "cmd+k cmd+i",
+                "command": "workbench.action.tasks.runTask",
+                "args": "phpunit: file"
+            }
+        ],
+        "taskDefinitions": [
+            {
+                "type": "phpunit",
+                "properties": {
+                    "task": {
+                        "type": "string",
+                        "description": "The scope for phpunit to run in (method|file)"
+                    }
+                }
+            }
+        ],
+        "problemMatchers": [
+            {
+                "name": "phpunit",
+                "owner": "php",
+                "fileLocation": "absolute",
+                "pattern": [
+                    {
+                        "regexp": "^\\d+\\)\\s.*$"
+                    },
+                    {
+                        "regexp": "^(.*)$",
+                        "message": 1
+                    },
+                    {
+                        "regexp": "^(.*):(\\d+)$",
+                        "file": 1,
+                        "location": 2
+                    }
+                ]
+            }
+        ]
+    },
+    "scripts": {
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.5.2",
+        "vscode": "^1.1.5",
+        "mocha": "^3.5.0",
+        "eslint": "^4.6.1",
+        "@types/node": "^7.0.0",
+        "@types/mocha": "^2.2.42"
+    }
+}
