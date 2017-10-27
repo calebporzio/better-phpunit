@@ -2,6 +2,13 @@
 
 ![Demo GIF](demo.gif)
 
+## How To Run:
+- Place your cursor in the file/method you want to run
+- Open the command menu: `cmd+shift+p`
+- Select: `Tasks: Run Task`
+- Select: `phpunit: method` to run a phpunit method
+- Select: `phpunit: file` to run a phpunit file
+
 ## Features:
 - Color output!
 - Run individual methods by placing your cursor anywhere in the method
