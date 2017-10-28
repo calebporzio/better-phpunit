@@ -30,3 +30,10 @@ Keybindings:
     "args": "phpunit: file"
 }
 ```
+
+## Roadmap:
+- Running specific test suites
+- Not using tasks, but using plain commands?
+- Handling PHP fatal and parser errors
+- A sidebar panel for managing errors
+- Re-run failures

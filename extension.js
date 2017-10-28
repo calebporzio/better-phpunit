@@ -48,8 +48,8 @@ function getMethodName(lineNumber) {
 
     while (line > 0) {
         const lineText = vscode.window.activeTextEditor.document.lineAt(line).text;
-        const methodMatch = lineText.match(/^.*function\s*(.*)\(/);
-        const classMatch = lineText.match(/^.*class\s*(\w*)\s*.*$/);
+        const methodMatch = lineText.match(/^\s*(?:public|private|protected)?\s*function\s*(\w+)\s*\(.*$/);
+        const classMatch = lineText.match(/^class\s*(\w*)\s*.*$/);
         if (methodMatch || classMatch) {
             const match = methodMatch || classMatch;
             methodName = match[1];
