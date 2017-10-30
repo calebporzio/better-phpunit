@@ -2,7 +2,7 @@
     "name": "better-phpunit",
     "displayName": "Better PHPUnit",
     "description": "A better PHPUnit test runner",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "publisher": "calebporzio",
     "engines": {
         "vscode": "^1.17.0"
@@ -22,14 +22,14 @@
     "contributes": {
         "keybindings": [
             {
-                "key": "cmd+k cmd+o",
+                "key": "cmd+k cmd+r",
                 "command": "workbench.action.tasks.runTask",
-                "args": "phpunit: method"
+                "args": "phpunit: run"
             },
             {
-                "key": "cmd+k cmd+i",
+                "key": "cmd+k cmd+p",
                 "command": "workbench.action.tasks.runTask",
-                "args": "phpunit: file"
+                "args": "phpunit: run previous"
             }
         ],
         "taskDefinitions": [
@@ -38,7 +38,7 @@
                 "properties": {
                     "task": {
                         "type": "string",
-                        "description": "The scope for phpunit to run in (method|file)"
+                        "description": "Weather or not to run the current test (method|file) or the previous one."
                     }
                 }
             }
