@@ -2,7 +2,7 @@
     "name": "better-phpunit",
     "displayName": "Better PHPUnit",
     "description": "A better PHPUnit test runner",
-    "version": "0.0.1",
+    "version": "0.1.2",
     "publisher": "calebporzio",
     "engines": {
         "vscode": "^1.17.0"
