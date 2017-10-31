@@ -1,16 +1,52 @@
 const vscode = require('vscode');
 
-var previousFileName;
-var previousFilterString;
+var fileName;
+var filterString;
+var ranFromCommand;
+var runWithoutCommandCount;
 
 function activate(context) {
-    let provider = vscode.workspace.registerTaskProvider('phpunit', {
-        provideTasks: () => {
-            const rootDirectory = vscode.workspace.rootPath;
-            const fileName = vscode.window.activeTextEditor.document.fileName;
-            const methodName = getMethodName(vscode.window.activeTextEditor.selection.active.line);
+    let disposables = [];
 
-            let filterString = methodName ? `--filter '/^.*::${methodName}$/'` : '';
+    disposables.push(vscode.commands.registerCommand('better-phpunit.run', async () => {
+        fileName = vscode.window.activeTextEditor.document.fileName;
+        const methodName = getMethodName(vscode.window.activeTextEditor.selection.active.line);
+        filterString = methodName ? `--filter '/^.*::${methodName}$/'` : '';
+
+        ranFromCommand = true;
+
+        await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run');
+
+        setTimeout(() => {
+            // This hideous setTimeout is here, because for some reason
+            // VS Code runs a task twice instantaniously - ugh.
+            ranFromCommand = undefined;
+        }, 100);
+    }));
+
+    disposables.push(vscode.commands.registerCommand('better-phpunit.run-previous', async () => {
+        // throw error if not run yet
+
+        ranFromCommand = true;
+
+        await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run');
+
+        setTimeout(() => {
+            // This hideous setTimeout is here, because for some reason
+            // VS Code runs a task twice instantaniously - ugh.
+            ranFromCommand = undefined;
+        }, 100);
+    }));
+
+    disposables.push(vscode.workspace.registerTaskProvider('phpunit', {
+        provideTasks: (token) => {
+            const rootDirectory = vscode.workspace.rootPath;
+
+            if (! ranFromCommand) {
+                fileName = vscode.window.activeTextEditor.document.fileName;
+                const methodName = getMethodName(vscode.window.activeTextEditor.selection.active.line);
+                filterString = methodName ? `--filter '/^.*::${methodName}$/'` : '';
+            }
 
             const tasks = [
                 new vscode.Task(
@@ -19,27 +55,17 @@ function activate(context) {
                     'phpunit',
                     new vscode.ShellExecution(`${rootDirectory}/vendor/bin/phpunit ${fileName} ${filterString}`),
                     '$phpunit'
-                ),
-                new vscode.Task(
-                    { type: "phpunit", task: "run previous" },
-                    "run previous",
-                    'phpunit',
-                    new vscode.ShellExecution(`${rootDirectory}/vendor/bin/phpunit ${previousFileName} ${previousFilterString}`),
-                    '$phpunit'
-                ),
+                )
             ];
-
-            previousFileName = fileName;
-            previousFilterString = filterString;
 
             return tasks;
         },
         resolveTask(task) {
             return undefined;
         }
-    });
+    }));
 
-    context.subscriptions.push(provider);
+    context.subscriptions.push(disposables);
 }
 exports.activate = activate;
 
