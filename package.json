@@ -82,7 +82,11 @@
         "vscode": "^1.1.5",
         "mocha": "^3.5.0",
         "eslint": "^4.6.1",
+        "expect": "^21.2.1",
         "@types/node": "^7.0.0",
         "@types/mocha": "^2.2.42"
+    },
+    "dependencies": {
+        "xml2js": "^0.4.19"
     }
 }
