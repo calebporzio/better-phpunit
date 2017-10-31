@@ -25,12 +25,31 @@ suite("Test Output Parsing", function() {
                 <!-- Nested Suites -->
                 <testsuite name="Outer Nested">
                     <testsuite name="Inner Nested 1">
-                        <testcase name="i_pass" class="Tests\\Feature\\TestFile" file="/Users/user/Code/tests/Feature/TestFile.php" line="14" assertions="3" time="1.5"/>
-                        <testcase name="i_pass" class="Tests\\Feature\\TestFile" file="/Users/user/Code/tests/Feature/TestFile.php" line="14" assertions="3" time="1.5"/>
+                        <testcase name="i_warning" class="Tests\\Feature\\TestFile" file="/Users/user/Code/tests/Feature/TestFile.php" line="14" assertions="3" time="1.5">
+                            <warning type="foo">
+                                bar
+                            </warning>
+                        </testcase>
+                        <testcase name="i_incomplete" class="Tests\\Feature\\TestFile" file="/Users/user/Code/tests/Feature/TestFile.php" line="14" assertions="3" time="1.5">
+                            <skipped/>
+                        </testcase>
                     </testsuite>
                     <testsuite name="Inner Nested 2">
-                        <testcase name="i_pass" class="Tests\\Feature\\TestFile" file="/Users/user/Code/tests/Feature/TestFile.php" line="14" assertions="3" time="1.5"/>
-                        <testcase name="i_pass" class="Tests\\Feature\\TestFile" file="/Users/user/Code/tests/Feature/TestFile.php" line="14" assertions="3" time="1.5"/>
+                        <testcase name="i_skipped" class="Tests\\Feature\\TestFile" file="/Users/user/Code/tests/Feature/TestFile.php" line="14" assertions="3" time="1.5">
+                            <skipped/>
+                        </testcase>
+                    </testsuite>
+                    <testsuite name="Inner Nested 3">
+                        <testcase name="i_error" class="Tests\\Feature\\TestFile" file="/Users/user/Code/tests/Feature/TestFile.php" line="14" assertions="3" time="1.5">
+                            <error>
+                                Something happend
+                            </error>
+                        </testcase>
+                        <testcase name="i_risky" class="Tests\\Feature\\TestFile" file="/Users/user/Code/tests/Feature/TestFile.php" line="14" assertions="3" time="1.5">
+                            <error>
+                                Risky Test
+                            </error>
+                        </testcase>
                     </testsuite>
                 </testsuite>
             </testsuites>
@@ -48,24 +67,29 @@ suite("Test Output Parsing", function() {
                 status: "failed",
             },
             {
-                name: "i_pass",
+                name: "i_warning",
                 duration: 1.5,
-                status: "passed",
+                status: "warning",
             },
             {
-                name: "i_pass",
+                name: "i_incomplete",
                 duration: 1.5,
-                status: "passed",
+                status: "skipped",
             },
             {
-                name: "i_pass",
+                name: "i_skipped",
                 duration: 1.5,
-                status: "passed",
+                status: "skipped",
             },
             {
-                name: "i_pass",
+                name: "i_error",
                 duration: 1.5,
-                status: "passed",
+                status: "failed",
+            },
+            {
+                name: "i_risky",
+                duration: 1.5,
+                status: "risky",
             },
         ])
     });

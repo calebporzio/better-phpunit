@@ -11,6 +11,7 @@ function parseString(str) {
 function statusOfTest(test) {
     const skips = test.skipped || []
     const errors = test.error || []
+    const warnings = test.warning || []
     const failures = test.failure || []
 
     if (failures.length > 0) {
@@ -18,11 +19,19 @@ function statusOfTest(test) {
     }
 
     if (errors.length > 0) {
+        if (errors.every(e => e.includes("Risky Test"))) {
+            return "risky"
+        }
+
         return "failed"
     }
 
     if (skips.length > 0) {
         return "skipped"
+    }
+
+    if (warnings.length > 0) {
+        return "warning"
     }
 
     return "passed"
