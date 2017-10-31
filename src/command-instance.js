@@ -1,6 +1,7 @@
 const findUp = require('find-up');
 const vscode = require('vscode');
 const path = require('path');
+const SSH = require("./ssh");
 
 module.exports = class CommandInstance {
     constructor() {
@@ -12,6 +13,12 @@ module.exports = class CommandInstance {
             || this.findExecutablePath();
 
         this.shellCommand = `${this.executablePath} ${this.fileName} ${this.filterString()}${this.commandSuffix()}`;
+
+        this.ssh = new SSH();
+
+        this.fileName = this.ssh.remapLocalPath(this.fileName)
+        this.executablePath = this.ssh.remapLocalPath(this.executablePath)
+        this.shellCommand = this.ssh.wrapCommand(this.shellCommand)
     }
 
     runEntireSuite() {
