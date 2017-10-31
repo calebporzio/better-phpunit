@@ -48,12 +48,14 @@ function activate(context) {
                 filterString = methodName ? `--filter '/^.*::${methodName}$/'` : '';
             }
 
+            const command = buildPHPUnitCommand(rootDirectory, fileName, filterString)
+
             const tasks = [
                 new vscode.Task(
                     { type: "phpunit", task: "run" },
                     "run",
                     'phpunit',
-                    new vscode.ShellExecution(`${rootDirectory}/vendor/bin/phpunit ${fileName} ${filterString}`),
+                    new vscode.ShellExecution(command),
                     '$phpunit'
                 )
             ];
@@ -88,4 +90,10 @@ function getMethodName(lineNumber) {
     }
 
     return methodName;
+}
+
+function buildPHPUnitCommand(rootDirectory, fileName, filterString) {
+    let command = `${rootDirectory}/vendor/bin/phpunit --colors ${fileName} ${filterString}`
+
+    return command
 }
