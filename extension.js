@@ -1,7 +1,10 @@
 const vscode = require('vscode');
+const { Log } = require("./results/Log")
 
 var fileName;
+var outputLog;
 var filterString;
+var lastRanTests;
 var ranFromCommand;
 var runWithoutCommandCount;
 
@@ -16,6 +19,7 @@ function activate(context) {
         ranFromCommand = true;
 
         await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run');
+        await updateLastRanTests()
 
         setTimeout(() => {
             // This hideous setTimeout is here, because for some reason
@@ -30,6 +34,7 @@ function activate(context) {
         ranFromCommand = true;
 
         await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run');
+        await updateLastRanTests()
 
         setTimeout(() => {
             // This hideous setTimeout is here, because for some reason
@@ -93,7 +98,21 @@ function getMethodName(lineNumber) {
 }
 
 function buildPHPUnitCommand(rootDirectory, fileName, filterString) {
-    let command = `${rootDirectory}/vendor/bin/phpunit --colors ${fileName} ${filterString}`
+    outputLog = new Log(`${rootDirectory}/.betterphpunit.output.log.xml`)
+
+    let command = `${rootDirectory}/vendor/bin/phpunit --colors --log-junit ${outputLog.getPath()} ${fileName} ${filterString}`
 
     return command
+}
+
+async function updateLastRanTests() {
+    lastRanTests = await getRanTests()
+}
+
+async function getRanTests() {
+    if (outputLog) {
+        return await outputLog.getTests()
+    }
+
+    return []
 }
