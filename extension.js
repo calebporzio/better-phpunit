@@ -98,11 +98,14 @@ function getMethodName(lineNumber) {
 }
 
 function buildPHPUnitCommand(rootDirectory, fileName, filterString) {
-    outputLog = new Log(`${rootDirectory}/.betterphpunit.output.log.xml`)
+    const logPath = `${rootDirectory}/.betterphpunit.output.log.xml`
+    const readyFile = `${rootDirectory}/.betterphpunit.done`
+
+    outputLog = new Log(logPath, readyFile)
 
     let command = `${rootDirectory}/vendor/bin/phpunit --colors --log-junit ${outputLog.getPath()} ${fileName} ${filterString}`
 
-    return command
+    return `${command} && touch ${readyFile}`
 }
 
 async function updateLastRanTests() {
@@ -111,6 +114,7 @@ async function updateLastRanTests() {
 
 async function getRanTests() {
     if (outputLog) {
+        await outputLog.waitUntilReady()
         return await outputLog.getTests()
     }
 
