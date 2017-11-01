@@ -33,6 +33,8 @@ Log.prototype.waitUntilReady = async function () {
 }
 
 Log.prototype.getTests = async function () {
+    console.log("better-phpunit: Loading tests from file")
+
     const tests = await Tests.fromFile(this.path)
 
     await this.remove()

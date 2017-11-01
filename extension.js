@@ -18,6 +18,7 @@ function activate(context) {
 
         ranFromCommand = true;
 
+        console.log("better-phpunit: Running PHPUnit Tests")
         await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run');
         await updateLastRanTests()
 
@@ -33,6 +34,7 @@ function activate(context) {
 
         ranFromCommand = true;
 
+        console.log("better-phpunit: Running PHPUnit Tests")
         await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run');
         await updateLastRanTests()
 
@@ -109,14 +111,19 @@ function buildPHPUnitCommand(rootDirectory, fileName, filterString) {
 }
 
 async function updateLastRanTests() {
+    console.log("better-phpunit: Updating Last Run Tests")
     lastRanTests = await getRanTests()
 }
 
 async function getRanTests() {
     if (outputLog) {
+        console.log("better-phpunit: Waiting for tests to complete")
         await outputLog.waitUntilReady()
+
+        console.log("better-phpunit: Parsing test ouput")
         return await outputLog.getTests()
     }
 
+    console.log("better-phpunit: No output log was set")
     return []
 }

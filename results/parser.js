@@ -49,6 +49,8 @@ function* testsInSuite(suite) {
     }
 
     for (let test of suite.testcase || []) {
+        console.log("better-phpunit: parsing test", test)
+
         yield {
             name: test["$"].name,
             status: statusOfTest(test),
@@ -58,11 +60,15 @@ function* testsInSuite(suite) {
 }
 
 function parseOutput(output) {
+    console.log("better-phpunit: Parsing output")
+
     const suites = output.testsuites.testsuite
     
     const tests = []
 
     for (let test of testsInSuites(suites)) {
+        console.log("better-phpunit: found test", test)
+
         tests.push(test)
     }
 
