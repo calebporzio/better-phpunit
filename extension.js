@@ -17,56 +17,53 @@ function activate(context) {
         const methodName = getMethodName(vscode.window.activeTextEditor.selection.active.line);
         filterString = methodName ? `--filter '/^.*::${methodName}$/'` : '';
 
+        ranFromFailed = undefined;
         ranFromCommand = true;
 
         console.log("better-phpunit: Running PHPUnit Tests")
         await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run');
-        await updateLastRanTests()
 
         setTimeout(() => {
             // This hideous setTimeout is here, because for some reason
             // VS Code runs a task twice instantaniously - ugh.
             ranFromCommand = undefined;
         }, 100);
+
+        await updateLastRanTests()
     }));
 
     disposables.push(vscode.commands.registerCommand('better-phpunit.run-previous', async () => {
         // throw error if not run yet
 
+        ranFromFailed = undefined;
         ranFromCommand = true;
 
         console.log("better-phpunit: Running PHPUnit Tests")
         await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run');
-        await updateLastRanTests()
 
         setTimeout(() => {
             // This hideous setTimeout is here, because for some reason
             // VS Code runs a task twice instantaniously - ugh.
             ranFromCommand = undefined;
         }, 100);
+
+        await updateLastRanTests()
     }));
 
     disposables.push(vscode.commands.registerCommand('better-phpunit.run-failed', async () => {
         // throw error if not run yet
 
-        ranFromCommand = true;
         ranFromFailed = true;
 
         console.log("better-phpunit: Running failed tests")
-        await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run failed');
-
-        setTimeout(() => {
-            // This hideous setTimeout is here, because for some reason
-            // VS Code runs a task twice instantaniously - ugh.
-            ranFromFailed = undefined;
-            ranFromCommand = undefined;
-        }, 100);
+        await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run');
     }));
 
     disposables.push(vscode.workspace.registerTaskProvider('phpunit', {
         provideTasks: (token) => {
             console.log("better-phpunit: running task")
             console.log("better-phpunit: running failed?", ranFromFailed)
+            console.log("better-phpunit: running command?", ranFromCommand)
 
             const rootDirectory = vscode.workspace.rootPath;
 
@@ -167,7 +164,7 @@ function getMethodName(lineNumber) {
 
 function createFilterString(filter) {
     if (filter.class && filter.method) {
-        return `--filter '/^${filter.class}::${filter.method}$/'`
+        return `--filter '/^${filter.class.replace(/\\/g, "\\\\")}::${filter.method}$/'`
     }
 
     if (filter.method) {
