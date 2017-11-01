@@ -1,7 +1,10 @@
 const vscode = require('vscode');
+const { Log } = require("./results/Log")
 
 var fileName;
+var outputLog;
 var filterString;
+var lastRanTests;
 var ranFromCommand;
 var runWithoutCommandCount;
 
@@ -15,7 +18,9 @@ function activate(context) {
 
         ranFromCommand = true;
 
+        console.log("better-phpunit: Running PHPUnit Tests")
         await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run');
+        await updateLastRanTests()
 
         setTimeout(() => {
             // This hideous setTimeout is here, because for some reason
@@ -29,7 +34,9 @@ function activate(context) {
 
         ranFromCommand = true;
 
+        console.log("better-phpunit: Running PHPUnit Tests")
         await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run');
+        await updateLastRanTests()
 
         setTimeout(() => {
             // This hideous setTimeout is here, because for some reason
@@ -48,12 +55,14 @@ function activate(context) {
                 filterString = methodName ? `--filter '/^.*::${methodName}$/'` : '';
             }
 
+            const command = buildPHPUnitCommand(rootDirectory, fileName, filterString)
+
             const tasks = [
                 new vscode.Task(
                     { type: "phpunit", task: "run" },
                     "run",
                     'phpunit',
-                    new vscode.ShellExecution(`${rootDirectory}/vendor/bin/phpunit ${fileName} ${filterString}`),
+                    new vscode.ShellExecution(command),
                     '$phpunit'
                 )
             ];
@@ -88,4 +97,33 @@ function getMethodName(lineNumber) {
     }
 
     return methodName;
+}
+
+function buildPHPUnitCommand(rootDirectory, fileName, filterString) {
+    const logPath = `${rootDirectory}/.betterphpunit.output.log.xml`
+    const readyFile = `${rootDirectory}/.betterphpunit.done`
+
+    outputLog = new Log(logPath, readyFile)
+
+    let command = `${rootDirectory}/vendor/bin/phpunit --colors --log-junit ${outputLog.getPath()} ${fileName} ${filterString}`
+
+    return `${command}; touch ${readyFile}`
+}
+
+async function updateLastRanTests() {
+    console.log("better-phpunit: Updating Last Run Tests")
+    lastRanTests = await getRanTests()
+}
+
+async function getRanTests() {
+    if (outputLog) {
+        console.log("better-phpunit: Waiting for tests to complete")
+        await outputLog.waitUntilReady()
+
+        console.log("better-phpunit: Parsing test ouput")
+        return await outputLog.getTests()
+    }
+
+    console.log("better-phpunit: No output log was set")
+    return []
 }
