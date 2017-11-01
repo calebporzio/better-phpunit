@@ -52,6 +52,7 @@ function activate(context) {
         ranFromCommand = true;
         ranFromFailed = true;
 
+        console.log("better-phpunit: Running failed tests")
         await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run failed');
 
         setTimeout(() => {
@@ -64,6 +65,9 @@ function activate(context) {
 
     disposables.push(vscode.workspace.registerTaskProvider('phpunit', {
         provideTasks: (token) => {
+            console.log("better-phpunit: running task")
+            console.log("better-phpunit: running failed?", ranFromFailed)
+
             const rootDirectory = vscode.workspace.rootPath;
 
             if (! ranFromCommand) {
@@ -72,8 +76,10 @@ function activate(context) {
                 filterString = getPHPUnitFilters()
             }
 
+            console.log("better-phpunit: building command")
             const command = buildPHPUnitCommand(rootDirectory, fileName, filterString)
 
+            console.log("better-phpunit: building tasks")
             const tasks = [
                 new vscode.Task(
                     { type: "phpunit", task: "run" },
@@ -180,7 +186,11 @@ function getActiveFileFilters() {
 }
 
 function getPHPUnitFilters() {
+    console.log("better-phpunit: Creating test filters")
+
     if (ranFromFailed) {
+        console.log("better-phpunit: Creating failed test filters")
+
         return getFailedTests().map(test => {
             return {
                 file: test.file,
