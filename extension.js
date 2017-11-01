@@ -5,6 +5,7 @@ var fileName;
 var outputLog;
 var filterString;
 var lastRanTests;
+var ranFromFailed;
 var ranFromCommand;
 var runWithoutCommandCount;
 
@@ -21,6 +22,8 @@ function activate(context) {
         console.log("better-phpunit: Running PHPUnit Tests")
         await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run');
         await updateLastRanTests()
+
+        console.log(lastRanTests)
 
         setTimeout(() => {
             // This hideous setTimeout is here, because for some reason
@@ -41,6 +44,22 @@ function activate(context) {
         setTimeout(() => {
             // This hideous setTimeout is here, because for some reason
             // VS Code runs a task twice instantaniously - ugh.
+            ranFromCommand = undefined;
+        }, 100);
+    }));
+
+    disposables.push(vscode.commands.registerCommand('better-phpunit.run-failed', async () => {
+        // throw error if not run yet
+
+        ranFromCommand = true;
+        ranFromFailed = true;
+
+        await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run failed');
+
+        setTimeout(() => {
+            // This hideous setTimeout is here, because for some reason
+            // VS Code runs a task twice instantaniously - ugh.
+            ranFromFailed = undefined;
             ranFromCommand = undefined;
         }, 100);
     }));
