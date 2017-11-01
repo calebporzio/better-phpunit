@@ -55,6 +55,9 @@ function* testsInSuite(suite) {
             name: test["$"].name,
             status: statusOfTest(test),
             duration: parseFloat(test["$"].time),
+
+            file: test["$"].file,
+            class: test["$"].class,
         }
     }
 }
