@@ -28,6 +28,10 @@
             {
                 "command": "better-phpunit.run-previous",
                 "title": "Better PHPUnit: run previous"
+            },
+            {
+                "command": "better-phpunit.run-failed",
+                "title": "Better PHPUnit: run failed"
             }
         ],
         "keybindings": [
