@@ -19,7 +19,7 @@ function statusOfTest(test) {
     }
 
     if (errors.length > 0) {
-        if (errors.every(e => e.includes("Risky Test"))) {
+        if (errors.every(e => (e["_"] || "").includes("Risky Test"))) {
             return "risky"
         }
 

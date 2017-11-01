@@ -107,7 +107,7 @@ function buildPHPUnitCommand(rootDirectory, fileName, filterString) {
 
     let command = `${rootDirectory}/vendor/bin/phpunit --colors --log-junit ${outputLog.getPath()} ${fileName} ${filterString}`
 
-    return `${command} && touch ${readyFile}`
+    return `${command}; touch ${readyFile}`
 }
 
 async function updateLastRanTests() {
