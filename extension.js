@@ -23,8 +23,6 @@ function activate(context) {
         await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run');
         await updateLastRanTests()
 
-        console.log(lastRanTests)
-
         setTimeout(() => {
             // This hideous setTimeout is here, because for some reason
             // VS Code runs a task twice instantaniously - ugh.
@@ -182,6 +180,16 @@ function getActiveFileFilters() {
 }
 
 function getPHPUnitFilters() {
+    if (runFromFailed) {
+        return getFailedTests().map(test => {
+            return {
+                file: test.file,
+                class: test.class,
+                method: test.name,
+            }
+        }).map(createFilterString).join(" ")
+    }
+
     return getActiveFileFilters().map(createFilterString).join(" ")
 }
 
@@ -212,4 +220,8 @@ async function getRanTests() {
 
     console.log("better-phpunit: No output log was set")
     return []
+}
+
+function getFailedTests() {
+    return lastRanTests ? lastRanTests.failed() : []
 }
