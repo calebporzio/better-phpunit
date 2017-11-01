@@ -180,7 +180,7 @@ function getActiveFileFilters() {
 }
 
 function getPHPUnitFilters() {
-    if (runFromFailed) {
+    if (ranFromFailed) {
         return getFailedTests().map(test => {
             return {
                 file: test.file,
