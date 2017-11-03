@@ -40,17 +40,6 @@
                 "command": "better-phpunit.run-previous"
             }
         ],
-        "taskDefinitions": [
-            {
-                "type": "phpunit",
-                "properties": {
-                    "task": {
-                        "type": "string",
-                        "description": "Weather or not to run the current test (method|file) or the previous one."
-                    }
-                }
-            }
-        ],
         "problemMatchers": [
             {
                 "name": "phpunit",
