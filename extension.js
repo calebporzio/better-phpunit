@@ -1,4 +1,5 @@
 const vscode = require('vscode');
+const path = require('path');
 
 var fileName;
 var filterString;
@@ -53,7 +54,7 @@ function activate(context) {
                     { type: "phpunit", task: "run" },
                     "run",
                     'phpunit',
-                    new vscode.ShellExecution(`${rootDirectory}/vendor/bin/phpunit ${fileName} ${filterString}`),
+                    new vscode.ShellExecution(`${path.join(rootDirectory, 'vendor', 'bin', 'phpunit')} ${fileName} ${filterString}`),
                     '$phpunit'
                 )
             ];
