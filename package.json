@@ -84,10 +84,5 @@
 		"eslint": "^4.6.1",
 		"@types/node": "^7.0.0",
 		"@types/mocha": "^2.2.42"
-	},
-	"__metadata": {
-		"id": "2dd41a16-fc28-4680-a274-a850fa5f1098",
-		"publisherDisplayName": "calebporzio",
-		"publisherId": "a2487481-f6cb-4f67-9340-4db67a69d30d"
 	}
 }
