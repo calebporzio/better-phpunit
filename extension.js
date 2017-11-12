@@ -15,7 +15,8 @@ function activate(context) {
         filterString = methodName ? `--filter '/^.*::${methodName}$/'` : '';
 
         ranFromCommand = true;
-
+        
+        await vscode.commands.executeCommand('workbench.action.terminal.clear');
         await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run');
 
         setTimeout(() => {
@@ -30,6 +31,7 @@ function activate(context) {
 
         ranFromCommand = true;
 
+        await vscode.commands.executeCommand('workbench.action.terminal.clear');
         await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run');
 
         setTimeout(() => {
@@ -89,4 +91,8 @@ function getMethodName(lineNumber) {
     }
 
     return methodName;
+}
+
+function clearTerminal() {
+    
 }

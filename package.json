@@ -1,88 +1,88 @@
 {
-    "name": "better-phpunit",
-    "displayName": "Better PHPUnit",
-    "description": "A better PHPUnit test runner",
-    "version": "0.3.1",
-    "publisher": "calebporzio",
-    "engines": {
-        "vscode": "^1.17.0"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/calebporzio/better-phpunit.git"
-    },
-    "icon": "icon.png",
-    "categories": [
-        "Other"
-    ],
-    "activationEvents": [
-        "*"
-    ],
-    "main": "./extension",
-    "contributes": {
-        "commands": [
-            {
-                "command": "better-phpunit.run",
-                "title": "Better PHPUnit: run"
-            },
-            {
-                "command": "better-phpunit.run-previous",
-                "title": "Better PHPUnit: run previous"
-            }
-        ],
-        "keybindings": [
-            {
-                "key": "cmd+k cmd+r",
-                "command": "better-phpunit.run"
-            },
-            {
-                "key": "cmd+k cmd+p",
-                "command": "better-phpunit.run-previous"
-            }
-        ],
-        "taskDefinitions": [
-            {
-                "type": "phpunit",
-                "properties": {
-                    "task": {
-                        "type": "string",
-                        "description": "Weather or not to run the current test (method|file) or the previous one."
-                    }
-                }
-            }
-        ],
-        "problemMatchers": [
-            {
-                "name": "phpunit",
-                "owner": "php",
-                "fileLocation": "absolute",
-                "pattern": [
-                    {
-                        "regexp": "^\\d+\\)\\s.*$"
-                    },
-                    {
-                        "regexp": "^(.*)$",
-                        "message": 1
-                    },
-                    {
-                        "regexp": "^(.*):(\\d+)$",
-                        "file": 1,
-                        "location": 2
-                    }
-                ]
-            }
-        ]
-    },
-    "scripts": {
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "node ./node_modules/vscode/bin/test"
-    },
-    "devDependencies": {
-        "typescript": "^2.5.2",
-        "vscode": "^1.1.5",
-        "mocha": "^3.5.0",
-        "eslint": "^4.6.1",
-        "@types/node": "^7.0.0",
-        "@types/mocha": "^2.2.42"
-    }
+	"name": "better-phpunit",
+	"displayName": "Better PHPUnit",
+	"description": "A better PHPUnit test runner",
+	"version": "0.3.1",
+	"publisher": "calebporzio",
+	"engines": {
+		"vscode": "^1.17.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/calebporzio/better-phpunit.git"
+	},
+	"icon": "icon.png",
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"*"
+	],
+	"main": "./extension",
+	"contributes": {
+		"commands": [
+			{
+				"command": "better-phpunit.run",
+				"title": "Better PHPUnit: run"
+			},
+			{
+				"command": "better-phpunit.run-previous",
+				"title": "Better PHPUnit: run previous"
+			}
+		],
+		"keybindings": [
+			{
+				"key": "cmd+k cmd+r",
+				"command": "better-phpunit.run"
+			},
+			{
+				"key": "cmd+k cmd+p",
+				"command": "better-phpunit.run-previous"
+			}
+		],
+		"taskDefinitions": [
+			{
+				"type": "phpunit",
+				"properties": {
+					"task": {
+						"type": "string",
+						"description": "Weather or not to run the current test (method|file) or the previous one."
+					}
+				}
+			}
+		],
+		"problemMatchers": [
+			{
+				"name": "phpunit",
+				"owner": "php",
+				"fileLocation": "absolute",
+				"pattern": [
+					{
+						"regexp": "^\\d+\\)\\s.*$"
+					},
+					{
+						"regexp": "^(.*)$",
+						"message": 1
+					},
+					{
+						"regexp": "^(.*):(\\d+)$",
+						"file": 1,
+						"location": 2
+					}
+				]
+			}
+		]
+	},
+	"scripts": {
+		"postinstall": "node ./node_modules/vscode/bin/install",
+		"test": "node ./node_modules/vscode/bin/test"
+	},
+	"devDependencies": {
+		"typescript": "^2.5.2",
+		"vscode": "^1.1.5",
+		"mocha": "^3.5.0",
+		"eslint": "^4.6.1",
+		"@types/node": "^7.0.0",
+		"@types/mocha": "^2.2.42"
+	}
 }
