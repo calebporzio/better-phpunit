@@ -16,6 +16,7 @@ function activate(context) {
 
         ranFromCommand = true;
 
+        await vscode.commands.executeCommand('workbench.action.terminal.clear');
         await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run');
 
         setTimeout(() => {
@@ -30,6 +31,7 @@ function activate(context) {
 
         ranFromCommand = true;
 
+        await vscode.commands.executeCommand('workbench.action.terminal.clear');
         await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run');
 
         setTimeout(() => {
