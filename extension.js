@@ -10,7 +10,7 @@ function activate(context) {
     let disposables = [];
 
     disposables.push(vscode.commands.registerCommand('better-phpunit.run', async () => {
-        fileName = vscode.window.activeTextEditor.document.fileName;
+        fileName = vscode.window.activeTextEditor.document.fileName.replace(/ /g, '\\ ');
         const methodName = getMethodName(vscode.window.activeTextEditor.selection.active.line);
         filterString = methodName ? `--filter '/^.*::${methodName}$/'` : '';
 
@@ -41,10 +41,10 @@ function activate(context) {
 
     disposables.push(vscode.workspace.registerTaskProvider('phpunit', {
         provideTasks: (token) => {
-            const rootDirectory = vscode.workspace.rootPath;
+            const rootDirectory = vscode.workspace.rootPath.replace(/ /g, '\\ ');
 
             if (! ranFromCommand) {
-                fileName = vscode.window.activeTextEditor.document.fileName;
+                fileName = vscode.window.activeTextEditor.document.fileName.replace(/ /g, '\\ ');
                 const methodName = getMethodName(vscode.window.activeTextEditor.selection.active.line);
                 filterString = methodName ? `--filter '/^.*::${methodName}$/'` : '';
             }
