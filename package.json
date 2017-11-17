@@ -2,7 +2,7 @@
     "name": "better-phpunit",
     "displayName": "Better PHPUnit",
     "description": "A better PHPUnit test runner",
-    "version": "0.3.2",
+    "version": "0.3.3",
     "publisher": "calebporzio",
     "engines": {
         "vscode": "^1.17.0"
@@ -73,5 +73,8 @@
         "eslint": "^4.6.1",
         "@types/node": "^7.0.0",
         "@types/mocha": "^2.2.42"
+    },
+    "dependencies": {
+        "find-up": "^2.1.0"
     }
 }

@@ -1,70 +1,43 @@
+const findUp = require('find-up');
 const vscode = require('vscode');
+const assert = require('assert');
 const path = require('path');
 
-var fileName;
-var filterString;
-var ranFromCommand;
-var runWithoutCommandCount;
+var projectSnapshot;
 
 function activate(context) {
     let disposables = [];
 
     disposables.push(vscode.commands.registerCommand('better-phpunit.run', async () => {
-        fileName = vscode.window.activeTextEditor.document.fileName.replace(/ /g, '\\ ');
-        const methodName = getMethodName(vscode.window.activeTextEditor.selection.active.line);
-        filterString = methodName ? `--filter '/^.*::${methodName}$/'` : '';
-
-        ranFromCommand = true;
+        projectSnapshot = new ProjectSnapshot;
 
         await vscode.commands.executeCommand('workbench.action.terminal.clear');
         await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run');
-
-        setTimeout(() => {
-            // This hideous setTimeout is here, because for some reason
-            // VS Code runs a task twice instantaniously - ugh.
-            ranFromCommand = undefined;
-        }, 100);
     }));
 
     disposables.push(vscode.commands.registerCommand('better-phpunit.run-previous', async () => {
-        // throw error if not run yet
-
-        ranFromCommand = true;
+        if (! projectSnapshot) {
+            vscode.window.showErrorMessage('Better PHPUnit: No tests have been run yet.');
+            return;
+        }
 
         await vscode.commands.executeCommand('workbench.action.terminal.clear');
         await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run');
-
-        setTimeout(() => {
-            // This hideous setTimeout is here, because for some reason
-            // VS Code runs a task twice instantaniously - ugh.
-            ranFromCommand = undefined;
-        }, 100);
     }));
 
     disposables.push(vscode.workspace.registerTaskProvider('phpunit', {
-        provideTasks: (token) => {
-            const rootDirectory = vscode.workspace.rootPath.replace(/ /g, '\\ ');
+        provideTasks: () => {
+            assert(projectSnapshot);
 
-            if (! ranFromCommand) {
-                fileName = vscode.window.activeTextEditor.document.fileName.replace(/ /g, '\\ ');
-                const methodName = getMethodName(vscode.window.activeTextEditor.selection.active.line);
-                filterString = methodName ? `--filter '/^.*::${methodName}$/'` : '';
-            }
+            const filterString = projectSnapshot.methodName ? `--filter '^.*::${projectSnapshot.methodName}$'` : '';
 
-            const tasks = [
-                new vscode.Task(
-                    { type: "phpunit", task: "run" },
-                    "run",
-                    'phpunit',
-                    new vscode.ShellExecution(`${path.join(rootDirectory, 'vendor', 'bin', 'phpunit')} ${fileName} ${filterString}`),
-                    '$phpunit'
-                )
-            ];
-
-            return tasks;
-        },
-        resolveTask(task) {
-            return undefined;
+            return [new vscode.Task(
+                { type: "phpunit", task: "run" },
+                "run",
+                'phpunit',
+                new vscode.ShellExecution(`${projectSnapshot.executablePath} ${projectSnapshot.fileName} ${filterString}`),
+                '$phpunit'
+            )];
         }
     }));
 
@@ -76,9 +49,35 @@ function deactivate() {
 }
 exports.deactivate = deactivate;
 
-function getMethodName(lineNumber) {
+function ProjectSnapshot() {
+    this.fileName;
+    this.methodName;
+    this.executablePath;
+
+    this.init();
+}
+
+ProjectSnapshot.prototype.init = function () {
+    this.fileName = vscode.window.activeTextEditor.document.fileName.replace(/ /g, '\\ ');
+    this.methodName = this.findMethodName();
+    this.executablePath = this.findExecutablePath(this.fileName);
+}
+
+ProjectSnapshot.prototype.findExecutablePath = (currentFileName) => {
+    let phpunitDotXml = findUp.sync('phpunit.xml', { cwd: currentFileName });
+
+    if (phpunitDotXml) {
+        return path.join(path.dirname(phpunitDotXml), 'vendor', 'bin', 'phpunit');
+    }
+
+    let projectDirectory = vscode.workspace.rootPath.replace(/ /g, '\\ ');
+
+    return path.join(projectDirectory, 'vendor', 'bin', 'phpunit');
+}
+
+ProjectSnapshot.prototype.findMethodName = () => {
+    let line = vscode.window.activeTextEditor.selection.active.line;
     let methodName;
-    let line = lineNumber;
 
     while (line > 0) {
         const lineText = vscode.window.activeTextEditor.document.lineAt(line).text;
