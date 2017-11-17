@@ -58,21 +58,21 @@ function ProjectSnapshot() {
 }
 
 ProjectSnapshot.prototype.init = function () {
-    this.fileName = vscode.window.activeTextEditor.document.fileName.replace(/ /g, '\\ ');
+    this.fileName = vscode.window.activeTextEditor.document.fileName.replace(/ /g, '\\ '); // Escape spaces for shells in both windows and mac.
     this.methodName = this.findMethodName();
-    this.executablePath = this.findExecutablePath(this.fileName);
+    this.executablePath = this.findExecutablePath();
 }
 
-ProjectSnapshot.prototype.findExecutablePath = (currentFileName) => {
-    let phpunitDotXml = findUp.sync('phpunit.xml', { cwd: currentFileName });
+ProjectSnapshot.prototype.findExecutablePath = () => {
+    let phpunitDotXml = findUp.sync('phpunit.xml', { cwd: vscode.window.activeTextEditor.document.fileName });
 
-    if (phpunitDotXml) {
-        return path.join(path.dirname(phpunitDotXml), 'vendor', 'bin', 'phpunit');
-    }
+    let rootDirectory = phpunitDotXml
+        ? path.dirname(phpunitDotXml)
+        : vscode.workspace.rootPath;
 
-    let projectDirectory = vscode.workspace.rootPath.replace(/ /g, '\\ ');
-
-    return path.join(projectDirectory, 'vendor', 'bin', 'phpunit');
+    return path.join(rootDirectory, 'vendor', 'bin', 'phpunit')
+        .replace(/\\/g, '\\\\') // Escape backslashes for windows, otherwise the shell will ignore them.
+        .replace(/ /g, '\\ '); // Escape spaces for shells in both windows and mac.
 }
 
 ProjectSnapshot.prototype.findMethodName = () => {
