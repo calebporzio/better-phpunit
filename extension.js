@@ -58,7 +58,7 @@ function ProjectSnapshot() {
 }
 
 ProjectSnapshot.prototype.init = function () {
-    this.fileName = vscode.window.activeTextEditor.document.fileName.replace(/ /g, '\\ '); // Escape spaces for shells in both windows and mac.
+    this.fileName = vscode.window.activeTextEditor.document.fileName.replace(/\\/g, '\/'); // Escape spaces for shells in both windows and mac.
     this.methodName = this.findMethodName();
     this.executablePath = this.findExecutablePath();
 }
@@ -71,8 +71,7 @@ ProjectSnapshot.prototype.findExecutablePath = () => {
         : vscode.workspace.rootPath;
 
     return path.join(rootDirectory, 'vendor', 'bin', 'phpunit')
-        .replace(/\\/g, '\\\\') // Escape backslashes for windows, otherwise the shell will ignore them.
-        .replace(/ /g, '\\ '); // Escape spaces for shells in both windows and mac.
+        .replace(/\\/g, '\/'); // Escape backslashes for windows, otherwise the shell will ignore them.
 }
 
 ProjectSnapshot.prototype.findMethodName = () => {
