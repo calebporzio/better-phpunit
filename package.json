@@ -2,7 +2,7 @@
     "name": "better-phpunit",
     "displayName": "Better PHPUnit",
     "description": "A better PHPUnit test runner",
-    "version": "0.3.4",
+    "version": "0.3.5",
     "publisher": "calebporzio",
     "engines": {
         "vscode": "^1.17.0"
@@ -18,7 +18,7 @@
     "activationEvents": [
         "*"
     ],
-    "main": "./extension",
+    "main": "./src/extension",
     "contributes": {
         "commands": [
             {
