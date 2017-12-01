@@ -1,42 +1,34 @@
 const vscode = require('vscode');
 const assert = require('assert');
-const ProjectSnapshot = require('./project-snapshot');
+const CommandInstance = require('./command-instance');
 
-var projectSnapshot;
+var currentCommandInstance;
 
 module.exports.activate = function (context) {
     let disposables = [];
 
     disposables.push(vscode.commands.registerCommand('better-phpunit.run', async () => {
-        projectSnapshot = new ProjectSnapshot;
+        // It's important that "better-phpunit.run" is the activation event for this package.
+        // Otherwise, "currentCommandInstance" won't be available to the rest of the package.
+        currentCommandInstance = new CommandInstance;
 
         await vscode.commands.executeCommand('workbench.action.terminal.clear');
         await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run');
     }));
 
     disposables.push(vscode.commands.registerCommand('better-phpunit.run-previous', async () => {
-        if (runCommandHasntRunYet()) {
-            vscode.window.showErrorMessage('Better PHPUnit: No tests have been run yet.');
-            return;
-        }
-
         await vscode.commands.executeCommand('workbench.action.terminal.clear');
         await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run');
     }));
 
     disposables.push(vscode.workspace.registerTaskProvider('phpunit', {
         provideTasks: () => {
-            if (runCommandHasntRunYet()) {
-                return []; // Don't provide task until the "run" command has been run.
-            }
-
-            const filterString = projectSnapshot.methodName ? `--filter '^.*::${projectSnapshot.methodName}$'` : '';
-
+            // new vscode.TaskScope.Global
             return [new vscode.Task(
                 { type: "phpunit", task: "run" },
                 "run",
                 'phpunit',
-                new vscode.ShellExecution(`${projectSnapshot.executablePath} ${projectSnapshot.fileName} ${filterString}`),
+                new vscode.ShellExecution(currentCommandInstance.shellCommand),
                 '$phpunit'
             )];
         }
@@ -45,6 +37,7 @@ module.exports.activate = function (context) {
     context.subscriptions.push(disposables);
 }
 
-function runCommandHasntRunYet() {
-    return ! projectSnapshot;
+// This method is exposed for testing purposes.
+module.exports.getCurrentCommandInstance = function () {
+    return currentCommandInstance;
 }

@@ -16,7 +16,7 @@
         "Other"
     ],
     "activationEvents": [
-        "*"
+        "onCommand:better-phpunit.run"
     ],
     "main": "./src/extension",
     "contributes": {

@@ -1,0 +1,12 @@
+{
+    "name": "calebporzio/sub-directory",
+    "authors": [
+        {
+            "name": "Caleb Porzio",
+            "email": "calebporzio@gmail.com"
+        }
+    ],
+    "require": {
+        "phpunit/phpunit": "^6.4"
+    }
+}

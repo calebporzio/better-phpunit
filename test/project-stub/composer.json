@@ -1,0 +1,13 @@
+{
+    "name": "calebporzio/project-stub",
+    "description": "Test environment for Better PHPUnit VS Code extension",
+    "authors": [
+        {
+            "name": "Caleb Porzio",
+            "email": "calebporzio@gmail.com"
+        }
+    ],
+    "require": {
+        "phpunit/phpunit": "^6.4"
+    }
+}
