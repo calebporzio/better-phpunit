@@ -16,7 +16,8 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:better-phpunit.run"
+        "onCommand:better-phpunit.run",
+        "onCommand:better-phpunit.run-suite"
     ],
     "main": "./src/extension",
     "contributes": {
@@ -24,6 +25,10 @@
             {
                 "command": "better-phpunit.run",
                 "title": "Better PHPUnit: run"
+            },
+            {
+                "command": "better-phpunit.run-suite",
+                "title": "Better PHPUnit: run suite"
             },
             {
                 "command": "better-phpunit.run-previous",
@@ -40,6 +45,24 @@
                 "command": "better-phpunit.run-previous"
             }
         ],
+        "configuration": {
+            "title": "Better PHPUnit configuration",
+            "properties": {
+                "better-phpunit.commandSuffix": {
+                    "type": ["string", "null"],
+                    "default": null,
+                    "description": "This string will be appended to the phpunit command, it's a great place to add flags like '--stop-on-failure'"
+                },
+                "better-phpunit.phpunitBinary": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null,
+                    "description": "A custom phpunit binary. Ex: 'phpunit', '/usr/local/bin/phpunit'"
+                }
+            }
+        },
         "problemMatchers": [
             {
                 "name": "phpunit",

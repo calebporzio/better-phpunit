@@ -5,14 +5,32 @@ const path = require('path');
 module.exports = class CommandInstance {
     constructor() {
         this.fileName = this.normalizePath(vscode.window.activeTextEditor.document.fileName);
-        this.methodName = this.findMethodName();
-        this.executablePath = this.findExecutablePath();
 
-        const filterString = this.methodName ? `--filter '^.*::${this.methodName}$'` : '';
-        this.shellCommand = `${this.executablePath} ${this.fileName} ${filterString}`;
+        this.methodName = this.findMethodName();
+
+        this.executablePath = vscode.workspace.getConfiguration('better-phpunit').get('phpunitBinary')
+            || this.findExecutablePath();
+
+        this.shellCommand = `${this.executablePath} ${this.fileName} ${this.filterString()}${this.commandSuffix()}`;
+    }
+
+    runEntireSuite() {
+        this.shellCommand = `${this.executablePath}${this.commandSuffix()}`;
+
+        return this;
+    }
+
+    filterString() {
+        return this.methodName ? `--filter '^.*::${this.methodName}$'` : '';
+    }
+
+    commandSuffix() {
+        let suffix = vscode.workspace.getConfiguration('better-phpunit').get('commandSuffix');
+        return suffix ? ' ' + suffix : ''; // Add a space before the suffix.
     }
 
     findExecutablePath() {
+        // find the closest phpunit.xml file in the project (for projects with multiple "vendor/phpunit"s).
         let phpunitDotXml = findUp.sync('phpunit.xml', { cwd: vscode.window.activeTextEditor.document.fileName });
 
         let rootDirectory = phpunitDotXml
