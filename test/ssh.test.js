@@ -31,7 +31,7 @@ describe("SSH Tests", function () {
         Object.defineProperty(process, "platform", { value: this.originalPlatform })
 
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.paths", {})
-        })
+    })
 
     it("Commands are not wrapped when SSH is disabled", async function () {
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.enable", false)
@@ -44,6 +44,11 @@ describe("SSH Tests", function () {
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.user", "auser")
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.host", "ahost")
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.port", "2222")
+
+        // This test _sometimes_ fails. It might be because
+        // the config file isn't written to quickly enough
+        // Therefore we'll wait just in case
+        await timeout(250, () => { });
 
         assert.equal("ssh -tt -p2222 auser@ahost \"foo\"", (new SSH).wrapCommand("foo"))
     });
@@ -72,7 +77,7 @@ describe("SSH Tests", function () {
         // This test _sometimes_ fails. It might be because
         // the config file isn't written to quickly enough
         // Therefore we'll wait just in case
-        await timeout(500, () => {});
+        await timeout(250, () => {});
 
         assert.equal("/some/remote/path", (new SSH).remapLocalPath("/some/local/path"))
         assert.equal("/some/other_remote/path", (new SSH).remapLocalPath("/some/other_local/path"))
