@@ -2,7 +2,7 @@
     "name": "better-phpunit",
     "displayName": "Better PHPUnit",
     "description": "A better PHPUnit test runner",
-    "version": "0.3.5",
+    "version": "0.4.0",
     "publisher": "calebporzio",
     "engines": {
         "vscode": "^1.17.0"
@@ -49,7 +49,10 @@
             "title": "Better PHPUnit configuration",
             "properties": {
                 "better-phpunit.commandSuffix": {
-                    "type": ["string", "null"],
+                    "type": [
+                        "string",
+                        "null"
+                    ],
                     "default": null,
                     "description": "This string will be appended to the phpunit command, it's a great place to add flags like '--stop-on-failure'"
                 },
