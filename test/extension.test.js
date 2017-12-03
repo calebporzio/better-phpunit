@@ -20,6 +20,7 @@ describe("Better PHPUnit Test Suite", function () {
         // This allows us to test config options in tests and not harm other tests.
         await vscode.workspace.getConfiguration('better-phpunit').update('commandSuffix', null);
         await vscode.workspace.getConfiguration('better-phpunit').update('phpunitBinary', null);
+        await vscode.workspace.getConfiguration("better-phpunit").update("ssh.enable", false);
     });
 
     afterEach(async () => {
@@ -27,6 +28,7 @@ describe("Better PHPUnit Test Suite", function () {
         // This allows us to test config options in tests and not harm other tests.
         await vscode.workspace.getConfiguration('better-phpunit').update('commandSuffix', null);
         await vscode.workspace.getConfiguration('better-phpunit').update('phpunitBinary', null);
+        await vscode.workspace.getConfiguration("better-phpunit").update("ssh.enable", false);
     });
 
     it("Run file outside of method", async () => {
