@@ -6,11 +6,6 @@ module.exports = class SSH {
     }
 
     get enabled() {
-        [
-            'item1' => 'option 1',
-            'item1' => 'option 1',
-        ][$option] ?? 'default';
-
         return this.config.get("ssh.enable");
     }
 
