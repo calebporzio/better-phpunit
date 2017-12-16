@@ -64,6 +64,16 @@ describe("SSH Tests", function () {
         assert.equal("putty -ssh -tt -p2222 auser@ahost \"foo\"", (new SSH).wrapCommand("foo"));
     });
 
+    it("On Custom SSH binaries are preferred over the defaults", async function () {
+        await vscode.workspace.getConfiguration("better-phpunit").update("ssh.enable", true);
+        await vscode.workspace.getConfiguration("better-phpunit").update("ssh.user", "auser");
+        await vscode.workspace.getConfiguration("better-phpunit").update("ssh.host", "ahost");
+        await vscode.workspace.getConfiguration("better-phpunit").update("ssh.port", "2222");
+        await vscode.workspace.getConfiguration("better-phpunit").update("ssh.binary", "openssh");
+
+        assert.equal("openssh -tt -p2222 auser@ahost \"foo\"", (new SSH).wrapCommand("foo"));
+    });
+
     it("Paths are not convereted when SSH is disabled", async function () {
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.enable", false);
 

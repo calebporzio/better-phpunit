@@ -20,6 +20,10 @@ module.exports = class SSH {
     }
 
     get binary() {
+        if (this.config.get("ssh.binary")) {
+            return this.config.get("ssh.binary");
+        }
+
         if (this.isRunningOnWindows) {
             return "putty -ssh";
         }
