@@ -64,6 +64,11 @@
                     "default": null,
                     "description": "A custom phpunit binary. Ex: 'phpunit', '/usr/local/bin/phpunit'"
                 },
+                "better-phpunit.ssh.binary": {
+                    "type": ["string", "null"],
+                    "default": null,
+                    "description": "The path (and flags) to an SSH-compatible binary. If null it will use SSH on *nix and Putty on Windows."
+                },
                 "better-phpunit.ssh.enable": {
                     "type": "boolean",
                     "default": false,
