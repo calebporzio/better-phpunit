@@ -64,7 +64,7 @@ describe("SSH Tests", function () {
         assert.equal("putty -ssh -tt -p2222 auser@ahost \"foo\"", (new SSH).wrapCommand("foo"));
     });
 
-    it("Paths are not convereted when SSH is disabled", async function () {
+    it("Paths are not converted when SSH is disabled", async function () {
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.enable", false);
 
         assert.equal("/some/local/path", (new SSH).remapLocalPath("/some/local/path"));
