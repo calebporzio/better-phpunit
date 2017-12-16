@@ -84,7 +84,7 @@ describe("SSH Tests", function () {
 
     // FIXME: This uses an implementation detail but there's
     // currently no simple way to setup SSH integration tests
-    it.only("The correct SSH command is run when triggering Better PHPUnit", async function () {
+    it("The correct SSH command is run when triggering Better PHPUnit", async function () {
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.paths", {
             "/Users/calebporzio/Documents/Code/sites/better-phpunit": "/some/remote/path",
         });
