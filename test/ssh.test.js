@@ -1,6 +1,8 @@
+const path = require('path');
 const assert = require('assert');
 const vscode = require('vscode');
 const SSH = require('../src/ssh');
+const extension = require('../src/extension');
 const waitToAssertInSeconds = 1;
 
 // This is a little helper function to promisify setTimeout, so we can "await" setTimeout.
@@ -78,5 +80,34 @@ describe("SSH Tests", function () {
 
         assert.equal("/some/remote/path", (new SSH).remapLocalPath("/some/local/path"));
         assert.equal("/some/other_remote/path", (new SSH).remapLocalPath("/some/other_local/path"));
+    });
+
+    // FIXME: This uses an implementation detail but there's
+    // currently no simple way to setup SSH integration tests
+    it.only("The correct SSH command is run when triggering Better PHPUnit", async function () {
+        await vscode.workspace.getConfiguration("better-phpunit").update("ssh.paths", {
+            "/Users/calebporzio/Documents/Code/sites/better-phpunit": "/some/remote/path",
+        });
+
+        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
+        await vscode.window.showTextDocument(document, { selection: new vscode.Range(7, 0, 7, 0) });
+        await vscode.commands.executeCommand('better-phpunit.run');
+
+        await timeout(waitToAssertInSeconds, () => {})
+
+        assert.equal(
+            extension.getGlobalCommandInstance().fileName,
+            '/some/remote/path/test/project-stub/tests/SampleTest.php'
+        );
+
+        assert.equal(
+            extension.getGlobalCommandInstance().executablePath,
+            '/some/remote/path/test/project-stub/vendor/bin/phpunit'
+        );
+
+        assert.equal(
+            extension.getGlobalCommandInstance().shellCommand,
+            'ssh -tt -p2222 auser@ahost "/some/remote/path/test/project-stub/vendor/bin/phpunit /some/remote/path/test/project-stub/tests/SampleTest.php --filter \'^.*::test_first$\'"'
+        );
     });
 });
