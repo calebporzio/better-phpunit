@@ -22,6 +22,7 @@ module.exports = class CommandInstance {
 
     runEntireSuite() {
         this.shellCommand = `${this.executablePath}${this.commandSuffix()}`;
+        this.shellCommand = this.ssh.wrapCommand(this.shellCommand)
 
         return this;
     }
