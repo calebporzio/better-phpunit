@@ -5,24 +5,24 @@ const SSH = require("./ssh");
 
 module.exports = class CommandInstance {
     constructor() {
+        this.ssh = new SSH();
+
         this.fileName = this.normalizePath(vscode.window.activeTextEditor.document.fileName);
+        this.fileName = this.ssh.remapLocalPath(this.fileName)
 
         this.methodName = this.findMethodName();
 
         this.executablePath = vscode.workspace.getConfiguration('better-phpunit').get('phpunitBinary')
             || this.findExecutablePath();
+        this.executablePath = this.ssh.remapLocalPath(this.executablePath)
 
         this.shellCommand = `${this.executablePath} ${this.fileName} ${this.filterString()}${this.commandSuffix()}`;
-
-        this.ssh = new SSH();
-
-        this.fileName = this.ssh.remapLocalPath(this.fileName)
-        this.executablePath = this.ssh.remapLocalPath(this.executablePath)
         this.shellCommand = this.ssh.wrapCommand(this.shellCommand)
     }
 
     runEntireSuite() {
         this.shellCommand = `${this.executablePath}${this.commandSuffix()}`;
+        this.shellCommand = this.ssh.wrapCommand(this.shellCommand)
 
         return this;
     }
