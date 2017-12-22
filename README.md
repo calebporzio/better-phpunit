@@ -47,6 +47,20 @@ Config:
 }
 ```
 
+Running tests over ssh (For VMs like Laravel Homestead):
+```
+{
+    "better-phpunit.ssh.enable": true,
+    "better-phpunit.ssh.paths": {
+        "/your/local/path": "/your/remote/path"
+    },
+    "better-phpunit.ssh.user": "user",
+    "better-phpunit.ssh.host": "host",
+    "better-phpunit.ssh.port": "22"
+    "better-phpunit.ssh.binary": "putty -ssh"
+}
+```
+
 ## Wish List:
 - Handling PHP fatal and parser errors
 - A sidebar panel for managing errors

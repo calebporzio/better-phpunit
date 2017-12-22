@@ -2,7 +2,7 @@
     "name": "better-phpunit",
     "displayName": "Better PHPUnit",
     "description": "A better PHPUnit test runner",
-    "version": "0.5.1",
+    "version": "0.5.3",
     "publisher": "calebporzio",
     "engines": {
         "vscode": "^1.17.0"
@@ -96,6 +96,14 @@
                     "type": "object",
                     "default": {},
                     "description": "The SSH path map. Keys are local (host) paths and values are remote (guest) paths."
+                },
+                "better-phpunit.ssh.binary": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null,
+                    "description": "The path (and flags) to an SSH-compatible binary. If null it will use SSH on *nix and Putty on Windows."
                 }
             }
         },

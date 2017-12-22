@@ -37,7 +37,7 @@ describe("Better PHPUnit Test Suite", function () {
         await vscode.commands.executeCommand('better-phpunit.run');
 
         await timeout(waitToAssertInSeconds, () => {
-            assert.ok(extension.getGlobalCommandInstance().methodName === undefined);
+            assert.ok(extension.getGlobalCommandInstance().method === undefined);
         });
     });
 
@@ -48,7 +48,7 @@ describe("Better PHPUnit Test Suite", function () {
 
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
-                extension.getGlobalCommandInstance().methodName,
+                extension.getGlobalCommandInstance().method,
                 'test_first'
             );
         });
@@ -61,7 +61,7 @@ describe("Better PHPUnit Test Suite", function () {
 
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
-                extension.getGlobalCommandInstance().methodName,
+                extension.getGlobalCommandInstance().method,
                 'test_second'
             );
         });
@@ -74,7 +74,7 @@ describe("Better PHPUnit Test Suite", function () {
 
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
-                extension.getGlobalCommandInstance().fileName,
+                extension.getGlobalCommandInstance().file,
                 '/Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/tests/SampleTest.php'
             );
         });
@@ -87,7 +87,7 @@ describe("Better PHPUnit Test Suite", function () {
 
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
-                extension.getGlobalCommandInstance().fileName.replace(/\\/g, 'XX'),
+                extension.getGlobalCommandInstance().file.replace(/\\/g, 'XX'),
                 '/Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/tests/FileXX WithXX SpacesXX Test.php'
             );
         });
@@ -100,7 +100,7 @@ describe("Better PHPUnit Test Suite", function () {
 
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
-                extension.getGlobalCommandInstance().executablePath,
+                extension.getGlobalCommandInstance().binary,
                 '/Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/vendor/bin/phpunit'
             );
         });
@@ -113,7 +113,7 @@ describe("Better PHPUnit Test Suite", function () {
 
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
-                extension.getGlobalCommandInstance().executablePath,
+                extension.getGlobalCommandInstance().binary,
                 '/Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/sub-directory/vendor/bin/phpunit'
             );
         });
@@ -126,7 +126,7 @@ describe("Better PHPUnit Test Suite", function () {
 
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
-                extension.getGlobalCommandInstance().shellCommand,
+                extension.getGlobalCommandInstance().output,
                 "/Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/vendor/bin/phpunit /Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/tests/SampleTest.php --filter '^.*::test_first$'"
             );
         });
@@ -139,7 +139,7 @@ describe("Better PHPUnit Test Suite", function () {
 
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
-                extension.getGlobalCommandInstance().shellCommand,
+                extension.getGlobalCommandInstance().output,
                 "/Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/vendor/bin/phpunit /Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/tests/SampleTest.php --filter '^.*::test_first$'"
             );
         });
@@ -152,7 +152,7 @@ describe("Better PHPUnit Test Suite", function () {
 
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
-                extension.getGlobalCommandInstance().shellCommand,
+                extension.getGlobalCommandInstance().output,
                 "/Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/vendor/bin/phpunit"
             );
         });
@@ -167,7 +167,7 @@ describe("Better PHPUnit Test Suite", function () {
 
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
-                extension.getGlobalCommandInstance().shellCommand,
+                extension.getGlobalCommandInstance().output,
                 "/Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/vendor/bin/phpunit --foo=bar"
             );
         });
@@ -182,7 +182,7 @@ describe("Better PHPUnit Test Suite", function () {
 
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
-                extension.getGlobalCommandInstance().shellCommand,
+                extension.getGlobalCommandInstance().output,
                 "vendor/foo/bar"
             );
         });
