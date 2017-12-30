@@ -48,7 +48,7 @@ describe("SSH Tests", function () {
 
         assert.equal(
             extension.getGlobalCommandInstance().output,
-            '/Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/vendor/bin/phpunit /Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/tests/SampleTest.php --filter \'^.*::test_first$\''
+            '/Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/vendor/bin/phpunit /Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/tests/SampleTest.php --filter \'^.*::test_first( with data set .*)?$\''
         );
     });
 
@@ -61,7 +61,7 @@ describe("SSH Tests", function () {
 
        assert.equal(
             extension.getGlobalCommandInstance().output,
-            'ssh -tt -p2222 auser@ahost "/some/remote/path/test/project-stub/vendor/bin/phpunit /some/remote/path/test/project-stub/tests/SampleTest.php --filter \'^.*::test_first$\'"'
+            'ssh -tt -p2222 auser@ahost "/some/remote/path/test/project-stub/vendor/bin/phpunit /some/remote/path/test/project-stub/tests/SampleTest.php --filter \'^.*::test_first( with data set .*)?$\'"'
         );
     });
 
@@ -76,7 +76,7 @@ describe("SSH Tests", function () {
 
         assert.equal(
             extension.getGlobalCommandInstance().output,
-            'putty -ssh -tt -p2222 auser@ahost "/some/remote/path/test/project-stub/vendor/bin/phpunit /some/remote/path/test/project-stub/tests/SampleTest.php --filter \'^.*::test_first$\'"'
+            'putty -ssh -tt -p2222 auser@ahost "/some/remote/path/test/project-stub/vendor/bin/phpunit /some/remote/path/test/project-stub/tests/SampleTest.php --filter \'^.*::test_first( with data set .*)?$\'"'
         );
     });
 });

@@ -127,7 +127,7 @@ describe("Better PHPUnit Test Suite", function () {
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().output,
-                "/Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/vendor/bin/phpunit /Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/tests/SampleTest.php --filter '^.*::test_first$'"
+                "/Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/vendor/bin/phpunit /Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/tests/SampleTest.php --filter '^.*::test_first( with data set .*)?$'"
             );
         });
     });
@@ -140,7 +140,7 @@ describe("Better PHPUnit Test Suite", function () {
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().output,
-                "/Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/vendor/bin/phpunit /Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/tests/SampleTest.php --filter '^.*::test_first$'"
+                "/Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/vendor/bin/phpunit /Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/tests/SampleTest.php --filter '^.*::test_first( with data set .*)?$'"
             );
         });
     });
