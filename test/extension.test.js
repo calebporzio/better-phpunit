@@ -119,6 +119,19 @@ describe("Better PHPUnit Test Suite", function () {
         });
     });
 
+    it("Detect configuration in sub-directory", async () => {
+        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'sub-directory', 'tests', 'SampleTest.php'));
+        await vscode.window.showTextDocument(document);
+        await vscode.commands.executeCommand('better-phpunit.run');
+
+        await timeout(waitToAssertInSeconds, () => {
+            assert.equal(
+                extension.getGlobalCommandInstance().configuration,
+                ' --configuration /Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/sub-directory/phpunit.xml'
+            );
+        });
+    });
+
     it("Check full command", async () => {
         let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
         await vscode.window.showTextDocument(document, { selection: new vscode.Range(7, 0, 7, 0) });

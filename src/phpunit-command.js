@@ -18,7 +18,7 @@ module.exports = class PhpUnitCommand {
 
         this.lastOutput = this.runFullSuite
             ? `${this.binary}${this.suffix}`
-            : `${this.binary} ${this.file} ${this.filter}${this.suffix}`;
+            : `${this.binary} ${this.file} ${this.filter}${this.configuration}${this.suffix}`;
 
         return this.lastOutput;
     }
@@ -29,6 +29,12 @@ module.exports = class PhpUnitCommand {
 
     get filter() {
         return this.method ? `--filter '^.*::${this.method}$'` : '';
+    }
+
+    get configuration() {
+        return this.subDirectory
+            ? ` --configuration ${this._normalizePath(path.join(this.subDirectory, 'phpunit.xml'))}`
+            : '';
     }
 
     get suffix() {
@@ -42,14 +48,18 @@ module.exports = class PhpUnitCommand {
             return vscode.workspace.getConfiguration('better-phpunit').get('phpunitBinary')
         }
 
-        // find the closest phpunit.xml file in the project (for projects with multiple "vendor/phpunit"s).
+        return this.subDirectory
+            ? this._normalizePath(path.join(this.subDirectory, 'vendor', 'bin', 'phpunit'))
+            : this._normalizePath(path.join(vscode.workspace.rootPath, 'vendor', 'bin', 'phpunit'));
+    }
+
+    get subDirectory() {
+        // find the closest phpunit.xml file in the project (for projects with multiple "vendor/bin/phpunit"s).
         let phpunitDotXml = findUp.sync('phpunit.xml', { cwd: vscode.window.activeTextEditor.document.fileName });
 
-        let rootDirectory = phpunitDotXml
+        return path.dirname(phpunitDotXml) !== vscode.workspace.rootPath
             ? path.dirname(phpunitDotXml)
-            : vscode.workspace.rootPath;
-
-        return this._normalizePath(path.join(rootDirectory, 'vendor', 'bin', 'phpunit'));
+            : null;
     }
 
     get method() {
