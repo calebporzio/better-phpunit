@@ -55,7 +55,7 @@ module.exports = class PhpUnitCommand {
 
     get subDirectory() {
         // find the closest phpunit.xml file in the project (for projects with multiple "vendor/bin/phpunit"s).
-        let phpunitDotXml = findUp.sync('phpunit.xml', { cwd: vscode.window.activeTextEditor.document.fileName });
+        let phpunitDotXml = findUp.sync(['phpunit.xml', 'phpunit.xml.dist'], { cwd: vscode.window.activeTextEditor.document.fileName });
 
         return path.dirname(phpunitDotXml) !== vscode.workspace.rootPath
             ? path.dirname(phpunitDotXml)
