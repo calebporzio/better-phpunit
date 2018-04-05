@@ -1,5 +1,6 @@
 const vscode = require('vscode');
 const PhpUnitCommand = require('./phpunit-command');
+const path = require('path');
 
 module.exports = class RemotePhpUnitCommand extends PhpUnitCommand {
     constructor(options) {
@@ -18,6 +19,12 @@ module.exports = class RemotePhpUnitCommand extends PhpUnitCommand {
 
     get output() {
         return this.wrapCommand(super.output);
+    }
+
+    get configuration() {
+        return this.subDirectory
+            ? ' --configuration ' + this.remapLocalPath(this._normalizePath(path.join(this.subDirectory, 'phpunit.xml')))
+            : '';
     }
 
     get paths() {
@@ -46,7 +53,11 @@ module.exports = class RemotePhpUnitCommand extends PhpUnitCommand {
         const user = this.config.get("ssh.user");
         const port = this.config.get("ssh.port");
         const host = this.config.get("ssh.host");
+        let options = this.config.get("ssh.options");
 
-        return `${this.sshBinary} -tt -p${port} ${user}@${host} "${command}"`;
+        if (!options)
+            options = `-tt -p${port}`;
+
+        return `${this.sshBinary} ${options} ${user}@${host} "${command}"`;
     }
 }
