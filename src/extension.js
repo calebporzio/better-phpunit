@@ -49,12 +49,12 @@ async function runCommand(command) {
     vscode.window.activeTextEditor
         || vscode.window.showErrorMessage('Better PHPUnit: open a file to run this command');
 
-    await vscode.commands.executeCommand('workbench.action.terminal.clear');
+    //await vscode.commands.executeCommand('workbench.action.terminal.clear');
     await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run');
 }
 
 async function runPreviousCommand() {
-    await vscode.commands.executeCommand('workbench.action.terminal.clear');
+    //await vscode.commands.executeCommand('workbench.action.terminal.clear');
     await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run');
 }
 
