@@ -1,11 +1,18 @@
 const vscode = require('vscode');
 const PhpUnitCommand = require('./phpunit-command');
+const path = require('path');
 
 module.exports = class RemotePhpUnitCommand extends PhpUnitCommand {
     constructor(options) {
         super(options);
 
         this.config = vscode.workspace.getConfiguration("better-phpunit");
+    }
+
+    get configuration() {
+        return this.subDirectory
+            ? ` --configuration ${this.remapLocalPath(this._normalizePath(path.join(this.subDirectory, 'phpunit.xml')))}`
+            : '';
     }
 
     get file() {
