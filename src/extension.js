@@ -3,7 +3,7 @@ const assert = require('assert');
 const PhpUnitCommand = require('./phpunit-command');
 const RemotePhpUnitCommand = require('./remote-phpunit-command.js');
 
-var globalCommand;
+let globalCommand;
 
 module.exports.activate = function (context) {
     let disposables = [];
@@ -32,12 +32,13 @@ module.exports.activate = function (context) {
         provideTasks: () => {
             return [new vscode.Task(
                 { type: "phpunit", task: "run" },
+                vscode.TaskScope[vscode.workspace.getConfiguration('better-phpunit').get('enviroment')],
                 "run",
                 'phpunit',
                 new vscode.ShellExecution(globalCommand.output),
                 '$phpunit'
             )];
-        }
+        },
     }));
 
     context.subscriptions.push(disposables);

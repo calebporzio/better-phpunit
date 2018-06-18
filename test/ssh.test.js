@@ -22,10 +22,11 @@ describe("SSH Tests", function () {
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.user", "auser");
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.host", "ahost");
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.port", "2222");
-        await vscode.workspace.getConfiguration("better-phpunit").update("ssh.paths", {
-            "/Users/calebporzio/Documents/Code/sites/better-phpunit": "/some/remote/path",
-            "/some/other_local/path": "/some/other_remote/path",
-        });
+
+        const paths = {};
+        paths[path.join(vscode.workspace.rootPath)] = "/some/remote/path";
+        paths["/some/other_local/path"] = "/some/other_remote/path";
+        await vscode.workspace.getConfiguration("better-phpunit").update("ssh.paths", paths);
     });
 
     afterEach(async () => {
@@ -48,7 +49,7 @@ describe("SSH Tests", function () {
 
         assert.equal(
             extension.getGlobalCommandInstance().output,
-            '/Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/vendor/bin/phpunit /Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/tests/SampleTest.php --filter \'^.*::test_first$\''
+            path.join(vscode.workspace.rootPath, '/vendor/bin/phpunit ') + path.join(vscode.workspace.rootPath, '/tests/SampleTest.php') + " --filter '^.*::test_first$'"
         );
     });
 
@@ -61,7 +62,7 @@ describe("SSH Tests", function () {
 
        assert.equal(
             extension.getGlobalCommandInstance().output,
-            'ssh -tt -p2222 auser@ahost "/some/remote/path/test/project-stub/vendor/bin/phpunit /some/remote/path/test/project-stub/tests/SampleTest.php --filter \'^.*::test_first$\'"'
+            'ssh -tt -p2222 auser@ahost "/some/remote/path/vendor/bin/phpunit /some/remote/path/tests/SampleTest.php --filter \'^.*::test_first$\'"'
         );
     });
 
@@ -76,7 +77,7 @@ describe("SSH Tests", function () {
 
         assert.equal(
             extension.getGlobalCommandInstance().output,
-            'putty -ssh -tt -p2222 auser@ahost "/some/remote/path/test/project-stub/vendor/bin/phpunit /some/remote/path/test/project-stub/tests/SampleTest.php --filter \'^.*::test_first$\'"'
+            'putty -ssh -tt -p2222 auser@ahost "/some/remote/path/vendor/bin/phpunit /some/remote/path/tests/SampleTest.php --filter \'^.*::test_first$\'"'
         );
     });
 });
