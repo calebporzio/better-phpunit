@@ -3,7 +3,7 @@ const assert = require('assert');
 const PhpUnitCommand = require('./phpunit-command');
 const RemotePhpUnitCommand = require('./remote-phpunit-command.js');
 
-var globalCommand;
+let globalCommand;
 
 module.exports.activate = function (context) {
     let disposables = [];
@@ -28,18 +28,6 @@ module.exports.activate = function (context) {
         await runPreviousCommand();
     }));
 
-    disposables.push(vscode.workspace.registerTaskProvider('phpunit', {
-        provideTasks: () => {
-            return [new vscode.Task(
-                { type: "phpunit", task: "run" },
-                "run",
-                'phpunit',
-                new vscode.ShellExecution(globalCommand.output),
-                '$phpunit'
-            )];
-        }
-    }));
-
     context.subscriptions.push(disposables);
 }
 
@@ -50,12 +38,20 @@ async function runCommand(command) {
         || vscode.window.showErrorMessage('Better PHPUnit: open a file to run this command');
 
     await vscode.commands.executeCommand('workbench.action.terminal.clear');
-    await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run');
+    const terminal = getTerminal();
+    await terminal.sendText(globalCommand.output, true);
 }
 
 async function runPreviousCommand() {
     await vscode.commands.executeCommand('workbench.action.terminal.clear');
-    await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run');
+    const terminal = getTerminal();
+    await terminal.sendText(globalCommand.output, true);
+}
+
+function getTerminal() {
+    const terminal = vscode.window.createTerminal('better-phpunit');
+    terminal.show();
+    return terminal;
 }
 
 function setGlobalCommandInstance(commandInstance) {

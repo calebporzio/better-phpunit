@@ -2,7 +2,7 @@
     "name": "better-phpunit",
     "displayName": "Better PHPUnit",
     "description": "A better PHPUnit test runner",
-    "version": "0.7.0",
+    "version": "0.8.0",
     "publisher": "calebporzio",
     "engines": {
         "vscode": "^1.17.0"
@@ -63,6 +63,14 @@
                     ],
                     "default": null,
                     "description": "A custom phpunit binary. Ex: 'phpunit', '/usr/local/bin/phpunit'"
+                },
+                "better-phpunit.environment": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": "Workspace",
+                    "description": "Target environment of the Task. Possible values: WorkspaceFolder, Global, Workspace."
                 },
                 "better-phpunit.ssh.enable": {
                     "type": "boolean",

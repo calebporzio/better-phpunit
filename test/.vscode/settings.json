@@ -1,0 +1,11 @@
+{
+    "better-phpunit.commandSuffix": null,
+    "better-phpunit.phpunitBinary": null,
+    "better-phpunit.ssh.enable": false,
+    "better-phpunit.ssh.user": "auser",
+    "better-phpunit.ssh.host": "ahost",
+    "better-phpunit.ssh.port": "2222",
+    "better-phpunit.ssh.paths": {},
+    "better-phpunit.ssh.binary": null,
+    "better-phpunit.environment": "Workspace"
+}
