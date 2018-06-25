@@ -104,6 +104,24 @@
                     ],
                     "default": null,
                     "description": "The path (and flags) to an SSH-compatible binary. If null it will use SSH on *nix and Putty on Windows."
+                },
+                "better-phpunit.docker.enable": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Run tests on a docker instance"
+                },
+                "better-phpunit.docker.container": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null,
+                    "description": "The container to use when running tests via Docker"
+                },
+                "better-phpunit.docker.paths": {
+                    "type": "object",
+                    "default": {},
+                    "description": "The docker path map. Keys are local (host) paths and values are remote (guest) paths."
                 }
             }
         },
