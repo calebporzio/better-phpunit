@@ -2,7 +2,7 @@ const assert = require('assert');
 const vscode = require('vscode');
 const path = require('path');
 const extension = require('../src/extension');
-const waitToAssertInSeconds = 1;
+const waitToAssertInSeconds = 5;
 
 // This is a little helper function to promisify setTimeout, so we can "await" setTimeout.
 function timeout(seconds, callback) {
@@ -75,7 +75,7 @@ describe("Better PHPUnit Test Suite", function () {
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().file,
-                '/Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/tests/SampleTest.php'
+                path.join(vscode.workspace.rootPath, '/tests/SampleTest.php')
             );
         });
     });
@@ -88,7 +88,7 @@ describe("Better PHPUnit Test Suite", function () {
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().file.replace(/\\/g, 'XX'),
-                '/Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/tests/FileXX WithXX SpacesXX Test.php'
+                path.join(vscode.workspace.rootPath, '/tests/FileXX WithXX SpacesXX Test.php')
             );
         });
     });
@@ -101,7 +101,7 @@ describe("Better PHPUnit Test Suite", function () {
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().binary,
-                '/Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/vendor/bin/phpunit'
+                path.join(vscode.workspace.rootPath, '/vendor/bin/phpunit')
             );
         });
     });
@@ -114,7 +114,7 @@ describe("Better PHPUnit Test Suite", function () {
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().binary,
-                '/Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/sub-directory/vendor/bin/phpunit'
+                path.join(vscode.workspace.rootPath, '/sub-directory/vendor/bin/phpunit')
             );
         });
     });
@@ -127,7 +127,7 @@ describe("Better PHPUnit Test Suite", function () {
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().configuration,
-                ' --configuration /Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/sub-directory/phpunit.xml'
+                ` --configuration ${path.join(vscode.workspace.rootPath, '/sub-directory/phpunit.xml')}`
             );
         });
     });
@@ -140,7 +140,7 @@ describe("Better PHPUnit Test Suite", function () {
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().output,
-                "/Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/vendor/bin/phpunit /Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/tests/SampleTest.php --filter '^.*::test_first$'"
+                path.join(vscode.workspace.rootPath, '/vendor/bin/phpunit ') + path.join(vscode.workspace.rootPath, '/tests/SampleTest.php') + " --filter '^.*::test_first$'"
             );
         });
     });
@@ -153,7 +153,7 @@ describe("Better PHPUnit Test Suite", function () {
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().output,
-                "/Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/vendor/bin/phpunit /Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/tests/SampleTest.php --filter '^.*::test_first$'"
+                path.join(vscode.workspace.rootPath, '/vendor/bin/phpunit ') + path.join(vscode.workspace.rootPath, '/tests/SampleTest.php') + " --filter '^.*::test_first$'"
             );
         });
     });
@@ -166,7 +166,7 @@ describe("Better PHPUnit Test Suite", function () {
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().output,
-                "/Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/vendor/bin/phpunit"
+                path.join(vscode.workspace.rootPath, '/vendor/bin/phpunit')
             );
         });
     });
@@ -181,7 +181,7 @@ describe("Better PHPUnit Test Suite", function () {
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().output,
-                "/Users/calebporzio/Documents/Code/sites/better-phpunit/test/project-stub/vendor/bin/phpunit --foo=bar"
+                path.join(vscode.workspace.rootPath, '/vendor/bin/phpunit') + ' --foo=bar'
             );
         });
     });
