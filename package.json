@@ -90,7 +90,7 @@
                         "integer"
                     ],
                     "default": 22,
-                    "description": "The port to use when running tests via SSH"
+                    "description": "The port to use when running tests via SSH.  Deprecated, set better-phpunit.options to '-p[port]' on Linux/Mac, and '-P [port]' on Windows."
                 },
                 "better-phpunit.ssh.paths": {
                     "type": "object",
@@ -104,6 +104,14 @@
                     ],
                     "default": null,
                     "description": "The path (and flags) to an SSH-compatible binary. If null it will use SSH on *nix and Putty on Windows."
+                },
+                "better-phpunit.ssh.options": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null,
+                    "description": "Additional command line options to pass to ssh/putty/plink"
                 }
             }
         },
