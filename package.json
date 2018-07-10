@@ -2,7 +2,7 @@
     "name": "better-phpunit",
     "displayName": "Better PHPUnit",
     "description": "A better PHPUnit test runner",
-    "version": "0.7.0",
+    "version": "0.8.0",
     "publisher": "calebporzio",
     "engines": {
         "vscode": "^1.17.0"
@@ -134,6 +134,20 @@
                         "location": 2
                     }
                 ]
+            }
+        ],
+       "taskDefinitions": [
+            {
+                "type": "phpunit",
+                "required": [
+                    "task"
+                ],
+                "properties": {
+                    "task": {
+                        "type": "string",
+                        "description": "The task to execute"
+                    }
+                }
             }
         ]
     },
