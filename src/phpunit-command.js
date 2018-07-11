@@ -8,6 +8,10 @@ module.exports = class PhpUnitCommand {
             ? options.runFullSuite
             : false;
 
+        this.runFullFile = options !== undefined
+            ? options.runFullFile
+            : false;
+
         this.lastOutput;
     }
 
@@ -18,7 +22,7 @@ module.exports = class PhpUnitCommand {
 
         this.lastOutput = this.runFullSuite
             ? `${this.binary}${this.suffix}`
-            : `${this.binary} ${this.file} ${this.filter}${this.configuration}${this.suffix}`;
+            : `${this.binary} ${this.file}${this.filter}${this.configuration}${this.suffix}`;
 
         return this.lastOutput;
     }
@@ -28,7 +32,7 @@ module.exports = class PhpUnitCommand {
     }
 
     get filter() {
-        return this.method ? `--filter '^.*::${this.method}$'` : '';
+        return this.method ? ` --filter '^.*::${this.method}$'` : '';
     }
 
     get configuration() {
@@ -63,6 +67,10 @@ module.exports = class PhpUnitCommand {
     }
 
     get method() {
+        if (this.runFullFile) {
+            return;
+        }
+
         let line = vscode.window.activeTextEditor.selection.active.line;
         let method;
 

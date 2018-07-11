@@ -171,6 +171,19 @@ describe("Better PHPUnit Test Suite", function () {
         });
     });
 
+    it("Run entire file", async () => {
+        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
+        await vscode.window.showTextDocument(document, { selection: new vscode.Range(7, 0, 7, 0) });
+        await vscode.commands.executeCommand('better-phpunit.run-file')
+
+        await timeout(waitToAssertInSeconds, () => {
+            assert.equal(
+                extension.getGlobalCommandInstance().output,
+                path.join(vscode.workspace.rootPath, '/vendor/bin/phpunit ') + path.join(vscode.workspace.rootPath, '/tests/SampleTest.php')
+            );
+        });
+    });
+
     it("Run with commandSuffix config", async () => {
         await vscode.workspace.getConfiguration('better-phpunit').update('commandSuffix', '--foo=bar');
 

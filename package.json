@@ -17,6 +17,7 @@
     ],
     "activationEvents": [
         "onCommand:better-phpunit.run",
+        "onCommand:better-phpunit.run-file",
         "onCommand:better-phpunit.run-suite"
     ],
     "main": "./src/extension",
@@ -25,6 +26,10 @@
             {
                 "command": "better-phpunit.run",
                 "title": "Better PHPUnit: run"
+            },
+            {
+                "command": "better-phpunit.run-file",
+                "title": "Better PHPUnit: run file"
             },
             {
                 "command": "better-phpunit.run-suite",

@@ -16,6 +16,14 @@ module.exports.activate = function (context) {
         await runCommand(command);
     }));
 
+    disposables.push(vscode.commands.registerCommand('better-phpunit.run-file', async () => {
+        const command = vscode.workspace.getConfiguration("better-phpunit").get("ssh.enable")
+            ? new RemotePhpUnitCommand({ runFullFile: true })
+            : new PhpUnitCommand({ runFullFile: true });
+
+        await runCommand(command);
+    }));
+
     disposables.push(vscode.commands.registerCommand('better-phpunit.run-suite', async () => {
         const command = vscode.workspace.getConfiguration("better-phpunit").get("ssh.enable")
             ? new RemotePhpUnitCommand({ runFullSuite: true })

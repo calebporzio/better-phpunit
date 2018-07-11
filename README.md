@@ -12,6 +12,11 @@
 - Open the command menu: `cmd+shift+p`
 - Select: `Better PHPUnit: run`
 
+or
+
+- Open the command menu: `cmd+shift+p`
+- Select: `Better PHPUnit: run file`
+
 ## Run the entire suite:
 - Open the command menu: `cmd+shift+p`
 - Select: `Better PHPUnit: run suite`
