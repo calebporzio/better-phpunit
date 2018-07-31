@@ -18,7 +18,7 @@ module.exports = class PhpUnitCommand {
 
         this.lastOutput = this.runFullSuite
             ? `${this.binary}${this.suffix}`
-            : `${this.binary} ${this.file} ${this.filter}${this.configuration}${this.suffix}`;
+            : `${this.binary} ${this.file}${this.filter}${this.configuration}${this.suffix}`;
 
         return this.lastOutput;
     }
@@ -28,7 +28,7 @@ module.exports = class PhpUnitCommand {
     }
 
     get filter() {
-        return this.method ? `--filter '^.*::${this.method}$'` : '';
+        return this.method ? ` --filter '^.*::${this.method}$'` : '';
     }
 
     get configuration() {

@@ -112,6 +112,32 @@
                     ],
                     "default": null,
                     "description": "Additional command line options to pass to ssh/putty/plink"
+                },
+                "better-phpunit.docker.enable": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Run tests on a docker instance"
+                },
+                "better-phpunit.docker.binary": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null,
+                    "description": "The name of the 'docker' (or 'docker-compose') binary. If null, it will default to 'docker'"
+                },
+                "better-phpunit.docker.container": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null,
+                    "description": "The container to use when running tests via Docker"
+                },
+                "better-phpunit.docker.paths": {
+                    "type": "object",
+                    "default": {},
+                    "description": "The docker path map. Keys are local (host) paths and values are remote (container) paths."
                 }
             }
         },
@@ -136,7 +162,7 @@
                 ]
             }
         ],
-       "taskDefinitions": [
+        "taskDefinitions": [
             {
                 "type": "phpunit",
                 "required": [
