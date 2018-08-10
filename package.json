@@ -64,6 +64,14 @@
                     "default": null,
                     "description": "A custom phpunit binary. Ex: 'phpunit', '/usr/local/bin/phpunit'"
                 },
+                "better-phpunit.xmlConfigFilepath": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null,
+                    "description": "Absolute path for the PHPUnit XML configuration file"
+                },
                 "better-phpunit.ssh.enable": {
                     "type": "boolean",
                     "default": false,
