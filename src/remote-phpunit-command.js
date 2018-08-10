@@ -55,13 +55,12 @@ module.exports = class RemotePhpUnitCommand extends PhpUnitCommand {
         const host = this.config.get("ssh.host");
         let options = this.config.get("ssh.options");
         let disableOptions = this.config.get("ssh.disableAllOptions");
-        console.log('disableOptions variable');
-        console.log(disableOptions);
         let optionsString = '';
 
         if (!disableOptions) {
-            if (!options)
+            if (!options) {
                 options = `-tt -p${port}`;
+            }
             optionsString = options + ` ${user}@${host} `;
         }
 
