@@ -105,6 +105,11 @@
                     "default": null,
                     "description": "The path (and flags) to an SSH-compatible binary. If null it will use SSH on *nix and Putty on Windows."
                 },
+                "better-phpunit.ssh.disableAllOptions": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Do not include any config options in SSH command."
+                },
                 "better-phpunit.ssh.options": {
                     "type": [
                         "string",
@@ -136,7 +141,7 @@
                 ]
             }
         ],
-       "taskDefinitions": [
+        "taskDefinitions": [
             {
                 "type": "phpunit",
                 "required": [
@@ -156,12 +161,12 @@
         "test": "node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "typescript": "^2.5.2",
-        "vscode": "^1.1.5",
-        "mocha": "^3.5.0",
+        "@types/mocha": "^2.2.42",
+        "@types/node": "^7.0.69",
         "eslint": "^4.6.1",
-        "@types/node": "^7.0.0",
-        "@types/mocha": "^2.2.42"
+        "mocha": "^3.5.0",
+        "typescript": "^2.5.2",
+        "vscode": "^1.1.5"
     },
     "dependencies": {
         "find-up": "^2.1.0"
