@@ -9,6 +9,12 @@ module.exports = class RemotePhpUnitCommand extends PhpUnitCommand {
         this.config = vscode.workspace.getConfiguration("better-phpunit");
     }
 
+    get configuration() {
+        return this.subDirectory
+            ? ` --configuration ${this.remapLocalPath(this._normalizePath(path.join(this.subDirectory, 'phpunit.xml')))}`
+            : '';
+    }
+
     get file() {
         return this.remapLocalPath(super.file);
     }
