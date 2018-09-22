@@ -22,6 +22,7 @@ describe("SSH Tests", function () {
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.user", "auser");
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.host", "ahost");
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.port", "2222");
+        await vscode.workspace.getConfiguration("better-phpunit").update("docker.enable", false);
 
         const paths = {};
         paths[path.join(vscode.workspace.rootPath)] = "/some/remote/path";
@@ -36,6 +37,7 @@ describe("SSH Tests", function () {
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.port", "2222");
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.binary", null);
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.paths", {});
+        await vscode.workspace.getConfiguration("better-phpunit").update("docker.enable", false);
     });
 
     it("Commands are not wrapped when SSH is disabled", async function () {

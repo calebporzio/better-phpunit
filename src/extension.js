@@ -7,14 +7,14 @@ const DockerPhpUnitCommand = require('./docker-phpunit-command.js');
 var globalCommand;
 
 module.exports.activate = function (context) {
-    const config = vscode.workspace.getConfiguration("better-phpunit");
     let disposables = [];
-    let command;
 
     disposables.push(vscode.commands.registerCommand('better-phpunit.run', async () => {
-        if (config.get("ssh.enable")) {
+        let command;
+
+        if (vscode.workspace.getConfiguration("better-phpunit").get("ssh.enable")) {
             command = new RemotePhpUnitCommand;
-        } else if (config.get("docker.enable")) {
+        } else if (vscode.workspace.getConfiguration("better-phpunit").get("docker.enable")) {
             command = new DockerPhpUnitCommand;
         } else {
             command = new PhpUnitCommand;
@@ -24,9 +24,9 @@ module.exports.activate = function (context) {
     }));
 
     disposables.push(vscode.commands.registerCommand('better-phpunit.run-suite', async () => {
-        if (config.get("ssh.enable")) {
+        if (vscode.workspace.getConfiguration("better-phpunit").get("ssh.enable")) {
             command = new RemotePhpUnitCommand({ runFullSuite: true });
-        } else if (config.get("docker.enable")) {
+        } else if (vscode.workspace.getConfiguration("better-phpunit").get("docker.enable")) {
             command = new DockerPhpUnitCommand({ runFullSuite: true });
         } else {
             command = new PhpUnitCommand({ runFullSuite: true });
