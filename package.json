@@ -136,7 +136,7 @@
                 ]
             }
         ],
-       "taskDefinitions": [
+        "taskDefinitions": [
             {
                 "type": "phpunit",
                 "required": [
@@ -156,12 +156,12 @@
         "test": "node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "typescript": "^2.5.2",
-        "vscode": "^1.1.5",
-        "mocha": "^3.5.0",
+        "@types/mocha": "^2.2.42",
+        "@types/node": "^7.0.70",
         "eslint": "^4.6.1",
-        "@types/node": "^7.0.0",
-        "@types/mocha": "^2.2.42"
+        "mocha": "^3.5.0",
+        "typescript": "^2.5.2",
+        "vscode": "^1.1.21"
     },
     "dependencies": {
         "find-up": "^2.1.0"
