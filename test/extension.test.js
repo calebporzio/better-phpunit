@@ -21,6 +21,7 @@ describe("Better PHPUnit Test Suite", function () {
         await vscode.workspace.getConfiguration('better-phpunit').update('commandSuffix', null);
         await vscode.workspace.getConfiguration('better-phpunit').update('phpunitBinary', null);
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.enable", false);
+        await vscode.workspace.getConfiguration("better-phpunit").update("xmlConfigFilepath", null);
     });
 
     afterEach(async () => {
@@ -29,6 +30,7 @@ describe("Better PHPUnit Test Suite", function () {
         await vscode.workspace.getConfiguration('better-phpunit').update('commandSuffix', null);
         await vscode.workspace.getConfiguration('better-phpunit').update('phpunitBinary', null);
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.enable", false);
+        await vscode.workspace.getConfiguration("better-phpunit").update("xmlConfigFilepath", null);
     });
 
     it("Run file outside of method", async () => {
@@ -43,7 +45,7 @@ describe("Better PHPUnit Test Suite", function () {
 
     it("Run from within first method", async () => {
         let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
-        await vscode.window.showTextDocument(document, {selection: new vscode.Range(7, 0, 7, 0)});
+        await vscode.window.showTextDocument(document, { selection: new vscode.Range(7, 0, 7, 0) });
         await vscode.commands.executeCommand('better-phpunit.run');
 
         await timeout(waitToAssertInSeconds, () => {
@@ -128,6 +130,20 @@ describe("Better PHPUnit Test Suite", function () {
             assert.equal(
                 extension.getGlobalCommandInstance().configuration,
                 ` --configuration ${path.join(vscode.workspace.rootPath, '/sub-directory/phpunit.xml')}`
+            );
+        });
+    });
+
+    it("Uses configuration found in path supplied in settings", async () => {
+        await vscode.workspace.getConfiguration('better-phpunit').update('xmlConfigFilepath', '/var/log/phpunit.xml');
+        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'sub-directory', 'tests', 'SampleTest.php'));
+        await vscode.window.showTextDocument(document);
+        await vscode.commands.executeCommand('better-phpunit.run');
+
+        await timeout(waitToAssertInSeconds, () => {
+            assert.equal(
+                extension.getGlobalCommandInstance().configuration,
+                ` --configuration /var/log/phpunit.xml`
             );
         });
     });

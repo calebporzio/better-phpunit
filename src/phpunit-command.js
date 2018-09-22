@@ -32,6 +32,10 @@ module.exports = class PhpUnitCommand {
     }
 
     get configuration() {
+        let configFilepath = vscode.workspace.getConfiguration('better-phpunit').get('xmlConfigFilepath');
+        if (configFilepath !== null) {
+            return ` --configuration ${configFilepath}`;
+        }
         return this.subDirectory
             ? ` --configuration ${this._normalizePath(path.join(this.subDirectory, 'phpunit.xml'))}`
             : '';

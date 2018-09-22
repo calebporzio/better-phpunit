@@ -45,7 +45,7 @@ describe("SSH Tests", function () {
         await vscode.window.showTextDocument(document, { selection: new vscode.Range(7, 0, 7, 0) });
         await vscode.commands.executeCommand('better-phpunit.run');
 
-        await timeout(waitToAssertInSeconds, () => {})
+        await timeout(waitToAssertInSeconds, () => { })
 
         assert.equal(
             extension.getGlobalCommandInstance().output,
@@ -58,9 +58,9 @@ describe("SSH Tests", function () {
         await vscode.window.showTextDocument(document, { selection: new vscode.Range(7, 0, 7, 0) });
         await vscode.commands.executeCommand('better-phpunit.run');
 
-        await timeout(waitToAssertInSeconds, () => {})
+        await timeout(waitToAssertInSeconds, () => { })
 
-       assert.equal(
+        assert.equal(
             extension.getGlobalCommandInstance().output,
             'ssh -tt -p2222 auser@ahost "/some/remote/path/vendor/bin/phpunit /some/remote/path/tests/SampleTest.php --filter \'^.*::test_first$\'"'
         );
