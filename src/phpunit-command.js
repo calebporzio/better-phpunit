@@ -18,7 +18,7 @@ module.exports = class PhpUnitCommand {
 
         this.lastOutput = this.runFullSuite
             ? `${this.binary}${this.suffix}`
-            : `${this.binary} ${this.file} ${this.filter}${this.configuration}${this.suffix}`;
+            : `${this.binary} ${this.file}${this.filter}${this.configuration}${this.suffix}`;
 
         return this.lastOutput;
     }
@@ -28,10 +28,14 @@ module.exports = class PhpUnitCommand {
     }
 
     get filter() {
-        return this.method ? `--filter '^.*::${this.method}$'` : '';
+        return this.method ? ` --filter '^.*::${this.method}$'` : '';
     }
 
     get configuration() {
+        let configFilepath = vscode.workspace.getConfiguration('better-phpunit').get('xmlConfigFilepath');
+        if (configFilepath !== null) {
+            return ` --configuration ${configFilepath}`;
+        }
         return this.subDirectory
             ? ` --configuration ${this._normalizePath(path.join(this.subDirectory, 'phpunit.xml'))}`
             : '';

@@ -22,6 +22,7 @@ describe("SSH Tests", function () {
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.user", "auser");
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.host", "ahost");
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.port", "2222");
+        await vscode.workspace.getConfiguration("better-phpunit").update("docker.enable", false);
 
         const paths = {};
         paths[path.join(vscode.workspace.rootPath)] = "/some/remote/path";
@@ -36,6 +37,7 @@ describe("SSH Tests", function () {
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.port", "2222");
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.binary", null);
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.paths", {});
+        await vscode.workspace.getConfiguration("better-phpunit").update("docker.enable", false);
     });
 
     it("Commands are not wrapped when SSH is disabled", async function () {
@@ -45,7 +47,7 @@ describe("SSH Tests", function () {
         await vscode.window.showTextDocument(document, { selection: new vscode.Range(7, 0, 7, 0) });
         await vscode.commands.executeCommand('better-phpunit.run');
 
-        await timeout(waitToAssertInSeconds, () => {})
+        await timeout(waitToAssertInSeconds, () => { })
 
         assert.equal(
             extension.getGlobalCommandInstance().output,
@@ -58,9 +60,9 @@ describe("SSH Tests", function () {
         await vscode.window.showTextDocument(document, { selection: new vscode.Range(7, 0, 7, 0) });
         await vscode.commands.executeCommand('better-phpunit.run');
 
-        await timeout(waitToAssertInSeconds, () => {})
+        await timeout(waitToAssertInSeconds, () => { })
 
-       assert.equal(
+        assert.equal(
             extension.getGlobalCommandInstance().output,
             'ssh -tt -p2222 auser@ahost "/some/remote/path/vendor/bin/phpunit /some/remote/path/tests/SampleTest.php --filter \'^.*::test_first$\'"'
         );

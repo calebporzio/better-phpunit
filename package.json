@@ -2,7 +2,7 @@
     "name": "better-phpunit",
     "displayName": "Better PHPUnit",
     "description": "A better PHPUnit test runner",
-    "version": "0.8.1",
+    "version": "1.1.0",
     "publisher": "calebporzio",
     "engines": {
         "vscode": "^1.17.0"
@@ -64,6 +64,14 @@
                     "default": null,
                     "description": "A custom phpunit binary. Ex: 'phpunit', '/usr/local/bin/phpunit'"
                 },
+                "better-phpunit.xmlConfigFilepath": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null,
+                    "description": "Absolute path for the PHPUnit XML configuration file"
+                },
                 "better-phpunit.ssh.enable": {
                     "type": "boolean",
                     "default": false,
@@ -112,6 +120,24 @@
                     ],
                     "default": null,
                     "description": "Additional command line options to pass to ssh/putty/plink"
+                },
+                "better-phpunit.docker.enable": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Run tests within a Docker container"
+                },
+                "better-phpunit.docker.command": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null,
+                    "description": "The Docker command to execute a container. If null, an error will be thrown during execution."
+                },
+                "better-phpunit.docker.paths": {
+                    "type": "object",
+                    "default": {},
+                    "description": "The docker path map. Keys are local (host) paths and values are remote (container) paths."
                 }
             }
         },
@@ -136,7 +162,7 @@
                 ]
             }
         ],
-       "taskDefinitions": [
+        "taskDefinitions": [
             {
                 "type": "phpunit",
                 "required": [
@@ -156,12 +182,12 @@
         "test": "node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "typescript": "^2.5.2",
-        "vscode": "^1.1.5",
-        "mocha": "^3.5.0",
+        "@types/mocha": "^2.2.42",
+        "@types/node": "^7.0.70",
         "eslint": "^4.6.1",
-        "@types/node": "^7.0.0",
-        "@types/mocha": "^2.2.42"
+        "mocha": "^4.1.0",
+        "typescript": "^2.5.2",
+        "vscode": "^1.1.21"
     },
     "dependencies": {
         "find-up": "^2.1.0"

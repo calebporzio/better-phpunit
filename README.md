@@ -61,6 +61,28 @@ Running tests over ssh (For VMs like Laravel Homestead):
 }
 ```
 
+Running tests in already running Docker containers:
+```
+{
+    "better-phpunit.docker.enable": true,
+    "better-phpunit.docker.command": "docker exec container-name",
+    "better-phpunit.docker.paths": {
+        "/your/local/path": "/your/remote/path"
+    },
+}
+```
+
+Running tests with Docker Compose, starting up a service and removing the container when finished:
+```
+{
+    "better-phpunit.docker.enable": true,
+    "better-phpunit.docker.command": "docker-compose run --rm service-name",
+    "better-phpunit.docker.paths": {
+        "/your/local/path": "/your/remote/path"
+    },
+}
+```
+
 ## Wish List:
 - Handling PHP fatal and parser errors
 - A sidebar panel for managing errors
