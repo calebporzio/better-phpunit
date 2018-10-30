@@ -19,6 +19,7 @@ function timeout(seconds, callback) {
 describe("SSH Tests", function () {
     beforeEach(async () => {
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.enable", true);
+        await vscode.workspace.getConfiguration("better-phpunit").update("ssh.disableAllOptions", false);
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.user", "auser");
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.host", "ahost");
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.port", "2222");
@@ -32,6 +33,7 @@ describe("SSH Tests", function () {
 
     afterEach(async () => {
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.enable", false);
+        await vscode.workspace.getConfiguration("better-phpunit").update("ssh.disableAllOptions", false);
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.user", "auser");
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.host", "ahost");
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.port", "2222");
@@ -80,6 +82,21 @@ describe("SSH Tests", function () {
         assert.equal(
             extension.getGlobalCommandInstance().output,
             'putty -ssh -tt -p2222 auser@ahost "/some/remote/path/vendor/bin/phpunit /some/remote/path/tests/SampleTest.php --filter \'^.*::test_first$\'"'
+        );
+    });
+
+    it("Can disable all ssh config options", async function () {
+        await vscode.workspace.getConfiguration("better-phpunit").update("ssh.disableAllOptions", true);
+
+        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
+        await vscode.window.showTextDocument(document, { selection: new vscode.Range(7, 0, 7, 0) });
+        await vscode.commands.executeCommand('better-phpunit.run');
+
+        await timeout(waitToAssertInSeconds, () => { })
+
+        assert.equal(
+            extension.getGlobalCommandInstance().output,
+            'ssh "/some/remote/path/vendor/bin/phpunit /some/remote/path/tests/SampleTest.php --filter \'^.*::test_first$\'"'
         );
     });
 });
