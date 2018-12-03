@@ -53,7 +53,7 @@ describe("SSH Tests", function () {
 
         assert.equal(
             extension.getGlobalCommandInstance().output,
-            path.join(vscode.workspace.rootPath, '/vendor/bin/phpunit ') + path.join(vscode.workspace.rootPath, '/tests/SampleTest.php') + " --filter '^.*::test_first$'"
+            path.join(vscode.workspace.rootPath, '/vendor/bin/phpunit ') + path.join(vscode.workspace.rootPath, '/tests/SampleTest.php') + " --filter '^.*::test_first( .*)$'"
         );
     });
 

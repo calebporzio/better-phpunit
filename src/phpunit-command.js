@@ -28,7 +28,9 @@ module.exports = class PhpUnitCommand {
     }
 
     get filter() {
-        return this.method ? ` --filter '^.*::${this.method}( .*)?$'` : '';
+        return process.platform === "win32"
+            ? (this.method ? ` --filter '^.*::${this.method}$'` : '')
+            : (this.method ? ` --filter '^.*::${this.method}( .*)?$'` : '');
     }
 
     get configuration() {
