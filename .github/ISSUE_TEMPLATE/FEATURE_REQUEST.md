@@ -1,3 +1,8 @@
+---
+name: Feature Request
+about: Request a new feature or enhancement
+---
+
 <!-- Thanks for taking the time to recommend a feature! Please fill out the form below -->
 
 ## Summary
