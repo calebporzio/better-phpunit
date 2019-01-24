@@ -44,6 +44,7 @@ Config:
 {
     "better-phpunit.commandSuffix": null, // This string will be appended to the phpunit command, it's a great place to add flags like '--stop-on-failure'
     "better-phpunit.phpunitBinary": null // A custom phpunit binary. Ex: 'phpunit', '/usr/local/bin/phpunit'
+    "better-phpunit.runSuites": null // Specify which suite(s) to run with the "run suite" command. Default is empty thus running all suites.
 }
 ```
 
