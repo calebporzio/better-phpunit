@@ -43,6 +43,7 @@ module.exports.activate = function (context) {
         provideTasks: () => {
             return [new vscode.Task(
                 { type: "phpunit", task: "run" },
+                2,
                 "run",
                 'phpunit',
                 new vscode.ShellExecution(globalCommand.output),
