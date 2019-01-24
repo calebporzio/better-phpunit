@@ -22,6 +22,7 @@ describe("Better PHPUnit Test Suite", function () {
         await vscode.workspace.getConfiguration('better-phpunit').update('phpunitBinary', null);
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.enable", false);
         await vscode.workspace.getConfiguration("better-phpunit").update("xmlConfigFilepath", null);
+        await vscode.workspace.getConfiguration("better-phpunit").update("runSuites", null);
         await vscode.workspace.getConfiguration("better-phpunit").update("docker.enable", false);
     });
 
@@ -32,6 +33,7 @@ describe("Better PHPUnit Test Suite", function () {
         await vscode.workspace.getConfiguration('better-phpunit').update('phpunitBinary', null);
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.enable", false);
         await vscode.workspace.getConfiguration("better-phpunit").update("xmlConfigFilepath", null);
+        await vscode.workspace.getConfiguration("better-phpunit").update("runSuites", null);
         await vscode.workspace.getConfiguration("better-phpunit").update("docker.enable", false);
     });
 
@@ -185,6 +187,20 @@ describe("Better PHPUnit Test Suite", function () {
             assert.equal(
                 extension.getGlobalCommandInstance().output,
                 path.join(vscode.workspace.rootPath, '/vendor/bin/phpunit')
+            );
+        });
+    });
+
+    it("Run entire suite with specified suites", async () => {
+        await vscode.workspace.getConfiguration('better-phpunit').update('runSuites', 'unit, integration');
+        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
+        await vscode.window.showTextDocument(document, { selection: new vscode.Range(7, 0, 7, 0) });
+        await vscode.commands.executeCommand('better-phpunit.run-suite')
+
+        await timeout(waitToAssertInSeconds, () => {
+            assert.equal(
+                extension.getGlobalCommandInstance().output,
+                path.join(vscode.workspace.rootPath, '/vendor/bin/phpunit') + ' --testsuite unit,integration'
             );
         });
     });
