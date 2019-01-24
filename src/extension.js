@@ -39,10 +39,11 @@ module.exports.activate = function (context) {
         await runPreviousCommand();
     }));
 
-    disposables.push(vscode.workspace.registerTaskProvider('phpunit', {
+    disposables.push(vscode.tasks.registerTaskProvider('phpunit', {
         provideTasks: () => {
             return [new vscode.Task(
                 { type: "phpunit", task: "run" },
+                2,
                 "run",
                 'phpunit',
                 new vscode.ShellExecution(globalCommand.output),
