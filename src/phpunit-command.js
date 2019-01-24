@@ -18,7 +18,11 @@ module.exports = class PhpUnitCommand {
 
         let runSuites = vscode.workspace.getConfiguration('better-phpunit').get('runSuites') || "";
         if (runSuites) {
-            runSuites = ' --testsuite '.concat(runSuites.replace(/\s+/g,''));
+            if (vscode.workspace.getConfiguration('better-phpunit').get('useCodeception')) {
+                runSuites = ' '.concat(runSuites.replace(/\s+/g, ''));
+            } else {
+                runSuites = ' --testsuite '.concat(runSuites.replace(/\s+/g, ''));
+            }
         }
         this.lastOutput = this.runFullSuite
             ? `${this.binary}${runSuites}${this.suffix}`
