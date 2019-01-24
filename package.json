@@ -72,6 +72,14 @@
                     "default": null,
                     "description": "Absolute path for the PHPUnit XML configuration file"
                 },
+				"better-phpunit.xmlConfigFileName": {
+					"type": [
+						"string",
+						"null"
+					],
+					"default": null,
+					"description": "PHPUnit XML configuration file name"
+				},
                 "better-phpunit.ssh.enable": {
                     "type": "boolean",
                     "default": false,
