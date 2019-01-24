@@ -32,9 +32,11 @@ module.exports = class PhpUnitCommand {
     }
 
     get filter() {
-        return process.platform === "win32"
-            ? (this.method ? ` --filter '^.*::${this.method}$'` : '')
-            : (this.method ? ` --filter '^.*::${this.method}( .*)?$'` : '');
+        let filterMethod = process.platform === "win32" ? ` --filter '^.*::${this.method}$'` : ` --filter '^.*::${this.method}( .*)?$'`;
+        if (vscode.workspace.getConfiguration('better-phpunit').get('useCodeception')) {
+            filterMethod = `:${this.method}`;
+        }
+        return (this.method ? filterMethod : '');
     }
 
     get configuration() {
@@ -66,6 +68,11 @@ module.exports = class PhpUnitCommand {
     get subDirectory() {
         // find the closest phpunit.xml file in the project (for projects with multiple "vendor/bin/phpunit"s).
         let phpunitDotXml = findUp.sync(['phpunit.xml', 'phpunit.xml.dist'], { cwd: vscode.window.activeTextEditor.document.fileName });
+
+        // when using Codeception there is no phpunit.xml file so we use a dummy to return null
+        if (vscode.workspace.getConfiguration('better-phpunit').get('useCodeception')) {
+            phpunitDotXml = vscode.workspace.rootPath.concat('/phpunit.xml');
+        }
 
         return path.dirname(phpunitDotXml) !== vscode.workspace.rootPath
             ? path.dirname(phpunitDotXml)
