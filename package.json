@@ -72,6 +72,14 @@
                     "default": null,
                     "description": "Absolute path for the PHPUnit XML configuration file"
                 },
+                "better-phpunit.runSuites": {
+                    "type": [
+                            "string",
+                            "null"
+                    ],
+                    "default": null,
+                    "description": "Specify test suites to run with command 'run suite' as a comma-separated list of test suites"
+                },
                 "better-phpunit.ssh.enable": {
                     "type": "boolean",
                     "default": false,
