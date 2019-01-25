@@ -191,7 +191,7 @@ describe("Better PHPUnit Test Suite", function () {
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().output,
-                path.join(vscode.workspace.rootPath, '/vendor/bin/codecept ') + path.join(vscode.workspace.rootPath, '/tests/SampleTest.php') + ":test_first"
+                path.join(vscode.workspace.rootPath, '/vendor/bin/codecept run ') + path.join(vscode.workspace.rootPath, '/tests/SampleTest.php') + ":test_first"
             );
         });
     });
@@ -250,7 +250,7 @@ describe("Better PHPUnit Test Suite", function () {
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().output,
-                path.join(vscode.workspace.rootPath, '/vendor/bin/codecept') + ' unit,integration'
+                path.join(vscode.workspace.rootPath, '/vendor/bin/codecept run') + ' unit,integration'
             );
         });
     });
