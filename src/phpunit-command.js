@@ -60,8 +60,12 @@ module.exports = class PhpUnitCommand {
     }
 
     get binary() {
-        if (vscode.workspace.getConfiguration('better-phpunit').get('phpunitBinary')) {
-            return vscode.workspace.getConfiguration('better-phpunit').get('phpunitBinary')
+        let configuredBinary = vscode.workspace.getConfiguration('better-phpunit').get('phpunitBinary');
+        if (configuredBinary) {
+            if (vscode.workspace.getConfiguration('better-phpunit').get('useCodeception')) {
+                configuredBinary = configuredBinary.concat(' run');
+            }
+            return configuredBinary;
         }
 
         return this.subDirectory
