@@ -24,6 +24,8 @@ module.exports.activate = function (context) {
     }));
 
     disposables.push(vscode.commands.registerCommand('better-phpunit.run-suite', async () => {
+        let command;
+
         if (vscode.workspace.getConfiguration("better-phpunit").get("docker.enable")) {
             command = new DockerPhpUnitCommand({ runFullSuite: true });
         } else if (vscode.workspace.getConfiguration("better-phpunit").get("ssh.enable")) {
