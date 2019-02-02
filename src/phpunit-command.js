@@ -16,16 +16,10 @@ module.exports = class PhpUnitCommand {
             return this.lastOutput;
         }
 
-        let runSuites = vscode.workspace.getConfiguration('better-phpunit').get('runSuites') || "";
-        if (runSuites) {
-            if (vscode.workspace.getConfiguration('better-phpunit').get('useCodeception')) {
-                runSuites = ' '.concat(runSuites.replace(/\s+/g, ''));
-            } else {
-                runSuites = ' --testsuite '.concat(runSuites.replace(/\s+/g, ''));
-            }
-        }
+        let runSuiteSuffix = vscode.workspace.getConfiguration('better-phpunit').get('runSuiteSuffix');
+        runSuiteSuffix = runSuiteSuffix ? ' '.concat(runSuiteSuffix) : '';
         this.lastOutput = this.runFullSuite
-            ? `${this.binary}${runSuites}${this.suffix}`
+            ? `${this.binary}${runSuiteSuffix}${this.suffix}`
             : `${this.binary} ${this.file}${this.filter}${this.configuration}${this.suffix}`;
 
         return this.lastOutput;
