@@ -239,10 +239,10 @@ describe("Better PHPUnit Test Suite", function () {
         });
     });
 
-    it("Run entire suite with specified suites with Codeception", async () => {
+    it("Run entire suite with specified suffix with Codeception", async () => {
         await vscode.workspace.getConfiguration('better-phpunit').update('useCodeception', true);
         await vscode.workspace.getConfiguration('better-phpunit').update('phpunitBinary', path.join(vscode.workspace.rootPath, '/vendor/bin/codecept'));
-        await vscode.workspace.getConfiguration('better-phpunit').update('runSuites', 'unit, integration');
+        await vscode.workspace.getConfiguration('better-phpunit').update('runSuiteSuffix', 'unit --coverage');
         let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
         await vscode.window.showTextDocument(document, { selection: new vscode.Range(7, 0, 7, 0) });
         await vscode.commands.executeCommand('better-phpunit.run-suite')
@@ -250,7 +250,7 @@ describe("Better PHPUnit Test Suite", function () {
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().output,
-                path.join(vscode.workspace.rootPath, '/vendor/bin/codecept run') + ' unit,integration'
+                path.join(vscode.workspace.rootPath, '/vendor/bin/codecept run') + ' unit --coverage'
             );
         });
     });
