@@ -18,6 +18,9 @@ module.exports = class DockerPhpUnitCommand extends RemotePhpUnitCommand {
     }
 
     wrapCommand(command) {
+        if (vscode.workspace.getConfiguration("better-phpunit").get("ssh.enable")) {
+            return super.wrapCommand(`${this.dockerCommand} ${command}`);
+        }
         return `${this.dockerCommand} ${command}`;
     }
 } 

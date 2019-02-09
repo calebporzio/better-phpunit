@@ -83,6 +83,9 @@ Running tests with Docker Compose, starting up a service and removing the contai
 }
 ```
 
+**Note:**
+For running Docker over a SSH session just use both options _ssh.enable_ and _docker.enable_ combined.
+
 ## Wish List:
 - Handling PHP fatal and parser errors
 - A sidebar panel for managing errors
