@@ -195,6 +195,9 @@ describe("Better PHPUnit Test Suite", function () {
     });
 
     it("Run previous", async () => {
+        let prevDocument = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
+        await vscode.window.showTextDocument(prevDocument, { selection: new vscode.Range(7, 0, 7, 0) });
+        await vscode.commands.executeCommand('better-phpunit.run');
         let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'OtherTest.php'));
         await vscode.window.showTextDocument(document, { selection: new vscode.Range(12, 0, 12, 0) });
         await vscode.commands.executeCommand('better-phpunit.run-previous');
