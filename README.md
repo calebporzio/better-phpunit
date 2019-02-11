@@ -44,6 +44,7 @@ Config:
 {
     "better-phpunit.commandSuffix": null, // This string will be appended to the phpunit command, it's a great place to add flags like '--stop-on-failure'
     "better-phpunit.phpunitBinary": null // A custom phpunit binary. Ex: 'phpunit', '/usr/local/bin/phpunit'
+    "better-phpunit.useCodeception": false // Switch to use Codeception instead of PHPUnit for testing. ATTENTION: You also have to specify the 'codecept' binary with the option "better-phpunit.phpunitBinary".
 }
 ```
 
