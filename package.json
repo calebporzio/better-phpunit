@@ -64,6 +64,11 @@
                     "default": null,
                     "description": "A custom phpunit binary. Ex: 'phpunit', '/usr/local/bin/phpunit'"
                 },
+                "better-phpunit.useCodeception": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Run tests with Codeception instead of PHPUnit"
+                },
                 "better-phpunit.xmlConfigFilepath": {
                     "type": [
                         "string",
