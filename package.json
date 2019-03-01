@@ -19,7 +19,9 @@
         "onCommand:better-phpunit.run",
         "onCommand:better-phpunit.run-suite",
         "onCommand:better-phpunit.coverage-text",
-        "onCommand:better-phpunit.coverage-html"
+        "onCommand:better-phpunit.coverage-html",
+        "onCommand:better-phpunit.coverage-suite-text",
+        "onCommand:better-phpunit.coverage-suite-html"
     ],
     "main": "./src/extension",
     "contributes": {
