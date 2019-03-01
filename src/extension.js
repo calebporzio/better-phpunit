@@ -12,10 +12,10 @@ module.exports.activate = function (context) {
     disposables.push(vscode.commands.registerCommand('better-phpunit.run', async () => {
         let command;
 
-        if (vscode.workspace.getConfiguration("better-phpunit").get("ssh.enable")) {
-            command = new RemotePhpUnitCommand;
-        } else if (vscode.workspace.getConfiguration("better-phpunit").get("docker.enable")) {
+        if (vscode.workspace.getConfiguration("better-phpunit").get("docker.enable")) {
             command = new DockerPhpUnitCommand;
+        } else if (vscode.workspace.getConfiguration("better-phpunit").get("ssh.enable")) {
+            command = new RemotePhpUnitCommand;
         } else {
             command = new PhpUnitCommand;
         }
@@ -24,10 +24,12 @@ module.exports.activate = function (context) {
     }));
 
     disposables.push(vscode.commands.registerCommand('better-phpunit.run-suite', async () => {
-        if (vscode.workspace.getConfiguration("better-phpunit").get("ssh.enable")) {
-            command = new RemotePhpUnitCommand({ runFullSuite: true });
-        } else if (vscode.workspace.getConfiguration("better-phpunit").get("docker.enable")) {
+        let command;
+
+        if (vscode.workspace.getConfiguration("better-phpunit").get("docker.enable")) {
             command = new DockerPhpUnitCommand({ runFullSuite: true });
+        } else if (vscode.workspace.getConfiguration("better-phpunit").get("ssh.enable")) {
+            command = new RemotePhpUnitCommand({ runFullSuite: true });
         } else {
             command = new PhpUnitCommand({ runFullSuite: true });
         }
@@ -55,10 +57,11 @@ module.exports.activate = function (context) {
         await runWithCoverage({ coverageType: 'html', runFullSuite: true });
     }));
 
-    disposables.push(vscode.workspace.registerTaskProvider('phpunit', {
+    disposables.push(vscode.tasks.registerTaskProvider('phpunit', {
         provideTasks: () => {
             return [new vscode.Task(
                 { type: "phpunit", task: "run" },
+                2,
                 "run",
                 'phpunit',
                 new vscode.ShellExecution(globalCommand.output),
