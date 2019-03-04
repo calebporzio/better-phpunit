@@ -1,0 +1,28 @@
+<?php
+
+$finder = PhpCsFixer\Finder::create()
+    ->exclude('storage')
+    ->exclude('bootstrap')
+    ->exclude('tests/Feature/__snapshots__')
+    ->in(__DIR__);
+
+return PhpCsFixer\Config::create()
+    ->setRules([
+        '@PSR2' => true,
+        'method_argument_space' => ['on_multiline' => 'ignore'],
+        'ordered_imports' => [
+            'sortAlgorithm' => 'alpha',
+        ],
+        'braces' => [
+            'allow_single_line_closure' => true,
+        ],
+        'trailing_comma_in_multiline_array' => true,
+        'single_quote' => false,
+        'space_after_semicolon' => true,
+        'single_blank_line_before_namespace' => true,
+        'no_unused_imports' => true,
+        'no_useless_else' => true,
+        // This is for phpunit functions with no visibility (attr: Adam Wathan)
+        'visibility_required' => false,
+    ])
+    ->setFinder($finder);

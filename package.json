@@ -72,7 +72,7 @@
                     "default": null,
                     "description": "Absolute path for the PHPUnit XML configuration file"
                 },
-                "better-phpunit.suiteOptions": {
+                "better-phpunit.suiteSuffix": {
                     "type": [
                         "string",
                         "null"
