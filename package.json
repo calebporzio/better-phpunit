@@ -18,10 +18,8 @@
     "activationEvents": [
         "onCommand:better-phpunit.run",
         "onCommand:better-phpunit.run-suite",
-        "onCommand:better-phpunit.coverage-text",
-        "onCommand:better-phpunit.coverage-html",
-        "onCommand:better-phpunit.coverage-suite-text",
-        "onCommand:better-phpunit.coverage-suite-html"
+        "onCommand:better-phpunit.coverage",
+        "onCommand:better-phpunit.coverage-suite"
     ],
     "main": "./src/extension",
     "contributes": {
@@ -39,20 +37,12 @@
                 "title": "Better PHPUnit: run previous"
             },
             {
-                "command": "better-phpunit.coverage-text",
-                "title": "Better PHPUnit: run with text coverage"
+                "command": "better-phpunit.coverage",
+                "title": "Better PHPUnit: run with coverage"
             },
             {
-                "command": "better-phpunit.coverage-html",
-                "title": "Better PHPUnit: run with html coverage"
-            },
-            {
-                "command": "better-phpunit.coverage-suite-text",
-                "title": "Better PHPUnit: run suite with text coverage"
-            },
-            {
-                "command": "better-phpunit.coverage-suite-html",
-                "title": "Better PHPUnit: run suite with html coverage"
+                "command": "better-phpunit.coverage-suite",
+                "title": "Better PHPUnit: run suite with coverage"
             }
         ],
         "keybindings": [
@@ -108,6 +98,15 @@
                     "default": null,
                     "description": "Relative path for the generated coverage files, based on the project folder. Ex: 'test/coverage'"
                 },
+				"better-phpunit.coverageFormat": {
+					"type": "string",
+					"enum": [
+						"Text",
+						"HTML"
+					],
+					"default": "Text",
+					"description": "Select the coverage report format"
+				},
                 "better-phpunit.ssh.enable": {
                     "type": "boolean",
                     "default": false,

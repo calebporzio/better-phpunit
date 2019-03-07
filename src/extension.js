@@ -41,20 +41,12 @@ module.exports.activate = function (context) {
         await runPreviousCommand();
     }));
 
-    disposables.push(vscode.commands.registerCommand('better-phpunit.coverage-text', async () => {
-        await runWithCoverage({ coverageType: 'text' });
+    disposables.push(vscode.commands.registerCommand('better-phpunit.coverage', async () => {
+        await runWithCoverage({ coverageType: getCoverageFormat() });
     }));
 
-    disposables.push(vscode.commands.registerCommand('better-phpunit.coverage-html', async () => {
-        await runWithCoverage({ coverageType: 'html' });
-    }));
-
-    disposables.push(vscode.commands.registerCommand('better-phpunit.coverage-suite-text', async () => {
-        await runWithCoverage({ coverageType: 'text', runFullSuite: true });
-    }));
-
-    disposables.push(vscode.commands.registerCommand('better-phpunit.coverage-suite-html', async () => {
-        await runWithCoverage({ coverageType: 'html', runFullSuite: true });
+    disposables.push(vscode.commands.registerCommand('better-phpunit.coverage-suite', async () => {
+        await runWithCoverage({ coverageType: getCoverageFormat(), runFullSuite: true });
     }));
 
     disposables.push(vscode.tasks.registerTaskProvider('phpunit', {
@@ -105,6 +97,10 @@ async function runWithCoverage(options) {
     }
 
     await runCommand(command);
+}
+
+function getCoverageFormat() {
+    return vscode.workspace.getConfiguration('better-phpunit').get('coverageFormat').toLowerCase();
 }
 
 // This method is exposed for testing purposes.

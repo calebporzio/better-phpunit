@@ -95,11 +95,8 @@ module.exports = class PhpUnitCommand {
     get coverage() {
         let coverage = '';
         let coveragePath = vscode.workspace.getConfiguration('better-phpunit').get('coveragePath');
-        if (coveragePath === null) {
-            coveragePath = '';
-        }
 
-        if (this.coverageType !== '') {
+        if (coveragePath) {
             switch (this.coverageType) {
                 case 'text': {
                     coverage += ` --coverage-text=${this._normalizePath(path.join(coveragePath, 'coverage.txt'))}`;
@@ -111,7 +108,7 @@ module.exports = class PhpUnitCommand {
                 }
             }
         } else {
-            // TODO: Put some error message here
+            vscode.window.showErrorMessage("The coverage path is not set at the configuration. No coverage report will be generated.");
         }
 
         return coverage ? ' ' + coverage : '';
