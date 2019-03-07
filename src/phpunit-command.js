@@ -8,6 +8,10 @@ module.exports = class PhpUnitCommand {
             ? options.runFullSuite
             : false;
 
+        this.coverageType = options !== undefined
+            ? options.coverageType
+            : false;
+
         this.lastOutput;
     }
 
@@ -20,8 +24,8 @@ module.exports = class PhpUnitCommand {
         suiteSuffix = suiteSuffix ? ' '.concat(suiteSuffix) : '';
 
         this.lastOutput = this.runFullSuite
-            ? `${this.binary}${suiteSuffix}${this.suffix}`
-            : `${this.binary} ${this.file}${this.filter}${this.configuration}${this.suffix}`;
+            ? `${this.binary}${suiteSuffix}${this.suffix}${this.coverage}`
+            : `${this.binary} ${this.file}${this.filter}${this.configuration}${this.suffix}${this.coverage}`;
 
         return this.lastOutput;
     }
@@ -86,6 +90,31 @@ module.exports = class PhpUnitCommand {
         }
 
         return method;
+    }
+
+    get coverage() {
+        let coverage = '';
+        let coveragePath = vscode.workspace.getConfiguration('better-phpunit').get('coveragePath');
+        if (coveragePath === null) {
+            coveragePath = '';
+        }
+
+        if (this.coverageType !== '') {
+            switch (this.coverageType) {
+                case 'text': {
+                    coverage += ` --coverage-text=${this._normalizePath(path.join(coveragePath, 'coverage.txt'))}`;
+                    break;
+                }
+                case 'html': {
+                    coverage += ` --coverage-html ${this._normalizePath(coveragePath)}`;
+                    break;
+                }
+            }
+        } else {
+            // TODO: Put some error message here
+        }
+
+        return coverage ? ' ' + coverage : '';
     }
 
     _normalizePath(path) {

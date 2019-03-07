@@ -17,7 +17,11 @@
     ],
     "activationEvents": [
         "onCommand:better-phpunit.run",
-        "onCommand:better-phpunit.run-suite"
+        "onCommand:better-phpunit.run-suite",
+        "onCommand:better-phpunit.coverage-text",
+        "onCommand:better-phpunit.coverage-html",
+        "onCommand:better-phpunit.coverage-suite-text",
+        "onCommand:better-phpunit.coverage-suite-html"
     ],
     "main": "./src/extension",
     "contributes": {
@@ -33,6 +37,22 @@
             {
                 "command": "better-phpunit.run-previous",
                 "title": "Better PHPUnit: run previous"
+            },
+            {
+                "command": "better-phpunit.coverage-text",
+                "title": "Better PHPUnit: run with text coverage"
+            },
+            {
+                "command": "better-phpunit.coverage-html",
+                "title": "Better PHPUnit: run with html coverage"
+            },
+            {
+                "command": "better-phpunit.coverage-suite-text",
+                "title": "Better PHPUnit: run suite with text coverage"
+            },
+            {
+                "command": "better-phpunit.coverage-suite-html",
+                "title": "Better PHPUnit: run suite with html coverage"
             }
         ],
         "keybindings": [
@@ -79,6 +99,14 @@
                     ],
                     "default": null,
                     "description": "Specify options to appended only to the 'run suite' command, for example add options like '--testsuite unit' or '--coverage  --coverage-xml'"
+                },
+                "better-phpunit.coveragePath": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null,
+                    "description": "Relative path for the generated coverage files, based on the project folder. Ex: 'test/coverage'"
                 },
                 "better-phpunit.ssh.enable": {
                     "type": "boolean",
