@@ -16,8 +16,11 @@ module.exports = class PhpUnitCommand {
             return this.lastOutput;
         }
 
+        let suiteSuffix = vscode.workspace.getConfiguration('better-phpunit').get('suiteSuffix');
+        suiteSuffix = suiteSuffix ? ' '.concat(suiteSuffix) : '';
+
         this.lastOutput = this.runFullSuite
-            ? `${this.binary}${this.suffix}`
+            ? `${this.binary}${suiteSuffix}${this.suffix}`
             : `${this.binary} ${this.file}${this.filter}${this.configuration}${this.suffix}`;
 
         return this.lastOutput;

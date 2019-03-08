@@ -2,7 +2,7 @@
     "name": "better-phpunit",
     "displayName": "Better PHPUnit",
     "description": "A better PHPUnit test runner",
-    "version": "1.3.3",
+    "version": "1.4.0",
     "publisher": "calebporzio",
     "engines": {
         "vscode": "^1.17.0"
@@ -76,6 +76,14 @@
                     ],
                     "default": null,
                     "description": "Absolute path for the PHPUnit XML configuration file"
+                },
+                "better-phpunit.suiteSuffix": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null,
+                    "description": "Specify options to appended only to the 'run suite' command, for example add options like '--testsuite unit' or '--coverage  --coverage-xml'"
                 },
                 "better-phpunit.ssh.enable": {
                     "type": "boolean",
