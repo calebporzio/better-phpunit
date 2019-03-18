@@ -24,8 +24,8 @@ module.exports = class PhpUnitCommand {
         suiteSuffix = suiteSuffix ? ' '.concat(suiteSuffix) : '';
 
         this.lastOutput = this.runFullSuite
-            ? `${this.binary}${suiteSuffix}${this.suffix}${this.coverage}`
-            : `${this.binary} ${this.file}${this.filter}${this.configuration}${this.suffix}${this.coverage}`;
+            ? `${this.binary}${suiteSuffix}${this.coverage}${this.suffix}`
+            : `${this.binary} ${this.file}${this.filter}${this.configuration}${this.coverage}${this.suffix}`;
 
         return this.lastOutput;
     }

@@ -98,15 +98,15 @@
                     "default": null,
                     "description": "Relative path for the generated coverage files, based on the project folder. Ex: 'test/coverage'"
                 },
-				"better-phpunit.coverageFormat": {
-					"type": "string",
-					"enum": [
-						"Text",
-						"HTML"
-					],
-					"default": "Text",
-					"description": "Select the coverage report format"
-				},
+                "better-phpunit.coverageFormat": {
+                    "type": "string",
+                    "enum": [
+                        "Text",
+                        "HTML"
+                    ],
+                    "default": "Text",
+                    "description": "Select the coverage report format"
+                },
                 "better-phpunit.ssh.enable": {
                     "type": "boolean",
                     "default": false,
