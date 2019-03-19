@@ -183,7 +183,6 @@ describe("Better PHPUnit Test Suite", function () {
 
     it("Check full command using Codeception", async () => {
         await vscode.workspace.getConfiguration('better-phpunit').update('useCodeception', true);
-        await vscode.workspace.getConfiguration('better-phpunit').update('phpunitBinary', path.join(vscode.workspace.rootPath, '/vendor/bin/codecept'));
         let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
         await vscode.window.showTextDocument(document, { selection: new vscode.Range(7, 0, 7, 0) });
         await vscode.commands.executeCommand('better-phpunit.run');
@@ -227,7 +226,6 @@ describe("Better PHPUnit Test Suite", function () {
 
     it("Run entire suite with Codeception", async () => {
         await vscode.workspace.getConfiguration('better-phpunit').update('useCodeception', true);
-        await vscode.workspace.getConfiguration('better-phpunit').update('phpunitBinary', path.join(vscode.workspace.rootPath, '/vendor/bin/codecept'));
         let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
         await vscode.window.showTextDocument(document, { selection: new vscode.Range(7, 0, 7, 0) });
         await vscode.commands.executeCommand('better-phpunit.run-suite');
