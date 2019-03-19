@@ -55,17 +55,16 @@ module.exports = class PhpUnitCommand {
     }
 
     get binary() {
+        let commandStub = vscode.workspace.getConfiguration('better-phpunit').get('useCodeception') ? path.join('vendor', 'bin', 'codecept') : path.join('vendor', 'bin', 'phpunit');
+        let addCommandOption = vscode.workspace.getConfiguration('better-phpunit').get('useCodeception') ? ' run' : '';
         let configuredBinary = vscode.workspace.getConfiguration('better-phpunit').get('phpunitBinary');
         if (configuredBinary) {
-            if (vscode.workspace.getConfiguration('better-phpunit').get('useCodeception')) {
-                configuredBinary = configuredBinary.concat(' run');
-            }
-            return configuredBinary;
+            return configuredBinary.concat(addCommandOption);
         }
 
         return this.subDirectory
-            ? this._normalizePath(path.join(this.subDirectory, 'vendor', 'bin', 'phpunit'))
-            : this._normalizePath(path.join(vscode.workspace.rootPath, 'vendor', 'bin', 'phpunit'));
+            ? this._normalizePath(path.join(this.subDirectory, commandStub)).concat(addCommandOption)
+            : this._normalizePath(path.join(vscode.workspace.rootPath, commandStub)).concat(addCommandOption);
     }
 
     get subDirectory() {
