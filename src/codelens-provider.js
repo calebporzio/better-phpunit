@@ -1,10 +1,12 @@
 const Engine = require('php-parser');
 const vscode = require('vscode');
 
-const METHOD_TEST_LABEL = 'Run test';
-const CLASS_TEST_LABEL = 'Run class tests';
-
 class CodeLensProvider {
+    constructor ()  {
+        this.CLASS_TEST_LABEL = 'Run class tests';
+        this.METHOD_TEST_LABEL = 'Run test';
+    }
+
     async provideCodeLenses (document) {
         // Check if CodeLens is disabled by settings
         const enabled = Boolean(vscode.workspace.getConfiguration('better-phpunit').get('codelens'));
@@ -71,7 +73,7 @@ class CodeLensProvider {
                 // Append CodeLens
                 codeLens.push(new vscode.CodeLens(codeLensRange, {
                     command: 'better-phpunit.run',
-                    title: METHOD_TEST_LABEL,
+                    title: this.METHOD_TEST_LABEL,
                     arguments: [child.name.name, false], // Method name, run whole class
                 }));
             } // node.body
@@ -81,7 +83,7 @@ class CodeLensProvider {
                 const classCodeLensRange = new vscode.Range(node.loc.start.line - 1, 0, node.loc.start.line - 1, 0);
                 codeLens.push(new vscode.CodeLens(classCodeLensRange, {
                     command: 'better-phpunit.run',
-                    title: CLASS_TEST_LABEL,
+                    title: this.CLASS_TEST_LABEL,
                     arguments: [null, true], // Method name, run whole class
                 }));
             }
