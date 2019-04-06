@@ -1,5 +1,6 @@
 const vscode = require('vscode');
 const assert = require('assert');
+const CodeLensProvider = require('./codelens-provider');
 const PhpUnitCommand = require('./phpunit-command');
 const RemotePhpUnitCommand = require('./remote-phpunit-command.js');
 const DockerPhpUnitCommand = require('./docker-phpunit-command.js');
@@ -9,15 +10,21 @@ var globalCommand;
 module.exports.activate = function (context) {
     let disposables = [];
 
-    disposables.push(vscode.commands.registerCommand('better-phpunit.run', async () => {
+    disposables.push(vscode.commands.registerCommand('better-phpunit.run', async (methodName, runClass) => {
         let command;
 
+        // Options for command class
+        const commandOptions = {
+            method: methodName,
+            runClass,
+        };
+
         if (vscode.workspace.getConfiguration("better-phpunit").get("docker.enable")) {
-            command = new DockerPhpUnitCommand;
+            command = new DockerPhpUnitCommand(commandOptions);
         } else if (vscode.workspace.getConfiguration("better-phpunit").get("ssh.enable")) {
-            command = new RemotePhpUnitCommand;
+            command = new RemotePhpUnitCommand(commandOptions);
         } else {
-            command = new PhpUnitCommand;
+            command = new PhpUnitCommand(commandOptions);
         }
 
         await runCommand(command);
@@ -53,6 +60,12 @@ module.exports.activate = function (context) {
             )];
         }
     }));
+
+    // Register CodeLens provider
+	disposables.push(vscode.languages.registerCodeLensProvider({
+		language: 'php',
+		scheme: 'file'
+	}, new CodeLensProvider));
 
     context.subscriptions.push(disposables);
 }

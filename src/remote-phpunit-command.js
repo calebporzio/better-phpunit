@@ -3,7 +3,7 @@ const PhpUnitCommand = require('./phpunit-command');
 const path = require('path');
 
 module.exports = class RemotePhpUnitCommand extends PhpUnitCommand {
-    constructor(options) {
+    constructor(options = {}) {
         super(options);
 
         this.config = vscode.workspace.getConfiguration("better-phpunit");

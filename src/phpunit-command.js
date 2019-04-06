@@ -3,10 +3,10 @@ const vscode = require('vscode');
 const path = require('path');
 
 module.exports = class PhpUnitCommand {
-    constructor(options) {
-        this.runFullSuite = options !== undefined
-            ? options.runFullSuite
-            : false;
+    constructor(options = {}) {
+        this.runFullSuite = options.runFullSuite || false;
+        this.runClass = options.runClass || false;
+        this.methodToTest = options.method || null;
 
         this.lastOutput;
     }
@@ -72,6 +72,16 @@ module.exports = class PhpUnitCommand {
     }
 
     get method() {
+        // Return if user wants to test the full class (from CodeLens)
+        if (this.runClass) {
+            return '';
+        }
+
+        // If there's a method passed as arg from CodeLens, run it
+        if (this.methodToTest !== null) {
+            return this.methodToTest;
+        }
+
         let line = vscode.window.activeTextEditor.selection.active.line;
         let method;
 

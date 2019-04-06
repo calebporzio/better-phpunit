@@ -17,7 +17,8 @@
     ],
     "activationEvents": [
         "onCommand:better-phpunit.run",
-        "onCommand:better-phpunit.run-suite"
+        "onCommand:better-phpunit.run-suite",
+        "onLanguage:php"
     ],
     "main": "./src/extension",
     "contributes": {
@@ -151,6 +152,11 @@
                     "type": "object",
                     "default": {},
                     "description": "The docker path map. Keys are local (host) paths and values are remote (container) paths."
+                },
+                "better-phpunit.codelens": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Show CodeLens above classes and methods"
                 }
             }
         },
@@ -199,6 +205,7 @@
         "@types/node": "^7.10.2",
         "eslint": "^4.6.1",
         "mocha": "^4.1.0",
+        "php-parser": "^3.0.0-prerelease.8",
         "typescript": "^2.5.2",
         "vscode": "^1.1.22"
     },
