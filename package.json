@@ -205,11 +205,11 @@
         "@types/node": "^7.10.2",
         "eslint": "^4.6.1",
         "mocha": "^4.1.0",
-        "php-parser": "^3.0.0-prerelease.8",
         "typescript": "^2.5.2",
         "vscode": "^1.1.22"
     },
     "dependencies": {
-        "find-up": "^2.1.0"
+        "find-up": "^2.1.0",
+        "php-parser": "^3.0.0-prerelease.8"
     }
 }
