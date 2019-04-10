@@ -36,50 +36,29 @@ class CodeLensProvider {
         });
 
         // CodeLens (aka "Run test" label) to be pushed
-        const codeLens = [];
+        let codeLens = [];
 
         // Loop over parsed content
         for (let node of parsed.children) {
-            let classHasTests = false;
-
-            // Skip if not a class
-            if (node.kind !== 'class') {
+            // Skip if not a class or namespace
+            if (node.kind !== 'class' && node.kind !== 'namespace') {
                 continue;
             }
 
-            // Loop over class children
-            for (let child of node.body) {
-                // Take only methods, it could be also constant and so on
-                if (child.kind !== 'method') {
-                    continue;
+            // If is a class, just parse it directly
+            if (node.kind === 'class') {
+                codeLens = codeLens.concat(this.parseClass(node));
+            } else {
+                // If it's a namespace, loop over children to find a class
+                for (let namespaceNode of node.children) {
+                    if (namespaceNode.kind === 'class') {
+                        codeLens = codeLens.concat(this.parseClass(namespaceNode));
+                    }
                 }
-
-                // Skip if name starts with test and if in the docBlock there is not a @test
-                const leadingComments = child.leadingComments || [];
-                const hasTestAnnotation = leadingComments.find(comment => {
-                    return comment.kind === 'commentblock' && comment.value.indexOf('* @test') > -1;
-                });
-
-                if (!child.name.name.startsWith('test') && !hasTestAnnotation) {
-                    continue;
-                }
-
-                // Set true the fact that the current class has tests
-                classHasTests = true;
-
-                // Build range for the method (where to put the CodeLens)
-                const codeLensRange = new vscode.Range(child.loc.start.line - 1, 0, child.loc.start.line - 1, 0);
-
-                // Append CodeLens
-                codeLens.push(new vscode.CodeLens(codeLensRange, {
-                    command: 'better-phpunit.run',
-                    title: this.METHOD_TEST_LABEL,
-                    arguments: [child.name.name, false], // Method name, run whole class
-                }));
-            } // node.body
+            }
 
             // If class has tests, attach the CodeLens to run the whole class
-            if (classHasTests) {
+            if (codeLens.length > 0) {
                 const classCodeLensRange = new vscode.Range(node.loc.start.line - 1, 0, node.loc.start.line - 1, 0);
                 codeLens.push(new vscode.CodeLens(classCodeLensRange, {
                     command: 'better-phpunit.run',
@@ -88,6 +67,46 @@ class CodeLensProvider {
                 }));
             }
         } // parse.children
+
+        return codeLens;
+    }
+
+    /**
+     * Parse a "class" node.
+     *
+     * @param  {object} node
+     * @return {array}
+     */
+    parseClass (node) {
+        const codeLens = [];
+
+        // Loop over class children
+        for (let child of node.body) {
+            // Take only methods, it could be also constant and so on
+            if (child.kind !== 'method') {
+                continue;
+            }
+
+            // Skip if name starts with test and if in the docBlock there is not a @test
+            const leadingComments = child.leadingComments || [];
+            const hasTestAnnotation = leadingComments.find(comment => {
+                return comment.kind === 'commentblock' && comment.value.indexOf('* @test') > -1;
+            });
+
+            if (!child.name.name.startsWith('test') && !hasTestAnnotation) {
+                continue;
+            }
+
+            // Build range for the method (where to put the CodeLens)
+            const codeLensRange = new vscode.Range(child.loc.start.line - 1, 0, child.loc.start.line - 1, 0);
+
+            // Append CodeLens
+            codeLens.push(new vscode.CodeLens(codeLensRange, {
+                command: 'better-phpunit.run',
+                title: this.METHOD_TEST_LABEL,
+                arguments: [child.name.name, false], // Method name, run whole class
+            }));
+        } // node.body
 
         return codeLens;
     }
