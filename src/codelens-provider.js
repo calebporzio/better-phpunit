@@ -71,6 +71,10 @@ class CodeLensProvider {
         const codeLens = [];
         let classHasTests = false;
 
+        // Temporary fix for https://github.com/glayzzle/php-parser/issues/250
+        // Sometimes a method "docblock" (here namely "leading comment") goes to previous one as "trailing comment"
+        let previousTrailingComment = null;
+
         // Loop over class children
         for (let child of node.body) {
             // Take only methods, it could be also constant and so on
@@ -79,7 +83,7 @@ class CodeLensProvider {
             }
 
             // Skip if name starts with test and if in the docBlock there is not a @test
-            const leadingComments = child.leadingComments || [];
+            const leadingComments = child.leadingComments || previousTrailingComment || [];
             const hasTestAnnotation = leadingComments.find(comment => {
                 return comment.kind === 'commentblock' && comment.value.indexOf('* @test') > -1;
             });
@@ -87,6 +91,9 @@ class CodeLensProvider {
             if (!child.name.name.startsWith('test') && !hasTestAnnotation) {
                 continue;
             }
+
+            // Check if has a trailingcomment and save for the next iteration
+            previousTrailingComment = child.body.trailingComments || null;
 
             // Assert that this class has at least one test
             classHasTests = true;
