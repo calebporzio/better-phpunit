@@ -56,16 +56,6 @@ class CodeLensProvider {
                     }
                 }
             }
-
-            // If class has tests, attach the CodeLens to run the whole class
-            if (codeLens.length > 0) {
-                const classCodeLensRange = new vscode.Range(node.loc.start.line - 1, 0, node.loc.start.line - 1, 0);
-                codeLens.push(new vscode.CodeLens(classCodeLensRange, {
-                    command: 'better-phpunit.run',
-                    title: this.CLASS_TEST_LABEL,
-                    arguments: [null, true], // Method name, run whole class
-                }));
-            }
         } // parse.children
 
         return codeLens;
@@ -79,6 +69,7 @@ class CodeLensProvider {
      */
     parseClass (node) {
         const codeLens = [];
+        let classHasTests = false;
 
         // Loop over class children
         for (let child of node.body) {
@@ -97,6 +88,9 @@ class CodeLensProvider {
                 continue;
             }
 
+            // Assert that this class has at least one test
+            classHasTests = true;
+
             // Build range for the method (where to put the CodeLens)
             const codeLensRange = new vscode.Range(child.loc.start.line - 1, 0, child.loc.start.line - 1, 0);
 
@@ -107,6 +101,16 @@ class CodeLensProvider {
                 arguments: [child.name.name, false], // Method name, run whole class
             }));
         } // node.body
+
+        // If class has tests, attach the CodeLens to run the whole class
+        if (classHasTests) {
+            const classCodeLensRange = new vscode.Range(node.loc.start.line - 1, 0, node.loc.start.line - 1, 0);
+            codeLens.push(new vscode.CodeLens(classCodeLensRange, {
+                command: 'better-phpunit.run',
+                title: this.CLASS_TEST_LABEL,
+                arguments: [null, true], // Method name, run whole class
+            }));
+        }
 
         return codeLens;
     }
