@@ -6,11 +6,13 @@
 - Place your cursor in/on the method you want to run
 - Open the command menu: `cmd+shift+p`
 - Select: `Better PHPUnit: run`
+- _[ALTERNATIVE]_ Click on `Run test` above the method name
 
 ## Run a test file:
 - Place your cursor on/above the class declaration line
 - Open the command menu: `cmd+shift+p`
 - Select: `Better PHPUnit: run`
+- _[ALTERNATIVE]_ Click on `Run class tests` above the class name
 
 ## Run the entire suite:
 - Open the command menu: `cmd+shift+p`
@@ -24,6 +26,7 @@
 - Color output!
 - Run individual methods by placing your cursor anywhere in/on the method
 - Test failures are displayed in the "Problems" panel for quick access
+- CodeLens to run single tests just in one click
 
 > Note: this plugin registers "tasks" to run phpunit, not a command like other extensions. This makes it possible to leverage the problem output and color terminal.
 
@@ -45,6 +48,7 @@ Config:
     "better-phpunit.commandSuffix": null, // This string will be appended to the phpunit command, it's a great place to add flags like '--stop-on-failure'
     "better-phpunit.phpunitBinary": null // A custom phpunit binary. Ex: 'phpunit', '/usr/local/bin/phpunit'
     "better-phpunit.suiteSuffix": null // Specify options to appended only to the 'run suite' command, for example add options like '--testsuite unit' or '--coverage --coverage-xml'.
+    "better-phpunit.codelens": true // Enable or disable CodeLens (label before methods to run single test)
 }
 ```
 
