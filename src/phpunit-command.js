@@ -3,10 +3,11 @@ const vscode = require('vscode');
 const path = require('path');
 
 module.exports = class PhpUnitCommand {
-    constructor(options) {
-        this.runFullSuite = options !== undefined
-            ? options.runFullSuite
-            : false;
+    constructor(options = {}) {
+        this.runFullSuite = options.runFullSuite || false;
+        this.runClass = options.runClass || false;
+        this.methodToTest = options.method || null;
+        this.pathOfTests = options.uri || null;
 
         this.lastOutput;
     }
@@ -27,6 +28,11 @@ module.exports = class PhpUnitCommand {
     }
 
     get file() {
+        // If there's a path of file or folder to test, return it
+        if (this.pathOfTests !== null) {
+            return this.pathOfTests;
+        }
+
         return this._normalizePath(vscode.window.activeTextEditor.document.fileName);
     }
 
@@ -72,6 +78,16 @@ module.exports = class PhpUnitCommand {
     }
 
     get method() {
+        // Return if user wants to test the full class (from CodeLens) or a path is provided
+        if (this.runClass || this.pathOfTests !== null) {
+            return '';
+        }
+
+        // If there's a method passed as arg from CodeLens, run it
+        if (this.methodToTest !== null) {
+            return this.methodToTest;
+        }
+
         let line = vscode.window.activeTextEditor.selection.active.line;
         let method;
 
