@@ -7,6 +7,7 @@ module.exports = class PhpUnitCommand {
         this.runFullSuite = options.runFullSuite || false;
         this.runClass = options.runClass || false;
         this.methodToTest = options.method || null;
+        this.pathOfTests = options.uri || null;
 
         this.lastOutput;
     }
@@ -27,6 +28,11 @@ module.exports = class PhpUnitCommand {
     }
 
     get file() {
+        // If there's a path of file or folder to test, return it
+        if (this.pathOfTests !== null) {
+            return this.pathOfTests;
+        }
+
         return this._normalizePath(vscode.window.activeTextEditor.document.fileName);
     }
 
@@ -72,8 +78,8 @@ module.exports = class PhpUnitCommand {
     }
 
     get method() {
-        // Return if user wants to test the full class (from CodeLens)
-        if (this.runClass) {
+        // Return if user wants to test the full class (from CodeLens) or a path is provided
+        if (this.runClass || this.pathOfTests !== null) {
             return '';
         }
 

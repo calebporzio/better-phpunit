@@ -34,6 +34,14 @@
             {
                 "command": "better-phpunit.run-previous",
                 "title": "Better PHPUnit: run previous"
+            },
+            {
+                "command": "better-phpunit.run-explorer-folder",
+                "title": "Run Tests Inside Folder"
+            },
+            {
+                "command": "better-phpunit.run-explorer-file",
+                "title": "Run File Tests"
             }
         ],
         "keybindings": [
@@ -46,6 +54,18 @@
                 "command": "better-phpunit.run-previous"
             }
         ],
+        "menus": {
+            "explorer/context": [
+                {
+                    "when": "explorerResourceIsFolder",
+                    "command": "better-phpunit.run-explorer-folder"
+                },
+                {
+                    "when": "resourceLangId == php",
+                    "command": "better-phpunit.run-explorer-file"
+                }
+            ]
+        },
         "configuration": {
             "title": "Better PHPUnit configuration",
             "properties": {

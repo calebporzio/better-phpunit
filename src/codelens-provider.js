@@ -7,7 +7,7 @@ class CodeLensProvider {
         this.METHOD_TEST_LABEL = 'Run test';
     }
 
-    async provideCodeLenses (document) {
+    provideCodeLenses (document) {
         // Check if CodeLens is disabled by settings
         const enabled = Boolean(vscode.workspace.getConfiguration('better-phpunit').get('codelens'));
 

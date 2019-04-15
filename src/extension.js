@@ -48,6 +48,34 @@ module.exports.activate = function (context) {
         await runPreviousCommand();
     }));
 
+    disposables.push(vscode.commands.registerCommand('better-phpunit.run-explorer-folder', async (uri) => {
+        let command;
+
+        if (vscode.workspace.getConfiguration("better-phpunit").get("docker.enable")) {
+            command = new DockerPhpUnitCommand({ uri: uri.fsPath });
+        } else if (vscode.workspace.getConfiguration("better-phpunit").get("ssh.enable")) {
+            command = new RemotePhpUnitCommand({ uri: uri.fsPath });
+        } else {
+            command = new PhpUnitCommand({ uri: uri.fsPath });
+        }
+
+        await runCommand(command);
+    }));
+
+    disposables.push(vscode.commands.registerCommand('better-phpunit.run-explorer-file', async (uri) => {
+        let command;
+
+        if (vscode.workspace.getConfiguration("better-phpunit").get("docker.enable")) {
+            command = new DockerPhpUnitCommand({ uri: uri.fsPath });
+        } else if (vscode.workspace.getConfiguration("better-phpunit").get("ssh.enable")) {
+            command = new RemotePhpUnitCommand({ uri: uri.fsPath });
+        } else {
+            command = new PhpUnitCommand({ uri: uri.fsPath });
+        }
+
+        await runCommand(command);
+    }));
+
     disposables.push(vscode.tasks.registerTaskProvider('phpunit', {
         provideTasks: () => {
             return [new vscode.Task(
