@@ -8,9 +8,8 @@
 - Select: `Better PHPUnit: run`
 
 ## Run a test file:
-- Place your cursor on/above the class declaration line
 - Open the command menu: `cmd+shift+p`
-- Select: `Better PHPUnit: run`
+- Select: `Better PHPUnit: run-file`
 
 ## Run the entire suite:
 - Open the command menu: `cmd+shift+p`
@@ -32,6 +31,10 @@ Keybindings:
 {
     "key": "cmd+k cmd+r",
     "command": "better-phpunit.run"
+},
+{
+    "key": "cmd+k cmd+f",
+    "command": "better-phpunit.run-file"
 },
 {
     "key": "cmd+k cmd+p",
