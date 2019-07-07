@@ -8,6 +8,10 @@ module.exports = class PhpUnitCommand {
             ? options.runFullSuite
             : false;
 
+        this.runFile = options !== undefined
+            ? options.runFile
+            : false;
+
         this.lastOutput;
     }
 
@@ -19,9 +23,13 @@ module.exports = class PhpUnitCommand {
         let suiteSuffix = vscode.workspace.getConfiguration('better-phpunit').get('suiteSuffix');
         suiteSuffix = suiteSuffix ? ' '.concat(suiteSuffix) : '';
 
-        this.lastOutput = this.runFullSuite
-            ? `${this.binary}${suiteSuffix}${this.suffix}`
-            : `${this.binary} ${this.file}${this.filter}${this.configuration}${this.suffix}`;
+        if (this.runFullSuite) {
+            this.lastOutput = `${this.binary}${suiteSuffix}${this.suffix}`
+        } else if (this.runFile) {
+            this.lastOutput = `${this.binary} ${this.file}${this.configuration}${this.suffix}`;
+        } else {
+            this.lastOutput = `${this.binary} ${this.file}${this.filter}${this.configuration}${this.suffix}`;
+        }
 
         return this.lastOutput;
     }

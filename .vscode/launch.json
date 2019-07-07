@@ -11,7 +11,8 @@
             "request": "launch",
             "runtimeExecutable": "${execPath}",
             "args": [
-                "--extensionDevelopmentPath=${workspaceFolder}"
+                "${workspaceFolder}/test/project-stub",
+                "--extensionDevelopmentPath=${workspaceFolder}",
             ]
         },
         {
@@ -22,7 +23,7 @@
             "args": [
                 "${workspaceFolder}/test/project-stub",
                 "--extensionDevelopmentPath=${workspaceFolder}",
-                "--extensionTestsPath=${workspaceFolder}/test"
+                "--extensionTestsPath=${workspaceFolder}/test",
             ],
         }
     ]
