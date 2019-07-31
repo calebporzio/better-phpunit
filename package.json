@@ -2,7 +2,7 @@
     "name": "better-phpunit",
     "displayName": "Better PHPUnit",
     "description": "A better PHPUnit test runner",
-    "version": "1.4.0",
+    "version": "1.5.0",
     "publisher": "calebporzio",
     "engines": {
         "vscode": "^1.17.0"
@@ -17,6 +17,7 @@
     ],
     "activationEvents": [
         "onCommand:better-phpunit.run",
+        "onCommand:better-phpunit.run-file",
         "onCommand:better-phpunit.run-suite"
     ],
     "main": "./src/extension",
@@ -25,6 +26,10 @@
             {
                 "command": "better-phpunit.run",
                 "title": "Better PHPUnit: run"
+            },
+            {
+                "command": "better-phpunit.run-file",
+                "title": "Better PHPUnit: run file"
             },
             {
                 "command": "better-phpunit.run-suite",
@@ -39,6 +44,10 @@
             {
                 "key": "cmd+k cmd+r",
                 "command": "better-phpunit.run"
+            },
+            {
+                "key": "cmd+k cmd+f",
+                "command": "better-phpunit.run-file"
             },
             {
                 "key": "cmd+k cmd+p",
