@@ -59,6 +59,12 @@ module.exports = class PhpUnitCommand {
 
         return suffix ? ' ' + suffix : ''; // Add a space before the suffix.
     }
+	
+	get windowsSuffix() {
+        return process.platform === "win32"
+            ? '.bat'
+            : '';
+    }
 
     get binary() {
         if (vscode.workspace.getConfiguration('better-phpunit').get('phpunitBinary')) {
@@ -66,8 +72,8 @@ module.exports = class PhpUnitCommand {
         }
 
         return this.subDirectory
-            ? this._normalizePath(path.join(this.subDirectory, 'vendor', 'bin', 'phpunit'))
-            : this._normalizePath(path.join(vscode.workspace.rootPath, 'vendor', 'bin', 'phpunit'));
+            ? this._normalizePath(path.join(this.subDirectory, 'vendor', 'bin', 'phpunit'+this.windowsSuffix))
+            : this._normalizePath(path.join(vscode.workspace.rootPath, 'vendor', 'bin', 'phpunit'+this.windowsSuffix));
     }
 
     get subDirectory() {
