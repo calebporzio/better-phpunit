@@ -60,7 +60,7 @@ Running tests over ssh (For VMs like Laravel Homestead):
     },
     "better-phpunit.ssh.user": "user",
     "better-phpunit.ssh.host": "host",
-    "better-phpunit.ssh.port": "22",
+    "better-phpunit.ssh.port": 22,
     "better-phpunit.ssh.binary": "putty -ssh"
 }
 ```
