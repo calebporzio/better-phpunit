@@ -40,7 +40,7 @@ module.exports = class PhpUnitCommand {
 
     get filter() {
         return process.platform === "win32"
-            ? (this.method ? ` --filter '^.*::${this.method}$'` : '')
+            ? (this.method ? ` --filter '^.*::${this.method}'` : '')
             : (this.method ? ` --filter '^.*::${this.method}( .*)?$'` : '');
     }
 
