@@ -59,7 +59,7 @@ module.exports = class PhpUnitCommand {
 
         return suffix ? ' ' + suffix : ''; // Add a space before the suffix.
     }
-	
+
 	get windowsSuffix() {
         return process.platform === "win32"
             ? '.bat'

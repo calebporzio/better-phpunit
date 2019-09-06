@@ -1,5 +1,7 @@
 # Better PHPUnit
 
+Better PHPUnit is the most popular, cleanest, and fastest PHPUnit runner for VS Code.
+
 ![Demo GIF](demo.gif)
 
 ## Run a test method:
