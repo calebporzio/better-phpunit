@@ -39,7 +39,7 @@ module.exports = class PhpUnitCommand {
     }
 
     get filter() {
-        let filterMethod = process.platform === "win32" ? ` --filter '^.*::${this.method}$'` : ` --filter '^.*::${this.method}( .*)?$'`;
+        let filterMethod = process.platform === "win32" ? ` --filter '^.*::${this.method}'` : ` --filter '^.*::${this.method}( .*)?$'`;
         if (vscode.workspace.getConfiguration('better-phpunit').get('useCodeception')) {
             filterMethod = `:${this.method}`;
         }
@@ -64,6 +64,7 @@ module.exports = class PhpUnitCommand {
 
     get binary() {
         let commandStub = vscode.workspace.getConfiguration('better-phpunit').get('useCodeception') ? path.join('vendor', 'bin', 'codecept') : path.join('vendor', 'bin', 'phpunit');
+        commandStub = process.platform === "win32" ? commandStub + '.bat' : commandStub;
         let addCommandOption = vscode.workspace.getConfiguration('better-phpunit').get('useCodeception') ? ' run' : '';
         let configuredBinary = vscode.workspace.getConfiguration('better-phpunit').get('phpunitBinary');
         if (configuredBinary) {
