@@ -1,6 +1,7 @@
 const vscode = require('vscode');
 const PhpUnitCommand = require('./phpunit-command');
 const path = require('path');
+const os = require('os');
 
 module.exports = class RemotePhpUnitCommand extends PhpUnitCommand {
     constructor(options) {
@@ -41,8 +42,9 @@ module.exports = class RemotePhpUnitCommand extends PhpUnitCommand {
 
     remapLocalPath(actualPath) {
         for (const [localPath, remotePath] of Object.entries(this.paths)) {
-            if (actualPath.startsWith(localPath)) {
-                return actualPath.replace(localPath, remotePath);
+            const expandedLocalPath = localPath.replace(/^~/, os.homedir());
+            if (actualPath.startsWith(expandedLocalPath)) {
+                return actualPath.replace(expandedLocalPath, remotePath);
             }
         }
 
