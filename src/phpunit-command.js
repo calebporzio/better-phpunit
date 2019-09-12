@@ -39,11 +39,9 @@ module.exports = class PhpUnitCommand {
     }
 
     get filter() {
-        let filterMethod = process.platform === "win32" ? ` --filter '^.*::${this.method}'` : ` --filter '^.*::${this.method}( .*)?$'`;
-        if (vscode.workspace.getConfiguration('better-phpunit').get('useCodeception')) {
-            filterMethod = `:${this.method}`;
-        }
-        return (this.method ? filterMethod : '');
+        return process.platform === "win32"
+            ? (this.method ? ` --filter '^.*::${this.method}'` : '')
+            : (this.method ? ` --filter '^.*::${this.method}( .*)?$'` : '');
     }
 
     get configuration() {
@@ -62,29 +60,26 @@ module.exports = class PhpUnitCommand {
         return suffix ? ' ' + suffix : ''; // Add a space before the suffix.
     }
 
+	get windowsSuffix() {
+        return process.platform === "win32"
+            ? '.bat'
+            : '';
+    }
+
     get binary() {
-        let commandStub = vscode.workspace.getConfiguration('better-phpunit').get('useCodeception') ? path.join('vendor', 'bin', 'codecept') : path.join('vendor', 'bin', 'phpunit');
-        commandStub = process.platform === "win32" ? commandStub + '.bat' : commandStub;
-        let addCommandOption = vscode.workspace.getConfiguration('better-phpunit').get('useCodeception') ? ' run' : '';
-        let configuredBinary = vscode.workspace.getConfiguration('better-phpunit').get('phpunitBinary');
-        if (configuredBinary) {
-            return configuredBinary.concat(addCommandOption);
+        if (vscode.workspace.getConfiguration('better-phpunit').get('phpunitBinary')) {
+            return vscode.workspace.getConfiguration('better-phpunit').get('phpunitBinary')
         }
 
         return this.subDirectory
-            ? this._normalizePath(path.join(this.subDirectory, commandStub)).concat(addCommandOption)
-            : this._normalizePath(path.join(vscode.workspace.rootPath, commandStub)).concat(addCommandOption);
+            ? this._normalizePath(path.join(this.subDirectory, 'vendor', 'bin', 'phpunit'+this.windowsSuffix))
+            : this._normalizePath(path.join(vscode.workspace.rootPath, 'vendor', 'bin', 'phpunit'+this.windowsSuffix));
     }
 
     get subDirectory() {
         // find the closest phpunit.xml file in the project (for projects with multiple "vendor/bin/phpunit"s).
         let phpunitDotXml = findUp.sync(['phpunit.xml', 'phpunit.xml.dist'], { cwd: vscode.window.activeTextEditor.document.fileName });
 
-        // when using Codeception there is no phpunit.xml file so we use a dummy to return null
-        if (vscode.workspace.getConfiguration('better-phpunit').get('useCodeception')) {
-            phpunitDotXml = vscode.workspace.rootPath.concat('/phpunit.xml');
-        }
-        
         return path.dirname(phpunitDotXml) !== vscode.workspace.rootPath
             ? path.dirname(phpunitDotXml)
             : null;
