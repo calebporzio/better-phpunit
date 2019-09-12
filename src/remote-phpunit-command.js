@@ -1,15 +1,9 @@
 const vscode = require('vscode');
-const PhpUnitCommand = require('./phpunit-command');
+const CodeCeptionCommand = require('./codeception-command');
 const path = require('path');
 const os = require('os');
 
-module.exports = class RemotePhpUnitCommand extends PhpUnitCommand {
-    constructor(options) {
-        super(options);
-
-        this.config = vscode.workspace.getConfiguration("better-phpunit");
-    }
-
+module.exports = class RemotePhpUnitCommand extends CodeCeptionCommand {
     get file() {
         return this.remapLocalPath(super.file);
     }
