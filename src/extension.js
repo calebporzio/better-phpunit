@@ -55,6 +55,18 @@ module.exports.activate = function (context) {
         await runPreviousCommand();
     }));
 
+    disposables.push(vscode.commands.registerCommand('better-phpunit.coverage', async () => {
+        await runWithCoverage({ coverageType: getCoverageFormat() });
+    }));
+
+    disposables.push(vscode.commands.registerCommand('better-phpunit.coverage-file', async () => {
+        await runWithCoverage({ coverageType: getCoverageFormat(), runFile: true });
+    }));
+
+    disposables.push(vscode.commands.registerCommand('better-phpunit.coverage-suite', async () => {
+        await runWithCoverage({ coverageType: getCoverageFormat(), runFullSuite: true });
+    }));
+
     disposables.push(vscode.tasks.registerTaskProvider('phpunit', {
         provideTasks: () => {
             return [new vscode.Task(
@@ -89,6 +101,24 @@ async function runPreviousCommand() {
 function setGlobalCommandInstance(commandInstance) {
     // Store this object globally for the provideTasks, "run-previous", and for tests to assert against.
     globalCommand = commandInstance;
+}
+
+async function runWithCoverage(options) {
+    let command;
+
+    if (vscode.workspace.getConfiguration("better-phpunit").get("ssh.enable")) {
+        command = new RemotePhpUnitCommand( options );
+    } else if (vscode.workspace.getConfiguration("better-phpunit").get("docker.enable")) {
+        command = new DockerPhpUnitCommand( options );
+    } else {
+        command = new PhpUnitCommand( options );
+    }
+
+    await runCommand(command);
+}
+
+function getCoverageFormat() {
+    return vscode.workspace.getConfiguration('better-phpunit').get('coverageFormat').toLowerCase();
 }
 
 // This method is exposed for testing purposes.
