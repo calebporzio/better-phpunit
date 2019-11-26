@@ -28,15 +28,13 @@ module.exports = class PhpUnitCommand {
         suiteSuffix = suiteSuffix ? ' '.concat(suiteSuffix) : '';
 
         if (this.runFullSuite) {
-            this.lastOutput = `${this.binary}${suiteSuffix}${this.suffix}`
+            this.lastOutput = `${this.binary}${suiteSuffix}${this.coverage}${this.suffix}`
         } else if (this.runFile) {
-            this.lastOutput = `${this.binary} ${this.file}${this.configuration}${this.suffix}`;
-        } else if (this.coverageType) {
-            this.lastOutput = `${this.binary} ${this.file}${this.filter}${this.configuration}${this.coverage}${this.suffix}`;
+            this.lastOutput = `${this.binary} ${this.file}${this.configuration}${this.coverage}${this.suffix}`;
         } else {
-            this.lastOutput = `${this.binary} ${this.file}${this.filter}${this.configuration}${this.suffix}`;
+            this.lastOutput = `${this.binary} ${this.file}${this.filter}${this.configuration}${this.coverage}${this.suffix}`;
         }
-
+        
         return this.lastOutput;
     }
 
@@ -115,11 +113,11 @@ module.exports = class PhpUnitCommand {
         if (coveragePath) {
             switch (this.coverageType) {
                 case 'text': {
-                    coverage += ` --coverage-text=${this._normalizePath(path.join(coveragePath, 'coverage.txt'))}`;
+                    coverage += ` --coverage-text=${this._normalizePath(path.join(coveragePath, 'coverage.txt'))} `;
                     break;
                 }
                 case 'html': {
-                    coverage += ` --coverage-html ${this._normalizePath(coveragePath)}`;
+                    coverage += ` --coverage-html ${this._normalizePath(coveragePath)} `;
                     break;
                 }
             }

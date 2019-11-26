@@ -1,244 +1,254 @@
 {
-    "name": "better-phpunit",
-    "displayName": "Better PHPUnit",
-    "description": "A better PHPUnit test runner",
-    "version": "1.5.1",
-    "publisher": "calebporzio",
-    "engines": {
-        "vscode": "^1.17.0"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/calebporzio/better-phpunit.git"
-    },
-    "icon": "icon.png",
-    "categories": [
-        "Other"
-    ],
-    "activationEvents": [
-        "onCommand:better-phpunit.run",
-        "onCommand:better-phpunit.run-file",
-        "onCommand:better-phpunit.run-suite",
-        "onCommand:better-phpunit.coverage",
-        "onCommand:better-phpunit.coverage-suite"
-    ],
-    "main": "./src/extension",
-    "contributes": {
-        "commands": [
-            {
-                "command": "better-phpunit.run",
-                "title": "Better PHPUnit: run"
-            },
-            {
-                "command": "better-phpunit.run-file",
-                "title": "Better PHPUnit: run file"
-            },
-            {
-                "command": "better-phpunit.run-suite",
-                "title": "Better PHPUnit: run suite"
-            },
-            {
-                "command": "better-phpunit.run-previous",
-                "title": "Better PHPUnit: run previous"
-            },
-            {
-                "command": "better-phpunit.coverage",
-                "title": "Better PHPUnit: run with coverage"
-            },
-            {
-                "command": "better-phpunit.coverage-suite",
-                "title": "Better PHPUnit: run suite with coverage"
-            }
-        ],
-        "keybindings": [
-            {
-                "key": "cmd+k cmd+r",
-                "command": "better-phpunit.run"
-            },
-            {
-                "key": "cmd+k cmd+f",
-                "command": "better-phpunit.run-file"
-            },
-            {
-                "key": "cmd+k cmd+p",
-                "command": "better-phpunit.run-previous"
-            }
-        ],
-        "configuration": {
-            "title": "Better PHPUnit configuration",
-            "properties": {
-                "better-phpunit.commandSuffix": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
-                    "default": null,
-                    "description": "This string will be appended to the phpunit command, it's a great place to add flags like '--stop-on-failure'"
-                },
-                "better-phpunit.phpunitBinary": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
-                    "default": null,
-                    "description": "A custom phpunit binary. Ex: 'phpunit', '/usr/local/bin/phpunit'"
-                },
-                "better-phpunit.xmlConfigFilepath": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
-                    "default": null,
-                    "description": "Absolute path for the PHPUnit XML configuration file"
-                },
-                "better-phpunit.suiteSuffix": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
-                    "default": null,
-                    "description": "Specify options to appended only to the 'run suite' command, for example add options like '--testsuite unit' or '--coverage  --coverage-xml'"
-                },
-                "better-phpunit.coveragePath": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
-                    "default": null,
-                    "description": "Relative path for the generated coverage files, based on the project folder. Ex: 'test/coverage'"
-                },
-                "better-phpunit.coverageFormat": {
-                    "type": "string",
-                    "enum": [
-                        "Text",
-                        "HTML"
-                    ],
-                    "default": "Text",
-                    "description": "Select the coverage report format"
-                },
-                "better-phpunit.ssh.enable": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Run tests over SSH"
-                },
-                "better-phpunit.ssh.user": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
-                    "default": null,
-                    "description": "The user to connect as when running test via SSH"
-                },
-                "better-phpunit.ssh.host": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
-                    "default": null,
-                    "description": "The hostname to use when running tests via SSH"
-                },
-                "better-phpunit.ssh.port": {
-                    "type": [
-                        "integer"
-                    ],
-                    "default": 22,
-                    "description": "The port to use when running tests via SSH.  Deprecated, set better-phpunit.options to '-p[port]' on Linux/Mac, and '-P [port]' on Windows."
-                },
-                "better-phpunit.ssh.paths": {
-                    "type": "object",
-                    "default": {},
-                    "description": "The SSH path map. Keys are local (host) paths and values are remote (guest) paths."
-                },
-                "better-phpunit.ssh.binary": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
-                    "default": null,
-                    "description": "The path (and flags) to an SSH-compatible binary. If null it will use SSH on *nix and Putty on Windows."
-                },
-                "better-phpunit.ssh.disableAllOptions": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Do not include any config options in SSH command."
-                },
-                "better-phpunit.ssh.options": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
-                    "default": null,
-                    "description": "Additional command line options to pass to ssh/putty/plink"
-                },
-                "better-phpunit.docker.enable": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Run tests within a Docker container"
-                },
-                "better-phpunit.docker.command": {
-                    "type": [
-                        "string",
-                        "null"
-                    ],
-                    "default": null,
-                    "description": "The Docker command to execute a container. If null, an error will be thrown during execution."
-                },
-                "better-phpunit.docker.paths": {
-                    "type": "object",
-                    "default": {},
-                    "description": "The docker path map. Keys are local (host) paths and values are remote (container) paths."
-                }
-            }
-        },
-        "problemMatchers": [
-            {
-                "name": "phpunit",
-                "owner": "php",
-                "fileLocation": "absolute",
-                "pattern": [
-                    {
-                        "regexp": "^\\d+\\)\\s.*$"
-                    },
-                    {
-                        "regexp": "^(.*)$",
-                        "message": 1
-                    },
-                    {
-                        "regexp": "^(.*):(\\d+)$",
-                        "file": 1,
-                        "location": 2
-                    }
-                ]
-            }
-        ],
-        "taskDefinitions": [
-            {
-                "type": "phpunit",
-                "required": [
-                    "task"
-                ],
-                "properties": {
-                    "task": {
-                        "type": "string",
-                        "description": "The task to execute"
-                    }
-                }
-            }
-        ]
-    },
-    "scripts": {
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "node ./node_modules/vscode/bin/test"
-    },
-    "devDependencies": {
-        "@types/mocha": "^2.2.42",
-        "@types/node": "^7.10.2",
-        "eslint": "^4.6.1",
-        "mocha": "^4.1.0",
-        "typescript": "^2.5.2",
-        "vscode": "^1.1.22"
-    },
-    "dependencies": {
-        "find-up": "^2.1.0"
-    }
+	"name": "better-phpunit",
+	"displayName": "Better PHPUnit",
+	"description": "A better PHPUnit test runner",
+	"version": "1.5.1",
+	"publisher": "calebporzio",
+	"engines": {
+		"vscode": "^1.17.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/calebporzio/better-phpunit.git"
+	},
+	"icon": "icon.png",
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:better-phpunit.run",
+		"onCommand:better-phpunit.run-file",
+		"onCommand:better-phpunit.run-suite",
+		"onCommand:better-phpunit.coverage",
+		"onCommand:better-phpunit.coverage-file",
+		"onCommand:better-phpunit.coverage-suite"
+	],
+	"main": "./src/extension",
+	"contributes": {
+		"commands": [
+			{
+				"command": "better-phpunit.run",
+				"title": "Better PHPUnit: run"
+			},
+			{
+				"command": "better-phpunit.run-file",
+				"title": "Better PHPUnit: run file"
+			},
+			{
+				"command": "better-phpunit.run-suite",
+				"title": "Better PHPUnit: run suite"
+			},
+			{
+				"command": "better-phpunit.run-previous",
+				"title": "Better PHPUnit: run previous"
+			},
+			{
+				"command": "better-phpunit.coverage",
+				"title": "Better PHPUnit: run with coverage"
+			},
+			{
+				"command": "better-phpunit.coverage-file",
+				"title": "Better PHPUnit: run file with coverage"
+			},
+			{
+				"command": "better-phpunit.coverage-suite",
+				"title": "Better PHPUnit: run suite with coverage"
+			}
+		],
+		"keybindings": [
+			{
+				"key": "cmd+k cmd+r",
+				"command": "better-phpunit.run"
+			},
+			{
+				"key": "cmd+k cmd+f",
+				"command": "better-phpunit.run-file"
+			},
+			{
+				"key": "cmd+k cmd+p",
+				"command": "better-phpunit.run-previous"
+			}
+		],
+		"configuration": {
+			"title": "Better PHPUnit configuration",
+			"properties": {
+				"better-phpunit.commandSuffix": {
+					"type": [
+						"string",
+						"null"
+					],
+					"default": null,
+					"description": "This string will be appended to the phpunit command, it's a great place to add flags like '--stop-on-failure'"
+				},
+				"better-phpunit.phpunitBinary": {
+					"type": [
+						"string",
+						"null"
+					],
+					"default": null,
+					"description": "A custom phpunit binary. Ex: 'phpunit', '/usr/local/bin/phpunit'"
+				},
+				"better-phpunit.xmlConfigFilepath": {
+					"type": [
+						"string",
+						"null"
+					],
+					"default": null,
+					"description": "Absolute path for the PHPUnit XML configuration file"
+				},
+				"better-phpunit.suiteSuffix": {
+					"type": [
+						"string",
+						"null"
+					],
+					"default": null,
+					"description": "Specify options to appended only to the 'run suite' command, for example add options like '--testsuite unit' or '--coverage  --coverage-xml'"
+				},
+				"better-phpunit.coveragePath": {
+					"type": [
+						"string",
+						"null"
+					],
+					"default": null,
+					"description": "Relative path for the generated coverage files, based on the project folder. Ex: 'test/coverage'"
+				},
+				"better-phpunit.coverageFormat": {
+					"type": "string",
+					"enum": [
+						"Text",
+						"HTML"
+					],
+					"default": "Text",
+					"description": "Select the coverage report format"
+				},
+				"better-phpunit.ssh.enable": {
+					"type": "boolean",
+					"default": false,
+					"description": "Run tests over SSH"
+				},
+				"better-phpunit.ssh.user": {
+					"type": [
+						"string",
+						"null"
+					],
+					"default": null,
+					"description": "The user to connect as when running test via SSH"
+				},
+				"better-phpunit.ssh.host": {
+					"type": [
+						"string",
+						"null"
+					],
+					"default": null,
+					"description": "The hostname to use when running tests via SSH"
+				},
+				"better-phpunit.ssh.port": {
+					"type": [
+						"integer"
+					],
+					"default": 22,
+					"description": "The port to use when running tests via SSH.  Deprecated, set better-phpunit.options to '-p[port]' on Linux/Mac, and '-P [port]' on Windows."
+				},
+				"better-phpunit.ssh.paths": {
+					"type": "object",
+					"default": {},
+					"description": "The SSH path map. Keys are local (host) paths and values are remote (guest) paths."
+				},
+				"better-phpunit.ssh.binary": {
+					"type": [
+						"string",
+						"null"
+					],
+					"default": null,
+					"description": "The path (and flags) to an SSH-compatible binary. If null it will use SSH on *nix and Putty on Windows."
+				},
+				"better-phpunit.ssh.disableAllOptions": {
+					"type": "boolean",
+					"default": false,
+					"description": "Do not include any config options in SSH command."
+				},
+				"better-phpunit.ssh.options": {
+					"type": [
+						"string",
+						"null"
+					],
+					"default": null,
+					"description": "Additional command line options to pass to ssh/putty/plink"
+				},
+				"better-phpunit.docker.enable": {
+					"type": "boolean",
+					"default": false,
+					"description": "Run tests within a Docker container"
+				},
+				"better-phpunit.docker.command": {
+					"type": [
+						"string",
+						"null"
+					],
+					"default": null,
+					"description": "The Docker command to execute a container. If null, an error will be thrown during execution."
+				},
+				"better-phpunit.docker.paths": {
+					"type": "object",
+					"default": {},
+					"description": "The docker path map. Keys are local (host) paths and values are remote (container) paths."
+				}
+			}
+		},
+		"problemMatchers": [
+			{
+				"name": "phpunit",
+				"owner": "php",
+				"fileLocation": "absolute",
+				"pattern": [
+					{
+						"regexp": "^\\d+\\)\\s.*$"
+					},
+					{
+						"regexp": "^(.*)$",
+						"message": 1
+					},
+					{
+						"regexp": "^(.*):(\\d+)$",
+						"file": 1,
+						"location": 2
+					}
+				]
+			}
+		],
+		"taskDefinitions": [
+			{
+				"type": "phpunit",
+				"required": [
+					"task"
+				],
+				"properties": {
+					"task": {
+						"type": "string",
+						"description": "The task to execute"
+					}
+				}
+			}
+		]
+	},
+	"scripts": {
+		"postinstall": "node ./node_modules/vscode/bin/install",
+		"test": "node ./node_modules/vscode/bin/test"
+	},
+	"devDependencies": {
+		"@types/mocha": "^2.2.42",
+		"@types/node": "^7.10.2",
+		"eslint": "^4.6.1",
+		"mocha": "^4.1.0",
+		"typescript": "^2.5.2",
+		"vscode": "^1.1.22"
+	},
+	"dependencies": {
+		"find-up": "^2.1.0"
+	},
+	"__metadata": {
+		"id": "2dd41a16-fc28-4680-a274-a850fa5f1098",
+		"publisherDisplayName": "calebporzio",
+		"publisherId": "a2487481-f6cb-4f67-9340-4db67a69d30d"
+	}
 }

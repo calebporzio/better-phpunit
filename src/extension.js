@@ -59,6 +59,10 @@ module.exports.activate = function (context) {
         await runWithCoverage({ coverageType: getCoverageFormat() });
     }));
 
+    disposables.push(vscode.commands.registerCommand('better-phpunit.coverage-file', async () => {
+        await runWithCoverage({ coverageType: getCoverageFormat(), runFile: true });
+    }));
+
     disposables.push(vscode.commands.registerCommand('better-phpunit.coverage-suite', async () => {
         await runWithCoverage({ coverageType: getCoverageFormat(), runFullSuite: true });
     }));
