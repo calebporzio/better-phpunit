@@ -8,6 +8,10 @@ module.exports = class PhpUnitCommand {
             ? options.runFullSuite
             : false;
 
+        this.runFile = options !== undefined
+            ? options.runFile
+            : false;
+
         this.coverageType = options !== undefined
             ? options.coverageType
             : false;
@@ -23,9 +27,15 @@ module.exports = class PhpUnitCommand {
         let suiteSuffix = vscode.workspace.getConfiguration('better-phpunit').get('suiteSuffix');
         suiteSuffix = suiteSuffix ? ' '.concat(suiteSuffix) : '';
 
-        this.lastOutput = this.runFullSuite
-            ? `${this.binary}${suiteSuffix}${this.coverage}${this.suffix}`
-            : `${this.binary} ${this.file}${this.filter}${this.configuration}${this.coverage}${this.suffix}`;
+        if (this.runFullSuite) {
+            this.lastOutput = `${this.binary}${suiteSuffix}${this.suffix}`
+        } else if (this.runFile) {
+            this.lastOutput = `${this.binary} ${this.file}${this.configuration}${this.suffix}`;
+        } else if (this.coverageType) {
+            this.lastOutput = `${this.binary} ${this.file}${this.filter}${this.configuration}${this.coverage}${this.suffix}`;
+        } else {
+            this.lastOutput = `${this.binary} ${this.file}${this.filter}${this.configuration}${this.suffix}`;
+        }
 
         return this.lastOutput;
     }
@@ -36,7 +46,7 @@ module.exports = class PhpUnitCommand {
 
     get filter() {
         return process.platform === "win32"
-            ? (this.method ? ` --filter '^.*::${this.method}$'` : '')
+            ? (this.method ? ` --filter '^.*::${this.method}'` : '')
             : (this.method ? ` --filter '^.*::${this.method}( .*)?$'` : '');
     }
 
@@ -56,14 +66,20 @@ module.exports = class PhpUnitCommand {
         return suffix ? ' ' + suffix : ''; // Add a space before the suffix.
     }
 
+	get windowsSuffix() {
+        return process.platform === "win32"
+            ? '.bat'
+            : '';
+    }
+
     get binary() {
         if (vscode.workspace.getConfiguration('better-phpunit').get('phpunitBinary')) {
             return vscode.workspace.getConfiguration('better-phpunit').get('phpunitBinary')
         }
 
         return this.subDirectory
-            ? this._normalizePath(path.join(this.subDirectory, 'vendor', 'bin', 'phpunit'))
-            : this._normalizePath(path.join(vscode.workspace.rootPath, 'vendor', 'bin', 'phpunit'));
+            ? this._normalizePath(path.join(this.subDirectory, 'vendor', 'bin', 'phpunit'+this.windowsSuffix))
+            : this._normalizePath(path.join(vscode.workspace.rootPath, 'vendor', 'bin', 'phpunit'+this.windowsSuffix));
     }
 
     get subDirectory() {
