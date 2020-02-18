@@ -23,7 +23,7 @@ module.exports = class RemotePhpUnitCommand extends PhpUnitCommand {
     }
 
     get configuration() {
-        let configFilepath = vscode.workspace.getConfiguration('better-phpunit').get('xmlConfigFilepath');
+        let configFilepath = this.config.get("xmlConfigFilepath");
         if (configFilepath !== null) {
             return ` --configuration ${configFilepath}`;
         }

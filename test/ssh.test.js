@@ -26,6 +26,7 @@ describe("SSH Tests", function () {
         await vscode.workspace.getConfiguration("better-phpunit").update("docker.enable", false);
         await vscode.workspace.getConfiguration("better-phpunit").update("docker.command", null);
         await vscode.workspace.getConfiguration("better-phpunit").update("docker.paths", null);
+        await vscode.workspace.getConfiguration("better-phpunit").update("xmlConfigFilepath", null);
 
         const paths = {};
         paths[path.join(vscode.workspace.rootPath)] = "/some/remote/path";
@@ -44,6 +45,7 @@ describe("SSH Tests", function () {
         await vscode.workspace.getConfiguration("better-phpunit").update("docker.enable", false);
         await vscode.workspace.getConfiguration("better-phpunit").update("docker.command", null);
         await vscode.workspace.getConfiguration("better-phpunit").update("docker.paths", null);
+        await vscode.workspace.getConfiguration("better-phpunit").update("xmlConfigFilepath", null);
     });
 
     it("Commands are not wrapped when SSH is disabled", async function () {
@@ -111,6 +113,28 @@ describe("SSH Tests", function () {
         assert.equal(
             extension.getGlobalCommandInstance().output,
             'docker exec CONTAINER /some/remote/path/vendor/bin/phpunit'
+        );
+    });
+
+    it("Uses configuration found in path supplied in settings when triggering Better PHPUnit", async function () {
+        await vscode.workspace.getConfiguration("better-phpunit").update("ssh.enable", false);
+        await vscode.workspace.getConfiguration("better-phpunit").update("docker.enable", true);
+        await vscode.workspace.getConfiguration("better-phpunit").update("docker.command", "docker exec CONTAINER");
+        await vscode.workspace.getConfiguration('better-phpunit').update('xmlConfigFilepath', path.join(vscode.workspace.rootPath) + '/phpunit.xml.dist');
+
+        const paths = {};
+        paths[path.join(vscode.workspace.rootPath)] = "/some/remote/path";
+        paths["/some/other_local/path"] = "/some/other_remote/path";
+        await vscode.workspace.getConfiguration("better-phpunit").update("docker.paths", paths);
+        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
+        await vscode.window.showTextDocument(document, { selection: new vscode.Range(7, 0, 7, 0) });
+        await vscode.commands.executeCommand('better-phpunit.run');
+
+        await timeout(waitToAssertInSeconds, () => { })
+
+        assert.equal(
+            extension.getGlobalCommandInstance().output,
+            'docker exec CONTAINER /some/remote/path/vendor/bin/phpunit /some/remote/path/tests/SampleTest.php --filter \'^.*::test_first( .*)?$\' --configuration ' + path.join(vscode.workspace.rootPath) + '/phpunit.xml.dist'
         );
     });
 
