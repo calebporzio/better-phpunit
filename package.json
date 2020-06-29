@@ -160,6 +160,11 @@
                     "type": "object",
                     "default": {},
                     "description": "The docker path map. Keys are local (host) paths and values are remote (container) paths."
+                },
+                "better-phpunit.usePest": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Run Pest instead of PHPUnit. Overwrites phpunitBinary."
                 }
             }
         },
