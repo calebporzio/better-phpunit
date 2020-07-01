@@ -100,7 +100,7 @@ module.exports = class PhpUnitCommand {
 
         while (line > 0) {
             const lineText = vscode.window.activeTextEditor.document.lineAt(line).text;
-            const match = vscode.workspace.getConfiguration('better-phpunit').get('usePest') ? lineText.match(/^\s*it\(([^,)]+)/m) : lineText.match(/^\s*(?:public|private|protected)?\s*function\s*(\w+)\s*\(.*$/);
+            const match = vscode.workspace.getConfiguration('better-phpunit').get('usePest') ? lineText.match(/^\s*(?:it|test|get)\(([^,)]+)/m) : lineText.match(/^\s*(?:public|private|protected)?\s*function\s*(\w+)\s*\(.*$/);
             if (match) {
                 method = match[1];
                 break;
