@@ -24,6 +24,7 @@ describe("Better PHPUnit Test Suite", function () {
         await vscode.workspace.getConfiguration("better-phpunit").update("xmlConfigFilepath", null);
         await vscode.workspace.getConfiguration("better-phpunit").update("suiteSuffix", null);
         await vscode.workspace.getConfiguration("better-phpunit").update("docker.enable", false);
+        await vscode.workspace.getConfiguration("better-phpunit").update("usePest", false);
     });
 
     afterEach(async () => {
@@ -35,6 +36,7 @@ describe("Better PHPUnit Test Suite", function () {
         await vscode.workspace.getConfiguration("better-phpunit").update("xmlConfigFilepath", null);
         await vscode.workspace.getConfiguration("better-phpunit").update("suiteSuffix", null);
         await vscode.workspace.getConfiguration("better-phpunit").update("docker.enable", false);
+        await vscode.workspace.getConfiguration("better-phpunit").update("usePest", false);
     });
 
     it("Run file outside of method", async () => {
