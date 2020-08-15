@@ -50,6 +50,7 @@ Config:
     "better-phpunit.commandSuffix": null, // This string will be appended to the phpunit command, it's a great place to add flags like '--stop-on-failure'
     "better-phpunit.phpunitBinary": null // A custom phpunit binary. Ex: 'phpunit', '/usr/local/bin/phpunit'
     "better-phpunit.suiteSuffix": null // Specify options to appended only to the 'run suite' command, for example add options like '--testsuite unit' or '--coverage --coverage-xml'.
+    "better-phpunit.xmlConfigFilepath": null // Specify an absolute path to the phpunit config file. i.e. '/home/wherever/phpunit.xml.dist'
 }
 ```
 
