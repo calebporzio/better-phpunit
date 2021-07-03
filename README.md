@@ -48,7 +48,7 @@ Config:
 ```
 {
     "better-phpunit.commandSuffix": null, // This string will be appended to the phpunit command, it's a great place to add flags like '--stop-on-failure'
-    "better-phpunit.phpunitBinary": null // A custom phpunit binary. Ex: 'phpunit', '/usr/local/bin/phpunit'
+    "better-phpunit.phpunitBinary": null, // A custom phpunit binary. Ex: 'phpunit', '/usr/local/bin/phpunit'
     "better-phpunit.suiteSuffix": null // Specify options to appended only to the 'run suite' command, for example add options like '--testsuite unit' or '--coverage --coverage-xml'.
 }
 ```
@@ -62,7 +62,7 @@ Running tests over ssh (For VMs like Laravel Homestead):
     },
     "better-phpunit.ssh.user": "user",
     "better-phpunit.ssh.host": "host",
-    "better-phpunit.ssh.port": "22"
+    "better-phpunit.ssh.port": "22",
     "better-phpunit.ssh.binary": "putty -ssh"
 }
 ```
