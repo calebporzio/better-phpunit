@@ -24,11 +24,20 @@ module.exports = class PhpUnitCommand {
         suiteSuffix = suiteSuffix ? ' '.concat(suiteSuffix) : '';
 
         if (this.runFullSuite) {
-            this.lastOutput = `${this.binary}${suiteSuffix}${this.suffix}`
+            if(process.platform === "win32")
+                this.lastOutput = `"& '${this.binary}'${suiteSuffix}${this.suffix}"`;
+            else
+                this.lastOutput = `${this.binary}${suiteSuffix}${this.suffix}`;
         } else if (this.runFile) {
-            this.lastOutput = `${this.binary} ${this.file}${this.configuration}${this.suffix}`;
+            if(process.platform === "win32")
+                this.lastOutput = `"& '${this.binary}' '${this.file}'${this.configuration}${this.suffix}"`;
+            else
+                this.lastOutput = `${this.binary} ${this.file}${this.configuration}${this.suffix}`;
         } else {
-            this.lastOutput = `${this.binary} ${this.file}${this.filter}${this.configuration}${this.suffix}`;
+            if(process.platform === "win32")
+                this.lastOutput = `"& '${this.binary}' '${this.file}'${this.filter}${this.configuration}${this.suffix}"`;
+            else
+                this.lastOutput = `${this.binary} ${this.file}${this.filter}${this.configuration}${this.suffix}`;
         }
 
         return this.lastOutput;
