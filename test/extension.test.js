@@ -2,6 +2,7 @@ const assert = require('assert');
 const vscode = require('vscode');
 const path = require('path');
 const extension = require('../src/extension');
+const { getFilter } = require('../src/utils/getFilter');
 const waitToAssertInSeconds = 5;
 
 // This is a little helper function to promisify setTimeout, so we can "await" setTimeout.
@@ -173,7 +174,7 @@ describe("Better PHPUnit Test Suite", function () {
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().output,
-                path.join(vscode.workspace.rootPath, '/vendor/bin/phpunit ') + path.join(vscode.workspace.rootPath, '/tests/SampleTest.php') + " --filter '^.*::test_first( .*)?$'"
+                path.join(vscode.workspace.rootPath, '/vendor/bin/phpunit ') + path.join(vscode.workspace.rootPath, '/tests/SampleTest.php') + getFilter('test_first')
             );
         });
     });
@@ -186,7 +187,7 @@ describe("Better PHPUnit Test Suite", function () {
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().output,
-                path.join(vscode.workspace.rootPath, '/vendor/bin/phpunit ') + path.join(vscode.workspace.rootPath, '/tests/SampleTest.php') + " --filter '^.*::test_first( .*)?$'"
+                path.join(vscode.workspace.rootPath, '/vendor/bin/phpunit ') + path.join(vscode.workspace.rootPath, '/tests/SampleTest.php') + getFilter('test_first')
             );
         });
     });
