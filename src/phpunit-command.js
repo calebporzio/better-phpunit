@@ -1,6 +1,7 @@
 const findUp = require('find-up');
 const vscode = require('vscode');
 const path = require('path');
+const { getFilter } = require('./utils/getFilter');
 
 module.exports = class PhpUnitCommand {
     constructor(options) {
@@ -39,9 +40,7 @@ module.exports = class PhpUnitCommand {
     }
 
     get filter() {
-        return process.platform === "win32"
-            ? (this.method ? ` --filter '^.*::${this.method}'` : '')
-            : (this.method ? ` --filter '^.*::${this.method}( .*)?$'` : '');
+        return getFilter(this.method);
     }
 
     get configuration() {
@@ -60,7 +59,7 @@ module.exports = class PhpUnitCommand {
         return suffix ? ' ' + suffix : ''; // Add a space before the suffix.
     }
 
-	get windowsSuffix() {
+    get windowsSuffix() {
         return process.platform === "win32"
             ? '.bat'
             : '';
@@ -72,8 +71,8 @@ module.exports = class PhpUnitCommand {
         }
 
         return this.subDirectory
-            ? this._normalizePath(path.join(this.subDirectory, 'vendor', 'bin', 'phpunit'+this.windowsSuffix))
-            : this._normalizePath(path.join(vscode.workspace.rootPath, 'vendor', 'bin', 'phpunit'+this.windowsSuffix));
+            ? this._normalizePath(path.join(this.subDirectory, 'vendor', 'bin', 'phpunit' + this.windowsSuffix))
+            : this._normalizePath(path.join(vscode.workspace.rootPath, 'vendor', 'bin', 'phpunit' + this.windowsSuffix));
     }
 
     get subDirectory() {
