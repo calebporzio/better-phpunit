@@ -89,6 +89,18 @@ Running tests with Docker Compose, starting up a service and removing the contai
 }
 ```
 
+Running tests with Laravel Sail:
+```
+{
+    "better-phpunit.docker.enable": true,
+    "better-phpunit.docker.command": "docker compose exec -u sail laravel.test",
+    "better-phpunit.docker.paths": {
+        "/your/local/path": "/var/www/html"
+    },
+    "better-phpunit.phpunitBinary": "php artisan test",
+}
+```
+
 **Note:**
 For running Docker over a SSH session just use both options _ssh.enable_ and _docker.enable_ combined.
 
