@@ -76,6 +76,14 @@
                     "default": null,
                     "description": "A custom phpunit binary. Ex: 'phpunit', '/usr/local/bin/phpunit'"
                 },
+                "better-phpunit.pestBinary": {
+					"type": [
+						"string",
+						"null"
+					],
+					"default": null,
+					"description": "A custom Pest binary. Ex: 'pest', '/usr/local/bin/pest'"
+				},
                 "better-phpunit.xmlConfigFilepath": {
                     "type": [
                         "string",
