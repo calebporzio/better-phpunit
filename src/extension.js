@@ -1,5 +1,4 @@
 const vscode = require('vscode');
-const assert = require('assert');
 const PhpUnitCommand = require('./phpunit-command');
 const RemotePhpUnitCommand = require('./remote-phpunit-command.js');
 const DockerPhpUnitCommand = require('./docker-phpunit-command.js');

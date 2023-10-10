@@ -1,6 +1,7 @@
 const findUp = require('find-up');
 const vscode = require('vscode');
 const path = require('path');
+const fs = require('fs');
 
 module.exports = class PhpUnitCommand {
     constructor(options) {
@@ -67,13 +68,17 @@ module.exports = class PhpUnitCommand {
     }
 
     get binary() {
-        if (vscode.workspace.getConfiguration('better-phpunit').get('phpunitBinary')) {
-            return vscode.workspace.getConfiguration('better-phpunit').get('phpunitBinary')
+        const binaryKey = this.isPest ? 'pestBinary' : 'phpunitBinary';
+
+        if (vscode.workspace.getConfiguration('better-phpunit').get(binaryKey)) {
+            return vscode.workspace.getConfiguration('better-phpunit').get(binaryKey)
         }
 
+        const binary = this.isPest ? 'pest' : 'phpunit';
+
         return this.subDirectory
-            ? this._normalizePath(path.join(this.subDirectory, 'vendor', 'bin', 'phpunit'+this.windowsSuffix))
-            : this._normalizePath(path.join(vscode.workspace.rootPath, 'vendor', 'bin', 'phpunit'+this.windowsSuffix));
+            ? this._normalizePath(path.join(this.subDirectory, 'vendor', 'bin', binary+this.windowsSuffix))
+            : this._normalizePath(path.join(vscode.workspace.rootPath, 'vendor', 'bin', binary+this.windowsSuffix));
     }
 
     get subDirectory() {
@@ -100,6 +105,16 @@ module.exports = class PhpUnitCommand {
         }
 
         return method;
+    }
+
+    get isPest() {
+        const composerJson = findUp.sync('composer.json', { cwd: vscode.window.activeTextEditor.document.fileName });
+
+        if (!fs.existsSync(composerJson)) {
+            return false;
+        }
+
+        return fs.readFileSync(composerJson, 'utf8').includes('pestphp/pest');
     }
 
     _normalizePath(path) {
