@@ -1,22 +1,23 @@
-const path = require('path');
-const assert = require('assert');
+import * as assert from 'assert';
+import { beforeEach, afterEach } from 'mocha';
 const vscode = require('vscode');
-const extension = require('../src/extension');
+import * as path from 'path';
+const extension = require('../../../src/extension');
 const waitToAssertInSeconds = 5;
 
 // This is a little helper function to promisify setTimeout, so we can "await" setTimeout.
-function timeout(seconds, callback) {
+function timeout(seconds: any, callback: any) {
     return new Promise(resolve => {
         setTimeout(() => {
             callback();
-            resolve();
+            resolve('');
         }, seconds * waitToAssertInSeconds);
     });
 }
 
 // I'd love for these to be SSH integration tests.
 // However, that would take a fair amount of setup.
-describe("SSH Tests", function () {
+suite("SSH Tests", function () {
     beforeEach(async () => {
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.enable", true);
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.disableAllOptions", false);
@@ -27,7 +28,7 @@ describe("SSH Tests", function () {
         await vscode.workspace.getConfiguration("better-phpunit").update("docker.command", null);
         await vscode.workspace.getConfiguration("better-phpunit").update("docker.paths", null);
 
-        const paths = {};
+        const paths: any = {};
         paths[path.join(vscode.workspace.rootPath)] = "/some/remote/path";
         paths["/some/other_local/path"] = "/some/other_remote/path";
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.paths", paths);
@@ -46,9 +47,10 @@ describe("SSH Tests", function () {
         await vscode.workspace.getConfiguration("better-phpunit").update("docker.paths", null);
     });
 
-    it("Commands are not wrapped when SSH is disabled", async function () {
+    test("Commands are not wrapped when SSH is disabled", async function () {
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.enable", false);
 
+        console.log(vscode.workspace)
         let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
         await vscode.window.showTextDocument(document, { selection: new vscode.Range(7, 0, 7, 0) });
         await vscode.commands.executeCommand('better-phpunit.run');
@@ -61,7 +63,7 @@ describe("SSH Tests", function () {
         );
     });
 
-    it("The correct SSH command is run when triggering Better PHPUnit", async function () {
+    test("The correct SSH command is run when triggering Better PHPUnit", async function () {
         let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
         await vscode.window.showTextDocument(document, { selection: new vscode.Range(7, 0, 7, 0) });
         await vscode.commands.executeCommand('better-phpunit.run');
@@ -74,11 +76,11 @@ describe("SSH Tests", function () {
         );
     });
 
-    it("The correct Docker command is run when triggering Better PHPUnit", async function () {
+    test("The correct Docker command is run when triggering Better PHPUnit", async function () {
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.enable", false);
         await vscode.workspace.getConfiguration("better-phpunit").update("docker.enable", true);
         await vscode.workspace.getConfiguration("better-phpunit").update("docker.command", "docker exec CONTAINER");
-        const paths = {};
+        const paths: any = {};
         paths[path.join(vscode.workspace.rootPath)] = "/some/remote/path";
         paths["/some/other_local/path"] = "/some/other_remote/path";
         await vscode.workspace.getConfiguration("better-phpunit").update("docker.paths", paths);
@@ -94,11 +96,11 @@ describe("SSH Tests", function () {
         );
     });
 
-    it("The correct Docker suite command is run when triggering Better PHPUnit", async function () {
+    test("The correct Docker suite command is run when triggering Better PHPUnit", async function () {
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.enable", false);
         await vscode.workspace.getConfiguration("better-phpunit").update("docker.enable", true);
         await vscode.workspace.getConfiguration("better-phpunit").update("docker.command", "docker exec CONTAINER");
-        const paths = {};
+        const paths: any = {};
         paths[path.join(vscode.workspace.rootPath)] = "/some/remote/path";
         paths["/some/other_local/path"] = "/some/other_remote/path";
         await vscode.workspace.getConfiguration("better-phpunit").update("docker.paths", paths);
@@ -114,10 +116,10 @@ describe("SSH Tests", function () {
         );
     });
 
-    it("The correct Docker command is run via SSH when triggering Better PHPUnit", async function () {
+    test("The correct Docker command is run via SSH when triggering Better PHPUnit", async function () {
         await vscode.workspace.getConfiguration("better-phpunit").update("docker.enable", true);
         await vscode.workspace.getConfiguration("better-phpunit").update("docker.command", "docker exec CONTAINER");
-        const paths = {};
+        const paths: any = {};
         paths[path.join(vscode.workspace.rootPath)] = "/some/remote/path";
         paths["/some/other_local/path"] = "/some/other_remote/path";
         await vscode.workspace.getConfiguration("better-phpunit").update("docker.paths", paths);
@@ -133,10 +135,10 @@ describe("SSH Tests", function () {
         );
     });
 
-    it("The correct Docker suite command is run via SSH when triggering Better PHPUnit", async function () {
+    test("The correct Docker suite command is run via SSH when triggering Better PHPUnit", async function () {
         await vscode.workspace.getConfiguration("better-phpunit").update("docker.enable", true);
         await vscode.workspace.getConfiguration("better-phpunit").update("docker.command", "docker exec CONTAINER");
-        const paths = {};
+        const paths: any = {};
         paths[path.join(vscode.workspace.rootPath)] = "/some/remote/path";
         paths["/some/other_local/path"] = "/some/other_remote/path";
         await vscode.workspace.getConfiguration("better-phpunit").update("docker.paths", paths);
@@ -152,7 +154,7 @@ describe("SSH Tests", function () {
         );
     });
 
-    it("Can use a custom ssh binary", async function () {
+    test("Can use a custom ssh binary", async function () {
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.binary", "putty -ssh");
 
         let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
@@ -167,7 +169,7 @@ describe("SSH Tests", function () {
         );
     });
 
-    it("Can disable all ssh config options", async function () {
+    test("Can disable all ssh config options", async function () {
         await vscode.workspace.getConfiguration("better-phpunit").update("ssh.disableAllOptions", true);
 
         let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));

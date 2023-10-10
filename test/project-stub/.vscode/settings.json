@@ -1,0 +1,16 @@
+{
+    "better-phpunit.xmlConfigFilepath": null,
+    "better-phpunit.commandSuffix": null,
+    "better-phpunit.phpunitBinary": null,
+    "better-phpunit.ssh.enable": false,
+    "better-phpunit.suiteSuffix": null,
+    "better-phpunit.docker.enable": false,
+    "better-phpunit.docker.command": null,
+    "better-phpunit.docker.paths": null,
+    "better-phpunit.ssh.binary": null,
+    "better-phpunit.ssh.disableAllOptions": false,
+    "better-phpunit.ssh.user": "auser",
+    "better-phpunit.ssh.host": "ahost",
+    "better-phpunit.ssh.port": "2222",
+    "better-phpunit.ssh.paths": {}
+}

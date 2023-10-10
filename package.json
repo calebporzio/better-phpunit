@@ -5,7 +5,7 @@
     "version": "1.5.3",
     "publisher": "calebporzio",
     "engines": {
-        "vscode": "^1.17.0"
+        "vscode": "^1.74.0"
     },
     "repository": {
         "type": "git",
@@ -77,13 +77,13 @@
                     "description": "A custom phpunit binary. Ex: 'phpunit', '/usr/local/bin/phpunit'"
                 },
                 "better-phpunit.pestBinary": {
-					"type": [
-						"string",
-						"null"
-					],
-					"default": null,
-					"description": "A custom Pest binary. Ex: 'pest', '/usr/local/bin/pest'"
-				},
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "default": null,
+                    "description": "A custom Pest binary. Ex: 'pest', '/usr/local/bin/pest'"
+                },
                 "better-phpunit.xmlConfigFilepath": {
                     "type": [
                         "string",
@@ -211,16 +211,25 @@
         ]
     },
     "scripts": {
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "node ./node_modules/vscode/bin/test"
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "pretest": "npm run compile",
+        "test": "node ./out/test/runTest.js"
     },
     "devDependencies": {
-        "@types/mocha": "^2.2.42",
-        "@types/node": "^7.10.2",
-        "eslint": "^4.6.1",
-        "mocha": "^4.1.0",
-        "typescript": "^2.5.2",
-        "vscode": "^1.1.22"
+        "@types/glob": "^7.1.1",
+        "@types/mocha": "^10.0.1",
+        "@types/node": "^20.8.4",
+        "@types/vscode": "^1.74.0",
+        "@typescript-eslint/eslint-plugin": "^6.7.0",
+        "@typescript-eslint/parser": "^6.7.0",
+        "@vscode/test-electron": "^2.3.0",
+        "eslint": "^8.26.0",
+        "glob": "^7.1.4",
+        "mocha": "^10.2.0",
+        "source-map-support": "^0.5.12",
+        "typescript": "^5.2.2"
     },
     "dependencies": {
         "find-up": "^2.1.0"
