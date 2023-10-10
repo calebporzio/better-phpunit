@@ -1,6 +1,7 @@
 import * as assert from 'assert';
-import { beforeEach, afterEach } from 'mocha';
+import { beforeEach, afterEach, before, after } from 'mocha';
 import * as path from 'path';
+import * as fs from 'fs';
 
 const vscode = require('vscode');
 const extension = require('../../../src/extension');
@@ -18,6 +19,14 @@ function timeout(seconds: any, callback: any) {
 }
 
 suite("Better PHPUnit Test Suite", function () {
+    before(async () => {
+        fs.renameSync(path.join(path.join(vscode.workspace.rootPath, 'composer.json')), path.join(path.join(vscode.workspace.rootPath, 'composer.json.phpunit')));
+        fs.renameSync(path.join(path.join(vscode.workspace.rootPath, 'sub-directory', 'composer.json')), path.join(path.join(vscode.workspace.rootPath, 'sub-directory', 'composer.json.phpunit')));
+
+        fs.renameSync(path.join(path.join(vscode.workspace.rootPath, 'composer.json.pest')), path.join(path.join(vscode.workspace.rootPath, 'composer.json')));
+        fs.renameSync(path.join(path.join(vscode.workspace.rootPath, 'sub-directory', 'composer.json.pest')), path.join(path.join(vscode.workspace.rootPath, 'sub-directory', 'composer.json')));
+    });
+
     beforeEach(async () => {
         // Reset the test/project-stub/.vscode/settings.json settings for each test.
         // This allows us to test config options in tests and not harm other tests.
@@ -28,6 +37,14 @@ suite("Better PHPUnit Test Suite", function () {
         await vscode.workspace.getConfiguration("better-phpunit").update("xmlConfigFilepath", null);
         await vscode.workspace.getConfiguration("better-phpunit").update("suiteSuffix", null);
         await vscode.workspace.getConfiguration("better-phpunit").update("docker.enable", false);
+    });
+
+    after(async () => {
+        fs.renameSync(path.join(path.join(vscode.workspace.rootPath, 'composer.json')), path.join(path.join(vscode.workspace.rootPath, 'composer.json.pest')));
+        fs.renameSync(path.join(path.join(vscode.workspace.rootPath, 'sub-directory', 'composer.json')), path.join(path.join(vscode.workspace.rootPath, 'sub-directory', 'composer.json.pest')));
+
+        fs.renameSync(path.join(path.join(vscode.workspace.rootPath, 'composer.json.phpunit')), path.join(path.join(vscode.workspace.rootPath, 'composer.json')));
+        fs.renameSync(path.join(path.join(vscode.workspace.rootPath, 'sub-directory', 'composer.json.phpunit')), path.join(path.join(vscode.workspace.rootPath, 'sub-directory', 'composer.json')));
     });
 
     afterEach(async () => {
@@ -44,11 +61,11 @@ suite("Better PHPUnit Test Suite", function () {
 
     test("Run file outside of method", async () => {
         let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
-        await vscode.window.showTextDocument(document);
+        await vscode.window.showTextDocument(document, { selection: new vscode.Range(0, 0, 0, 0) });
         await vscode.commands.executeCommand('better-phpunit.run');
 
         await timeout(waitToAssertInSeconds, () => {
-            assert.ok(extension.getGlobalCommandInstance().method === undefined);
+            assert.equal(extension.getGlobalCommandInstance().method, undefined);
         });
     });
 
@@ -60,7 +77,7 @@ suite("Better PHPUnit Test Suite", function () {
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().output,
-                path.join(vscode.workspace.rootPath, '/vendor/bin/phpunit') + ' ' + path.join(vscode.workspace.rootPath, '/tests/SampleTest.php')
+                path.join(vscode.workspace.rootPath, '/vendor/bin/pest') + ' ' + path.join(vscode.workspace.rootPath, '/tests/SampleTest.php')
             );
         });
     });
@@ -125,7 +142,7 @@ suite("Better PHPUnit Test Suite", function () {
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().binary,
-                path.join(vscode.workspace.rootPath, '/vendor/bin/phpunit')
+                path.join(vscode.workspace.rootPath, '/vendor/bin/pest')
             );
         });
     });
@@ -138,7 +155,7 @@ suite("Better PHPUnit Test Suite", function () {
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().binary,
-                path.join(vscode.workspace.rootPath, '/sub-directory/vendor/bin/phpunit')
+                path.join(vscode.workspace.rootPath, '/sub-directory/vendor/bin/pest')
             );
         });
     });
@@ -178,7 +195,7 @@ suite("Better PHPUnit Test Suite", function () {
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().output,
-                path.join(vscode.workspace.rootPath, '/vendor/bin/phpunit ') + path.join(vscode.workspace.rootPath, '/tests/SampleTest.php') + " --filter '^.*::test_first( .*)?$'"
+                path.join(vscode.workspace.rootPath, '/vendor/bin/pest ') + path.join(vscode.workspace.rootPath, '/tests/SampleTest.php') + " --filter '^.*::test_first( .*)?$'"
             );
         });
     });
@@ -191,7 +208,7 @@ suite("Better PHPUnit Test Suite", function () {
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().output,
-                path.join(vscode.workspace.rootPath, '/vendor/bin/phpunit ') + path.join(vscode.workspace.rootPath, '/tests/SampleTest.php') + " --filter '^.*::test_first( .*)?$'"
+                path.join(vscode.workspace.rootPath, '/vendor/bin/pest ') + path.join(vscode.workspace.rootPath, '/tests/SampleTest.php') + " --filter '^.*::test_first( .*)?$'"
             );
         });
     });
@@ -204,7 +221,7 @@ suite("Better PHPUnit Test Suite", function () {
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().output,
-                path.join(vscode.workspace.rootPath, '/vendor/bin/phpunit')
+                path.join(vscode.workspace.rootPath, '/vendor/bin/pest')
             );
         });
     });
@@ -218,7 +235,7 @@ suite("Better PHPUnit Test Suite", function () {
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().output,
-                path.join(vscode.workspace.rootPath, '/vendor/bin/phpunit') + ' --testsuite unit --coverage'
+                path.join(vscode.workspace.rootPath, '/vendor/bin/pest') + ' --testsuite unit --coverage'
             );
         });
     });
@@ -233,13 +250,13 @@ suite("Better PHPUnit Test Suite", function () {
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().output,
-                path.join(vscode.workspace.rootPath, '/vendor/bin/phpunit') + ' --foo=bar'
+                path.join(vscode.workspace.rootPath, '/vendor/bin/pest') + ' --foo=bar'
             );
         });
     });
 
-    test("Run with phpunitBinary config", async () => {
-        await vscode.workspace.getConfiguration('better-phpunit').update('phpunitBinary', 'vendor/foo/bar');
+    test("Run with pestBinary config", async () => {
+        await vscode.workspace.getConfiguration('better-phpunit').update('pestBinary', 'vendor/foo/bar');
 
         let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
         await vscode.window.showTextDocument(document, { selection: new vscode.Range(7, 0, 7, 0) });

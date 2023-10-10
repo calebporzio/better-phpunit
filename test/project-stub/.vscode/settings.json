@@ -2,6 +2,7 @@
     "better-phpunit.xmlConfigFilepath": null,
     "better-phpunit.commandSuffix": null,
     "better-phpunit.phpunitBinary": null,
+    "better-phpunit.pestBinary": null,
     "better-phpunit.ssh.enable": false,
     "better-phpunit.suiteSuffix": null,
     "better-phpunit.docker.enable": false,
