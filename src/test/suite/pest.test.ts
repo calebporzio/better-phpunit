@@ -60,7 +60,7 @@ suite("Better PHPUnit Test Suite", function () {
     });
 
     test("Run file outside of method", async () => {
-        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
+        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SamplePestTest.php'));
         await vscode.window.showTextDocument(document, { selection: new vscode.Range(0, 0, 0, 0) });
         await vscode.commands.executeCommand('better-phpunit.run');
 
@@ -70,53 +70,53 @@ suite("Better PHPUnit Test Suite", function () {
     });
 
     test("Run file", async () => {
-        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
+        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SamplePestTest.php'));
         await vscode.window.showTextDocument(document, { selection: new vscode.Range(7, 0, 7, 0) });
         await vscode.commands.executeCommand('better-phpunit.run-file');
 
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().output,
-                path.join(vscode.workspace.rootPath, '/vendor/bin/pest') + ' ' + path.join(vscode.workspace.rootPath, '/tests/SampleTest.php')
+                path.join(vscode.workspace.rootPath, '/vendor/bin/pest') + ' ' + path.join(vscode.workspace.rootPath, '/tests/SamplePestTest.php')
             );
         });
     });
 
     test("Run from within first method", async () => {
-        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
+        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SamplePestTest.php'));
+        await vscode.window.showTextDocument(document, { selection: new vscode.Range(3, 0, 3, 0) });
+        await vscode.commands.executeCommand('better-phpunit.run');
+
+        await timeout(waitToAssertInSeconds, () => {
+            assert.equal(
+                extension.getGlobalCommandInstance().method,
+                "'first'"
+            );
+        });
+    });
+
+    test("Run from within second method", async () => {
+        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SamplePestTest.php'));
         await vscode.window.showTextDocument(document, { selection: new vscode.Range(7, 0, 7, 0) });
         await vscode.commands.executeCommand('better-phpunit.run');
 
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().method,
-                'test_first'
-            );
-        });
-    });
-
-    test("Run from within second method", async () => {
-        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
-        await vscode.window.showTextDocument(document, { selection: new vscode.Range(12, 0, 12, 0) });
-        await vscode.commands.executeCommand('better-phpunit.run');
-
-        await timeout(waitToAssertInSeconds, () => {
-            assert.equal(
-                extension.getGlobalCommandInstance().method,
-                'test_second'
+                "'second'"
             );
         });
     });
 
     test("Detect filename", async () => {
-        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
+        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SamplePestTest.php'));
         await vscode.window.showTextDocument(document);
         await vscode.commands.executeCommand('better-phpunit.run');
 
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().file,
-                path.join(vscode.workspace.rootPath, '/tests/SampleTest.php')
+                path.join(vscode.workspace.rootPath, '/tests/SamplePestTest.php')
             );
         });
     });
@@ -135,7 +135,7 @@ suite("Better PHPUnit Test Suite", function () {
     });
 
     test("Detect executable", async () => {
-        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
+        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SamplePestTest.php'));
         await vscode.window.showTextDocument(document);
         await vscode.commands.executeCommand('better-phpunit.run');
 
@@ -150,7 +150,7 @@ suite("Better PHPUnit Test Suite", function () {
     test("Fallback to default executable if composer.json not detected", async () => {
         fs.renameSync(path.join(path.join(vscode.workspace.rootPath, 'composer.json')), path.join(path.join(vscode.workspace.rootPath, 'composer.json.pest')));
 
-        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
+        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SamplePestTest.php'));
         await vscode.window.showTextDocument(document);
         await vscode.commands.executeCommand('better-phpunit.run');
 
@@ -211,14 +211,14 @@ suite("Better PHPUnit Test Suite", function () {
     });
 
     test("Check full command", async () => {
-        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
+        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SamplePestTest.php'));
         await vscode.window.showTextDocument(document, { selection: new vscode.Range(7, 0, 7, 0) });
         await vscode.commands.executeCommand('better-phpunit.run');
 
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().output,
-                path.join(vscode.workspace.rootPath, '/vendor/bin/pest ') + path.join(vscode.workspace.rootPath, '/tests/SampleTest.php') + " --filter '^.*::test_first( .*)?$'"
+                path.join(vscode.workspace.rootPath, '/vendor/bin/pest ') + path.join(vscode.workspace.rootPath, '/tests/SamplePestTest.php') + " --filter 'second'"
             );
         });
     });
@@ -231,13 +231,13 @@ suite("Better PHPUnit Test Suite", function () {
         await timeout(waitToAssertInSeconds, () => {
             assert.equal(
                 extension.getGlobalCommandInstance().output,
-                path.join(vscode.workspace.rootPath, '/vendor/bin/pest ') + path.join(vscode.workspace.rootPath, '/tests/SampleTest.php') + " --filter '^.*::test_first( .*)?$'"
+                path.join(vscode.workspace.rootPath, '/vendor/bin/pest ') + path.join(vscode.workspace.rootPath, '/tests/SamplePestTest.php') + " --filter 'second'"
             );
         });
     });
 
     test("Run entire suite", async () => {
-        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
+        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SamplePestTest.php'));
         await vscode.window.showTextDocument(document, { selection: new vscode.Range(7, 0, 7, 0) });
         await vscode.commands.executeCommand('better-phpunit.run-suite')
 
@@ -251,7 +251,7 @@ suite("Better PHPUnit Test Suite", function () {
 
     test("Run entire suite with specified options", async () => {
         await vscode.workspace.getConfiguration('better-phpunit').update('suiteSuffix', '--testsuite unit --coverage');
-        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
+        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SamplePestTest.php'));
         await vscode.window.showTextDocument(document, { selection: new vscode.Range(7, 0, 7, 0) });
         await vscode.commands.executeCommand('better-phpunit.run-suite');
 
@@ -266,7 +266,7 @@ suite("Better PHPUnit Test Suite", function () {
     test("Run with commandSuffix config", async () => {
         await vscode.workspace.getConfiguration('better-phpunit').update('commandSuffix', '--foo=bar');
 
-        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
+        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SamplePestTest.php'));
         await vscode.window.showTextDocument(document, { selection: new vscode.Range(7, 0, 7, 0) });
         await vscode.commands.executeCommand('better-phpunit.run-suite')
 
@@ -281,7 +281,7 @@ suite("Better PHPUnit Test Suite", function () {
     test("Run with pestBinary config", async () => {
         await vscode.workspace.getConfiguration('better-phpunit').update('pestBinary', 'vendor/foo/bar');
 
-        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
+        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SamplePestTest.php'));
         await vscode.window.showTextDocument(document, { selection: new vscode.Range(7, 0, 7, 0) });
         await vscode.commands.executeCommand('better-phpunit.run-suite')
 
