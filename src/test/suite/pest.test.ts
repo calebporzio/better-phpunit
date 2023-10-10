@@ -147,7 +147,27 @@ suite("Better PHPUnit Test Suite", function () {
         });
     });
 
+    test("Fallback to default executable if composer.json not detected", async () => {
+        fs.renameSync(path.join(path.join(vscode.workspace.rootPath, 'composer.json')), path.join(path.join(vscode.workspace.rootPath, 'composer.json.pest')));
+
+        let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'tests', 'SampleTest.php'));
+        await vscode.window.showTextDocument(document);
+        await vscode.commands.executeCommand('better-phpunit.run');
+
+        await timeout(waitToAssertInSeconds, () => {
+            assert.equal(
+                extension.getGlobalCommandInstance().binary,
+                path.join(vscode.workspace.rootPath, '/vendor/bin/phpunit')
+            );
+        });
+
+        fs.renameSync(path.join(path.join(vscode.workspace.rootPath, 'composer.json.pest')), path.join(path.join(vscode.workspace.rootPath, 'composer.json')));
+    });
+
     test("Detect executable in sub-directory", async () => {
+        fs.renameSync(path.join(path.join(vscode.workspace.rootPath, 'composer.json')), path.join(path.join(vscode.workspace.rootPath, 'composer.json.pest')));
+        fs.renameSync(path.join(path.join(vscode.workspace.rootPath, 'composer.json.phpunit')), path.join(path.join(vscode.workspace.rootPath, 'composer.json')));
+
         let document = await vscode.workspace.openTextDocument(path.join(vscode.workspace.rootPath, 'sub-directory', 'tests', 'SampleTest.php'));
         await vscode.window.showTextDocument(document);
         await vscode.commands.executeCommand('better-phpunit.run');
@@ -158,6 +178,9 @@ suite("Better PHPUnit Test Suite", function () {
                 path.join(vscode.workspace.rootPath, '/sub-directory/vendor/bin/pest')
             );
         });
+
+        fs.renameSync(path.join(path.join(vscode.workspace.rootPath, 'composer.json')), path.join(path.join(vscode.workspace.rootPath, 'composer.json.phpunit')));
+        fs.renameSync(path.join(path.join(vscode.workspace.rootPath, 'composer.json.pest')), path.join(path.join(vscode.workspace.rootPath, 'composer.json')));
     });
 
     test("Detect configuration in sub-directory", async () => {
