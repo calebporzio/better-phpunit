@@ -1,8 +1,10 @@
 import * as assert from 'assert';
 import { beforeEach, afterEach } from 'mocha';
-const vscode = require('vscode');
 import * as path from 'path';
+
+const vscode = require('vscode');
 const extension = require('../../../src/extension');
+
 const waitToAssertInSeconds = 5;
 
 // This is a little helper function to promisify setTimeout, so we can "await" setTimeout.
