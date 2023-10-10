@@ -14,6 +14,7 @@ module.exports = class PhpUnitCommand {
             : false;
 
         this.lastOutput;
+        this.isPest = this._isPest();
     }
 
     get output() {
@@ -40,6 +41,10 @@ module.exports = class PhpUnitCommand {
     }
 
     get filter() {
+        if (this.isPest) {
+            return this.method ? ` --filter ${this.method}` : '';
+        }
+        
         return process.platform === "win32"
             ? (this.method ? ` --filter '^.*::${this.method}'` : '')
             : (this.method ? ` --filter '^.*::${this.method}( .*)?$'` : '');
@@ -96,7 +101,10 @@ module.exports = class PhpUnitCommand {
 
         while (line > 0) {
             const lineText = vscode.window.activeTextEditor.document.lineAt(line).text;
-            const match = lineText.match(/^\s*(?:public|private|protected)?\s*function\s*(\w+)\s*\(.*$/);
+            const match = this.isPest ?
+                lineText.match(/^\s*(?:it|test)\(([^,)]+)/m) :
+                lineText.match(/^\s*(?:public|private|protected)?\s*function\s*(\w+)\s*\(.*$/);
+
             if (match) {
                 method = match[1];
                 break;
@@ -107,14 +115,19 @@ module.exports = class PhpUnitCommand {
         return method;
     }
 
-    get isPest() {
+    _isPest() {
+        const start = Date.now();
         const composerJson = findUp.sync('composer.json', { cwd: vscode.window.activeTextEditor.document.fileName });
 
         if (!fs.existsSync(composerJson)) {
             return false;
         }
 
-        return fs.readFileSync(composerJson, 'utf8').includes('pestphp/pest');
+        const isPest = fs.readFileSync(composerJson, 'utf8').includes('pestphp/pest');
+        const end = Date.now();
+        console.log(`Checking for Pest: ${end - start}ms`)
+
+        return isPest;
     }
 
     _normalizePath(path) {
