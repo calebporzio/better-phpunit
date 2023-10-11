@@ -8,5 +8,10 @@
     ],
     "require": {
         "phpunit/phpunit": "^6.4"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     }
 }

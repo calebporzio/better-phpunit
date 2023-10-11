@@ -123,7 +123,7 @@ module.exports = class PhpUnitCommand {
             return false;
         }
 
-        const isPest = fs.readFileSync(composerJson, 'utf8').includes('pestphp/pest');
+        const isPest = fs.readFileSync(composerJson, 'utf8').includes('"pestphp/pest"');
         const end = Date.now();
         console.log(`Checking for Pest: ${end - start}ms`)
 
