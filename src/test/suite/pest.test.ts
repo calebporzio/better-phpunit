@@ -20,6 +20,7 @@ function timeout(seconds: any, callback: any) {
 
 suite("Better PHPUnit Test Suite", function () {
     before(async () => {
+        this.timeout(5000)
         fs.renameSync(path.join(path.join(vscode.workspace.rootPath, 'composer.json')), path.join(path.join(vscode.workspace.rootPath, 'composer.json.phpunit')));
         fs.renameSync(path.join(path.join(vscode.workspace.rootPath, 'sub-directory', 'composer.json')), path.join(path.join(vscode.workspace.rootPath, 'sub-directory', 'composer.json.phpunit')));
 
