@@ -28,7 +28,6 @@ suite("Better PHPUnit Test Suite", function () {
     });
 
     beforeEach(async () => {
-        this.timeout(5000)
         // Reset the test/project-stub/.vscode/settings.json settings for each test.
         // This allows us to test config options in tests and not harm other tests.
         await vscode.workspace.getConfiguration('better-phpunit').update('commandSuffix', null);
