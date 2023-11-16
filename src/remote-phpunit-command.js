@@ -42,7 +42,12 @@ module.exports = class RemotePhpUnitCommand extends PhpUnitCommand {
 
     remapLocalPath(actualPath) {
         for (const [localPath, remotePath] of Object.entries(this.paths)) {
-            const expandedLocalPath = localPath.replace(/^~/, os.homedir());
+            const currentOpenFilePath = vscode.window.activeTextEditor.document.uri;
+            const currentWorkspacePath = vscode.workspace.getWorkspaceFolder(currentOpenFilePath)?.uri.fsPath;
+            const expandedLocalPath = localPath
+                .replace(/^~/, os.homedir())
+                .replace(/\$\{workspaceFolder\}/g, currentWorkspacePath);
+
             if (actualPath.startsWith(expandedLocalPath)) {
                 return actualPath.replace(expandedLocalPath, remotePath);
             }
