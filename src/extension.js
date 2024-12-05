@@ -56,6 +56,9 @@ module.exports.activate = function (context) {
 
     disposables.push(vscode.tasks.registerTaskProvider('phpunit', {
         provideTasks: () => {
+
+            if (!globalCommand) return [];
+
             return [new vscode.Task(
                 { type: "phpunit", task: "run" },
                 2,
