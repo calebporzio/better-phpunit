@@ -50,6 +50,30 @@ module.exports.activate = function (context) {
         await runCommand(command);
     }));
 
+    disposables.push(vscode.commands.registerCommand('better-phpunit.run-folder', async (uri) => {
+        // uri is passed when triggered from explorer context menu
+        // When triggered from keybinding, uri is undefined and we use the active editor's folder
+        const folderPath = uri ? uri.fsPath : null;
+
+        if (!folderPath && !vscode.window.activeTextEditor) {
+            vscode.window.showErrorMessage('Better PHPUnit: open a file to run this command');
+            return;
+        }
+
+        let command;
+        const options = { runFolder: true, folderPath };
+
+        if (vscode.workspace.getConfiguration("better-phpunit").get("docker.enable")) {
+            command = new DockerPhpUnitCommand(options);
+        } else if (vscode.workspace.getConfiguration("better-phpunit").get("ssh.enable")) {
+            command = new RemotePhpUnitCommand(options);
+        } else {
+            command = new PhpUnitCommand(options);
+        }
+
+        await runCommand(command, !!folderPath);
+    }));
+
     disposables.push(vscode.commands.registerCommand('better-phpunit.run-previous', async () => {
         await runPreviousCommand();
     }));
@@ -70,11 +94,13 @@ module.exports.activate = function (context) {
     context.subscriptions.push(disposables);
 }
 
-async function runCommand(command) {
+async function runCommand(command, skipEditorCheck = false) {
     setGlobalCommandInstance(command);
 
-    vscode.window.activeTextEditor
-        || vscode.window.showErrorMessage('Better PHPUnit: open a file to run this command');
+    if (!skipEditorCheck && !vscode.window.activeTextEditor) {
+        vscode.window.showErrorMessage('Better PHPUnit: open a file to run this command');
+        return;
+    }
 
     await vscode.commands.executeCommand('workbench.action.terminal.clear');
     await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run');
