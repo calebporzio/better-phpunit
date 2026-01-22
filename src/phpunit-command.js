@@ -13,6 +13,14 @@ module.exports = class PhpUnitCommand {
             ? options.runFile
             : false;
 
+        this.runFolder = options !== undefined
+            ? options.runFolder
+            : false;
+
+        this.folderPath = options !== undefined
+            ? options.folderPath
+            : null;
+
         this.lastOutput;
         this.isPest = this._isPest();
     }
@@ -29,6 +37,8 @@ module.exports = class PhpUnitCommand {
             this.lastOutput = `${this.binary}${suiteSuffix}${this.suffix}`
         } else if (this.runFile) {
             this.lastOutput = `${this.binary} ${this.file}${this.configuration}${this.suffix}`;
+        } else if (this.runFolder) {
+            this.lastOutput = `${this.binary} ${this.folder}${this.configuration}${this.suffix}`;
         } else {
             this.lastOutput = `${this.binary} ${this.file}${this.filter}${this.configuration}${this.suffix}`;
         }
@@ -38,6 +48,13 @@ module.exports = class PhpUnitCommand {
 
     get file() {
         return this._normalizePath(vscode.window.activeTextEditor.document.fileName);
+    }
+
+    get folder() {
+        if (this.folderPath) {
+            return this._normalizePath(this.folderPath);
+        }
+        return this._normalizePath(path.dirname(vscode.window.activeTextEditor.document.fileName));
     }
 
     get filter() {
@@ -88,7 +105,8 @@ module.exports = class PhpUnitCommand {
 
     get subDirectory() {
         // find the closest phpunit.xml file in the project (for projects with multiple "vendor/bin/phpunit"s).
-        let phpunitDotXml = findUp.sync(['phpunit.xml', 'phpunit.xml.dist'], { cwd: vscode.window.activeTextEditor.document.fileName });
+        const cwd = this.folderPath || vscode.window.activeTextEditor.document.fileName;
+        let phpunitDotXml = findUp.sync(['phpunit.xml', 'phpunit.xml.dist'], { cwd });
 
         return path.dirname(phpunitDotXml) !== vscode.workspace.rootPath
             ? path.dirname(phpunitDotXml)
@@ -117,7 +135,8 @@ module.exports = class PhpUnitCommand {
 
     _isPest() {
         const start = Date.now();
-        const composerJson = findUp.sync('composer.json', { cwd: vscode.window.activeTextEditor.document.fileName });
+        const cwd = this.folderPath || vscode.window.activeTextEditor.document.fileName;
+        const composerJson = findUp.sync('composer.json', { cwd });
 
         if (!fs.existsSync(composerJson)) {
             return false;

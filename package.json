@@ -18,7 +18,8 @@
     "activationEvents": [
         "onCommand:better-phpunit.run",
         "onCommand:better-phpunit.run-file",
-        "onCommand:better-phpunit.run-suite"
+        "onCommand:better-phpunit.run-suite",
+        "onCommand:better-phpunit.run-folder"
     ],
     "main": "./src/extension",
     "contributes": {
@@ -38,6 +39,10 @@
             {
                 "command": "better-phpunit.run-previous",
                 "title": "Better PHPUnit: run previous"
+            },
+            {
+                "command": "better-phpunit.run-folder",
+                "title": "Better PHPUnit: run folder"
             }
         ],
         "keybindings": [
@@ -55,8 +60,27 @@
                 "key": "cmd+k cmd+p",
                 "command": "better-phpunit.run-previous",
                 "when": "editorLangId == php"
+            },
+            {
+                "key": "cmd+k cmd+d",
+                "command": "better-phpunit.run-folder",
+                "when": "editorLangId == php"
+            },
+            {
+                "key": "cmd+k cmd+d",
+                "command": "better-phpunit.run-folder",
+                "when": "filesExplorerFocus && explorerResourceIsFolder"
             }
         ],
+        "menus": {
+            "explorer/context": [
+                {
+                    "command": "better-phpunit.run-folder",
+                    "when": "explorerResourceIsFolder",
+                    "group": "navigation"
+                }
+            ]
+        },
         "configuration": {
             "title": "Better PHPUnit configuration",
             "properties": {

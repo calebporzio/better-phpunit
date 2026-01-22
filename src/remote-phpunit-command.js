@@ -14,6 +14,10 @@ module.exports = class RemotePhpUnitCommand extends PhpUnitCommand {
         return this.remapLocalPath(super.file);
     }
 
+    get folder() {
+        return this.remapLocalPath(super.folder);
+    }
+
     get binary() {
         return this.remapLocalPath(super.binary)
     }

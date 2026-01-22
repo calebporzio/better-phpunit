@@ -13,6 +13,11 @@ Better PHPUnit is the most popular, cleanest, and fastest PHPUnit runner for VS 
 - Open the command menu: `cmd+shift+p`
 - Select: `Better PHPUnit: run-file`
 
+## Run a test folder:
+- Open the command menu: `cmd+shift+p`
+- Select: `Better PHPUnit: run folder`
+- Or right-click a folder in the Explorer sidebar
+
 ## Run the entire suite:
 - Open the command menu: `cmd+shift+p`
 - Select: `Better PHPUnit: run suite`
@@ -37,6 +42,10 @@ Keybindings:
 {
     "key": "cmd+k cmd+f",
     "command": "better-phpunit.run-file"
+},
+{
+    "key": "cmd+k cmd+d",
+    "command": "better-phpunit.run-folder"
 },
 {
     "key": "cmd+k cmd+p",
