@@ -84,6 +84,11 @@
                     "default": null,
                     "description": "A custom Pest binary. Ex: 'pest', '/usr/local/bin/pest'"
                 },
+                "better-phpunit.codeLens.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "Enable/disable code lens for better-phpunit tests"
+                },
                 "better-phpunit.xmlConfigFilepath": {
                     "type": [
                         "string",
