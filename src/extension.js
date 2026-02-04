@@ -2,7 +2,7 @@ const vscode = require('vscode');
 const PhpUnitCommand = require('./phpunit-command');
 const RemotePhpUnitCommand = require('./remote-phpunit-command.js');
 const DockerPhpUnitCommand = require('./docker-phpunit-command.js');
-
+const { addCodeLensFeature } = require('./codeLens/CodeLensFeature');
 var globalCommand;
 
 module.exports.activate = function (context) {
@@ -68,6 +68,7 @@ module.exports.activate = function (context) {
     }));
 
     context.subscriptions.push(disposables);
+    addCodeLensFeature(context);
 }
 
 async function runCommand(command) {
@@ -79,6 +80,8 @@ async function runCommand(command) {
     await vscode.commands.executeCommand('workbench.action.terminal.clear');
     await vscode.commands.executeCommand('workbench.action.tasks.runTask', 'phpunit: run');
 }
+
+module.exports.runCommand = runCommand;
 
 async function runPreviousCommand() {
     await vscode.commands.executeCommand('workbench.action.terminal.clear');
